@@ -9,7 +9,7 @@ Make sure to pull all recent changes to main/master to start the branch-off proc
 ##### **Project Conventions, Standards & Procedures:**
 
  - Branch naming:
-    - `[front/back]` / `[feat/fix/bug/refactor]` / `something-worked-on`
+    - `[front/back]` / `[feat/fix/bug/refactor]` / `[issue # -]something-worked-on`
     - Eg: `front/feat/login-form-component`
     - Eg: `front/fix/nav-items-wrap-on-mobile`
     - Eg: `back/feat/get-items-route`
