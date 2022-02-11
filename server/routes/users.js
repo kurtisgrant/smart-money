@@ -1,11 +1,12 @@
 const router = require('express').Router();
 
-const users = ['Bob', 'Alex', 'Will', 'Tristan'];
-
 module.exports = (db) => {
-  // all routes will go here 
   router.get('/', (req, res) => {
-    res.json(users);
+    const command = "SELECT * FROM teachers";
+    
+    db.query(command)
+      .then(data => res.json(data.rows))
+      .catch(e => console.log(e.message))
   });
 
   return router;
