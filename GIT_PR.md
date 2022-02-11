@@ -1,10 +1,10 @@
-### How to do a pull request Workflow in Github
+## How to do a pull request Workflow in Github
 
-#### Step 1 -- Git pull origin main/master
+### Step 1 -- Git pull origin main
 
-Make sure to pull all recent changes to main/master to start the branch-off process.
+Make sure to pull all recent changes to main to start the branch-off process.
 
-#### Step 2 -- Add a branch
+### Step 2 -- Add a branch
 
 ##### **Project Conventions, Standards & Procedures:**
 
@@ -20,18 +20,28 @@ To add a branch
 checkout -b 2-user-data-json
 ```
 
-#### Step 3 --- Work on Feature
+### Step 3 --- Work on Feature
 
 Commit AS OFTEN as you can!!! Commits really matter!. You SHOULD NOT do everything in 1 commit!
+
+### Step 4 --- Merge Main into Working Branch (Optional)
+
+'cd' into main branch
+do `git pull`
+'cd' into working branch
+do `git merge __branch_name`
+if there are merge conflicts, fix them and commit the changes
 
 #### Feature Complete!!!
 
 Now that you are done, and everything has been commited, you are going to PUSH the `BRANCH` into github.
 ```sh
 git push origin __branch_name__
-```
+``` 
 
 On github, create a pull request by, clicking `Pull Requests` button, then clicking the `new pull request` button on the page. Pick your branch, and fill out the form to generate a Pull request.
+
+
 
 
 #### Anyone on your team can view your pull request
