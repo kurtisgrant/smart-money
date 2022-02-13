@@ -1,15 +1,19 @@
-import './Button.scss'
+import classNames from "classnames";
+import './Button.scss';
 
-function Button({ onClick }) {
+function Button({ green, white, onClick }) {
+
+  let btnClass = classNames(
+    "button",
+    {
+       "button--green": green,
+       "button--white": white
+    }
+ );
    
    return (
      <div>
-       <p>..</p>
-      <button className="button-1" onClick={onClick}>
-        Button
-      </button>
-      <p>..</p>
-      <button className="button-2" onClick={onClick}>
+      <button className={btnClass} onClick={onClick}>
         Button
       </button>
       </div>
