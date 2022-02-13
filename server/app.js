@@ -6,8 +6,9 @@ const logger = require('morgan');
 // db connection
 const db = require('./configs/db.config');
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const teachersRouter = require('./routes/teachers');
+const simulationsRouter = require('./routes/simulations');
+const studentsRouter = require('./routes/students');
 
 const app = express();
 
@@ -17,7 +18,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter(db));
+app.use('/api/teachers', teachersRouter(db));
+app.use('/api/simulations', simulationsRouter(db));
+app.use('/api/students', studentsRouter(db));
 
 module.exports = app;

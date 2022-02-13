@@ -2,9 +2,9 @@ const router = require('express').Router();
 
 module.exports = (db) => {
   router.get('/', (req, res) => {
-    const command = "SELECT * FROM teachers";
+    const query = "SELECT * FROM students";
     
-    db.query(command)
+    db.query(query)
       .then(data => res.json(data.rows))
       .catch(e => console.log(e.message))
   });
