@@ -1,9 +1,12 @@
 import React from 'react'
+import LineChart from '../components/LineChart'
 
 function SimulationControlPanel() {
   return (
-    <div>SimulationControlPanel</div>
+    <div>SimulationControlPanel
+      <LineChart />
+    </div>
   )
 }
 
-export default SimulationControlPanel
+export default SimulationControlPanel;
