@@ -1,14 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Navbar() {
+function Navbar({ appState }) {
   return (
-    <div>
+    <div style={{ display: 'flex' }}>
       <h1>Navbar</h1>
-      <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/login">Login</Link></li>
-      </ul>
+      <p>Logged in as {appState.user ? appState.user.name : 'null'}</p>
     </div>
   );
 }
