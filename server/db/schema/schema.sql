@@ -1,6 +1,5 @@
 DROP TABLE IF EXISTS market_transactions CASCADE;
-DROP TABLE IF EXISTS investment_accounts CASCADE;
-DROP TABLE IF EXISTS basic_accounts CASCADE;
+DROP TABLE IF EXISTS accounts CASCADE;
 DROP TABLE IF EXISTS students CASCADE;
 DROP TABLE IF EXISTS simulations CASCADE;
 DROP TABLE IF EXISTS teachers CASCADE;
@@ -9,17 +8,20 @@ CREATE TABLE teachers (
   id SERIAL PRIMARY KEY NOT NULL,
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255),
-  password VARCHAR(255)
+  password VARCHAR(255),
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE simulations (
   id SERIAL PRIMARY KEY NOT NULL,
   name VARCHAR(255) NOT NULL,
-  created_date TIMESTAMP,
-  key VARCHAR(255),
+  created_date TIMESTAMP NOT NULL DEFAULT NOW(),
+  simulation_key VARCHAR(255),
   mock_market_data TEXT,
   current_month INT,
-  state BOOLEAN,
+  simulation_state BOOLEAN,
+  income BIGINT,
+  expense BIGINT,
   teacher_id INTEGER REFERENCES teachers(id) ON DELETE CASCADE
 );
 
@@ -30,15 +32,10 @@ CREATE TABLE students (
   simulation_id INTEGER REFERENCES simulations(id) ON DELETE CASCADE
 );
 
-CREATE TABLE basic_accounts (
+CREATE TABLE accounts (
   id SERIAL PRIMARY KEY NOT NULL,
-  type VARCHAR(255),
+  account_type VARCHAR(255),
   balance BIGINT,
-  student_id INTEGER REFERENCES students(id) ON DELETE CASCADE
-);
-
-CREATE TABLE investment_accounts (
-  id SERIAL PRIMARY KEY NOT NULL,
   student_id INTEGER REFERENCES students(id) ON DELETE CASCADE
 );
 
@@ -47,5 +44,5 @@ CREATE TABLE market_transactions (
   month INT,
   price BIGINT,
   quantity INTEGER,
-  investment_account_id INTEGER REFERENCES investment_accounts(id) ON DELETE CASCADE
+  account_id INTEGER REFERENCES accounts(id) ON DELETE CASCADE
 );
