@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Routes, Route, useParams } from 'react-router-dom';
+import './App.scss';
+import Button from './components/Button';
 import Navbar from './components/Navbar';
 import IndexContainer from './containers/IndexContainer';
 import SimulationContainer from './containers/SimulationContainer';
@@ -17,6 +19,8 @@ function App() {
         <Route path="/" element={<IndexContainer user={appState.user} setUser={setUser} />} />
         <Route path="/sim/:simulation_key" element={<SimulationContainer user={appState.user} setUser={setUser} />} />
       </Routes>
+      <Button green onClick={() => console.log('clicked')} />
+      <Button white onClick={() => console.log('clicked')} />
     </div>
   );
 }
