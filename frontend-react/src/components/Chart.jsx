@@ -1,5 +1,6 @@
 import React from 'react';
-import './Chart.css';
+import './Chart.scss';
+import Button from './Button';
 
 
 const Chart = () => {
@@ -9,8 +10,8 @@ const Chart = () => {
         
       </div>
       <div className="chart-btns">
-        <button className="btn-play">Play</button>
-        <button className="btn-pause">Pause</button>
+        <Button green>Play</Button>
+        <Button white>Pause</Button>
       </div>
     </div>
   )
