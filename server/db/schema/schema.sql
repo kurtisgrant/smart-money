@@ -16,11 +16,9 @@ CREATE TABLE simulations (
   id SERIAL PRIMARY KEY NOT NULL,
   name VARCHAR(255) NOT NULL,
   created_date TIMESTAMP,
-  id_string VARCHAR(255),
+  key VARCHAR(255),
   mock_market_data TEXT,
-  -- mock_market_data JSON NOT NULL,
   current_month INT,
-  -- current_month INT NOT NULL,
   state BOOLEAN,
   teacher_id INTEGER REFERENCES teachers(id) ON DELETE CASCADE
 );
