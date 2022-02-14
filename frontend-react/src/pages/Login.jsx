@@ -1,16 +1,28 @@
-import React from 'react';
+import React, { useState }from 'react';
 import Button from '../components/Button';
-import './Login.scss'
+import './Login.scss';
 
 function Login({ setUser }) {
+  const [email, setEmail] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  }
+
 	return (
 		<div className="container">
 			<header>
-				<h2>Login</h2>
+				Login
 			</header>
-			<form action="">
+			<form className="login-form" autoComplete="off" onSubmit={handleSubmit}>
 				<label htmlFor="email">Email</label>
-				<input id="email" type="text" placeholder="Enter Email" />
+				<input
+					id="email"
+					type="text"
+					placeholder="Enter Email"
+					value={email}
+					onChange={(e) => setEmail(e.target.value)}
+				/>
 				<Button
 					green
 					onClick={() =>

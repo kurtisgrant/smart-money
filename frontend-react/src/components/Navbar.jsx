@@ -13,8 +13,7 @@ function Navbar({ appState }) {
 				<h1>Logo</h1>
 			</div>
 			<div className="user-name">
-				<div>Mrs. Krabappel</div>
-				{/* <div>{appState.user ? appState.user.name : null}</div> */}
+				<div>{appState.user ? appState.user.name : null}</div>
 			</div>
 		</div>
 	);
