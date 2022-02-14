@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import './Button.scss';
 
-function Button({ green, white, onClick }) {
+function Button({ children, green, white, onClick }) {
 
   let btnClass = classNames(
     "button",
@@ -14,7 +14,7 @@ function Button({ green, white, onClick }) {
    return (
      <div>
       <button className={btnClass} onClick={onClick}>
-        Button
+        {children}
       </button>
       </div>
    );
