@@ -25,7 +25,7 @@ function SimulationContainer({ user, setUser }) {
 
   if (simulationData && !user) return <AccessCodeLogin setUser={setUser} simulationKey={simulation_key} />;
 
-  if (user.id === simulationData.teacherId && user.type === 'teacher') {
+  if (user.id === Number(simulationData.teacherId) && user.type === 'teacher') {
     return <SimulationControlPanel simulationKey={simulation_key} />;
   } else if (simulationData.studentIds.includes(user.id) && user.type === 'student') {
     return <StudentDashboard simulationKey={simulation_key} />;
