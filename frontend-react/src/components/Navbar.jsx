@@ -1,19 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './Navbar.scss';
+import Button from './Button';
 
-function Navbar({ appState }) {
+function Navbar({ appState, logout }) {
 	return (
-		// <div style={{ display: 'flex' }}>
-		//   <h1>Navbar</h1>
-		//   <p>Logged in as {appState.user ? appState.user.name : 'null'}</p>
-		// </div>
 		<div className="navbar">
 			<div className="logo">
 				<h1>Logo</h1>
 			</div>
-			<div className="user-name">
-				<div>{appState.user ? appState.user.name : null}</div>
+			<div className="auth-user">
+				<div className="user-name">
+					<div>{appState.user ? appState.user.name : null}</div>
+				</div>
+				<Button white onClick={() => logout()}>Logout</Button>
 			</div>
 		</div>
 	);
