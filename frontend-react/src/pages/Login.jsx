@@ -1,38 +1,36 @@
-import React, { useState }from 'react';
+import React, { useState } from 'react';
+import Form from '../components/Form';
 import Button from '../components/Button';
 import './Login.scss';
 
 function Login({ setUser }) {
-  const [email, setEmail] = useState('');
+	const [email, setEmail] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  }
+	const handleSubmit = (e) => {
+		e.preventDefault();
+	};
 
 	return (
 		<div className="container">
-			<header>
+			<header>Login</header>
+			<Form
+				label="Email"
+				id="email"
+				placeholder="Enter email"
+				formClassName="login-form"
+				inputValue={email}
+				setValue={setEmail}
+				handleSubmit={handleSubmit}
+			/>
+			<Button
+				green
+				onClick={() =>
+					setUser({ id: 3, name: 'Mrs. Krabappel', type: 'teacher' })
+				}
+			>
 				Login
-			</header>
-			<form className="login-form" autoComplete="off" onSubmit={handleSubmit}>
-				<label htmlFor="email">Email</label>
-				<input
-					id="email"
-					type="text"
-					placeholder="Enter Email"
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
-				/>
-				<Button
-					green
-					onClick={() =>
-						setUser({ id: 3, name: 'Mrs. Krabappel', type: 'teacher' })
-					}
-				>
-					Login
-				</Button>
-				<p>(Just click login to login as Mrs. K)</p>
-			</form>
+			</Button>
+			<p>(Just click login to login as Mrs. K)</p>
 		</div>
 	);
 }

@@ -12,11 +12,9 @@ function Button({ children, green, white, onClick }) {
  );
    
    return (
-     <div>
       <button className={btnClass} onClick={onClick}>
         {children}
       </button>
-      </div>
    );
 }
 
