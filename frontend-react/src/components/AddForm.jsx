@@ -1,31 +1,39 @@
-import Button from "./Button";
+import { Fragment } from 'react';
+import Button from './Button';
+import './AddForm.scss';
 
 function AddForm({
 	onSubmit,
 	inputOneValue,
 	inputOnePlaceholder,
-  setInputOne,
+	setInputOne,
 	inputTwoValue,
 	inputTwoPlaceholder,
-  setInputTwo
+	setInputTwo,
 }) {
 	return (
 		<form className="add-form" onSubmit={onSubmit}>
-			<input
-				type="text"
-				placeholder={inputOnePlaceholder}
-				value={inputOneValue}
-				onChange={(e) => setInputOne(e.target.value)}
-			/>
-			<input
-				type="text"
-				placeholder={inputTwoPlaceholder}
-				value={inputTwoValue}
-				onChange={(e) => setInputTwo(e.target.value)}
-			/>
-			<Button green type="submit">
-				Submit
-			</Button>
+			<>
+				<input
+					type="text"
+					placeholder={inputOnePlaceholder}
+					value={inputOneValue}
+					onChange={(e) => setInputOne(e.target.value)}
+				/>
+			</>
+			<>
+				<input
+					type="text"
+					placeholder={inputTwoPlaceholder}
+					value={inputTwoValue}
+					onChange={(e) => setInputTwo(e.target.value)}
+				/>
+			</>
+			<>
+				<Button green type="submit">
+					Submit
+				</Button>
+			</>
 		</form>
 	);
 }
