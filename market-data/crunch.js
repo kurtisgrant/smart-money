@@ -14,7 +14,7 @@ fs.createReadStream(csvFileName)
       return {
         date: row.Date,
         price: row.SP500,
-        yr2000Price: row['Consumer Price Index']
+        yr2000Price: row['Real Price']
       };
     });
 
