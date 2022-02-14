@@ -3,7 +3,6 @@ import { FaTrashAlt } from 'react-icons/fa';
 import './SimulationListItem.scss';
 
 const SimulationListItem = function ({ name, date }) {
-
 	return (
 		<div className="student-item">
 			<div className="col-1">{name}</div>
