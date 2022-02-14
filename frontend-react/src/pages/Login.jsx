@@ -11,13 +11,12 @@ function Login({ setUser }) {
 	};
 
 	return (
-		<div className="container">
-			<header>Login</header>
+		<div className="login-container">
+			<h2>Login</h2>
 			<Form
 				label="Email"
 				id="email"
 				placeholder="Enter email"
-				formClassName="login-form"
 				inputValue={email}
 				setValue={setEmail}
 				handleSubmit={handleSubmit}
