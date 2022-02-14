@@ -1,16 +1,25 @@
+@use '../styles/mixins';
+
 .navbar {
+  @include mixins.main-left-right-padding;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #3DAE70;
 
   .logo {
-    margin-left: 7rem;
     color: #FFFFFF;
   }
 
+  .auth-user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .user-name {
-    margin-right: 7rem;
+    margin-right: 2rem;
     color: #FFFFFF;
   }
 }
