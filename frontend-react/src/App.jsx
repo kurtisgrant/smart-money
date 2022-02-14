@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import './App.scss';
+import './styles/App.scss';
 import Navbar from './components/Navbar';
 import IndexContainer from './containers/IndexContainer';
 import SimulationContainer from './containers/SimulationContainer';
@@ -36,10 +36,12 @@ function App() {
   return (
     <div className="App">
       <Navbar appState={appState} logout={logout} />
-      <Routes>
-        <Route path="/" element={<IndexContainer user={appState.user} setUser={setUser} />} />
-        <Route path="/sim/:simulation_key" element={<SimulationContainer user={appState.user} setUser={setUser} />} />
-      </Routes>
+      <div className="main-container">
+        <Routes>
+          <Route path="/" element={<IndexContainer user={appState.user} setUser={setUser} />} />
+          <Route path="/sim/:simulation_key" element={<SimulationContainer user={appState.user} setUser={setUser} />} />
+        </Routes>
+      </div>
     </div>
   );
 }

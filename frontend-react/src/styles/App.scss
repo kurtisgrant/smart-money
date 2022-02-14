@@ -1,0 +1,11 @@
+@use '../styles/mixins';
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;700&display=swap');
+
+* {
+  font-family: 'Mulish', sans-serif;
+}
+
+.App > .main-container {
+  @include mixins.main-left-right-padding;
+  @include mixins.main-content-verticle-padding;
+}
