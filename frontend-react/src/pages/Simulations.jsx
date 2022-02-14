@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../components/Button';
 import SimulationList from '../components/SimulationList';
+import AddForm from '../components/AddForm';
 import './Simulations.scss';
 
 function Simulations({ user }) {
@@ -8,28 +9,12 @@ function Simulations({ user }) {
 	const [className, setClassName] = useState('');
 	const [date, setDate] = useState('');
 
-	// setSimulationsList ([
-	// 	{
-	// 		id: 1,
-	// 		name: 'Class 1A11',
-	// 		date: 'February 12, 2022',
-	// 	},
-	// 	{
-	// 		id: 2,
-	// 		name: 'Class 2B22',
-	// 		date: 'February 13, 2022',
-	// 	},
-	// 	{
-	// 		id: 3,
-	// 		name: 'Class 3C33',
-	// 		date: 'February 14, 2022',
-	// 	},
-	// ]);
-
-	const onSubmit = (e) => {
+  const onSubmit = (e) => {
 		e.preventDefault();
 
-		if (!className || !date) alert('Please fill out both class name and date.');
+		if (!className || !date) {
+      return alert('Please fill out both class name and date.')
+    }
 
 		setSimulationsList((prev) => [
 			...prev,
@@ -40,6 +25,10 @@ function Simulations({ user }) {
 		setDate('');
 	};
 
+  const deleteSimulation = (id) => {
+    setSimulationsList(simulationsList.filter((simulationItem) => simulationItem.id !== id));
+  }
+
 	return (
 		<div className="simulations-container">
 			<h1>Welcome back {user.name}!</h1>
@@ -48,7 +37,17 @@ function Simulations({ user }) {
 				<Button green>Add Simulation</Button>
 			</div>
 
-			<form className="add-form" onSubmit={onSubmit}>
+      <AddForm 
+        onSubmit={onSubmit}
+        inputOnePlaceholder="Enter class name"
+        inputOneValue={className}
+        setInputOne={setClassName}
+        inputTwoPlaceholder="Enter date"
+        inputTwoValue={date}
+        setInputTwo={setDate}
+      />
+
+			{/* <form className="add-form" onSubmit={onSubmit}>
 				<input
 					type="text"
 					placeholder="Enter class name"
@@ -61,12 +60,12 @@ function Simulations({ user }) {
 					value={date}
 					onChange={(e) => setDate(e.target.value)}
 				/>
-				<Button white type="submit">
+				<Button green type="submit">
 					Submit
 				</Button>
-			</form>
+			</form> */}
 
-			<SimulationList simulationList={simulationsList} />
+			<SimulationList simulationList={simulationsList} onDelete={deleteSimulation} />
 		</div>
 	);
 }
