@@ -1,0 +1,16 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3DAE70;
+
+  .logo {
+    margin-left: 7rem;
+    color: #FFFFFF;
+  }
+
+  .user-name {
+    margin-right: 7rem;
+    color: #FFFFFF;
+  }
+}
