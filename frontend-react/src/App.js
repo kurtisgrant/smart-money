@@ -23,9 +23,9 @@ function App() {
     setAppState({ ...appState, user });
   };
   const logout = () => {
-    sessionStorage.clearItem('user')
-    setAppState({ ...appState, user: null})
-  }
+    sessionStorage.removeItem('user');
+    setAppState({ ...appState, user: null });
+  };
 
   useEffect(() => {
     const sessionUser = JSON.parse(sessionStorage.getItem('user'));
