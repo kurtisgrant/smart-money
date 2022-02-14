@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
+  margin-right: auto;
+  margin-left: auto;
+
+  header {
+    margin: 50px 0;
+  }
+
+  label {
+    display: block;
+    padding-bottom: 5px;
+  }
+
+  input {
+    width: 100%;
+    border-radius: 20px;
+    padding: 7px 10px;
+    margin-bottom: 20px;
+    border: 1px solid #828282;
+  }
+
+  input:focus {
+    outline: none !important;
+    border:1px solid #3DAE70;
+  }
+}
