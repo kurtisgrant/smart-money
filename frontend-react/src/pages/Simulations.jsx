@@ -12,13 +12,15 @@ function Simulations({ user }) {
   const [date, setDate] = useState('');
   const navigate = useNavigate();
 
-  // const viewSimulation = (id, name) => {
-  //   navigate(`/${id}`, {
-  //     state: { className: name }
-  //   });
-  // };
+  const viewSimulation = (id, name) => {
+    navigate(`/${id}`, {
+      state: { className: name }
+    });
+  };
 
-  const deleteSimulation = (id) => {
+  const deleteSimulation = (e, id) => {
+    e.stopPropagation();
+    
     setSimulationsList(
       simulationsList.filter((simulationItem) => simulationItem.id !== id)
     );
@@ -46,8 +48,8 @@ function Simulations({ user }) {
 
       <SimulationList
         simulationList={simulationsList}
+        onClick={viewSimulation}
         onDelete={deleteSimulation}
-        // onClick={viewSimulation}
       />
     </div>
   );
