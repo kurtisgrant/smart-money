@@ -12,30 +12,15 @@ function Simulations({ user }) {
   const [date, setDate] = useState('');
   const navigate = useNavigate();
 
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-
-    if (!className || !date) {
-      return alert('Please fill out both class name and date.');
-    }
-
-    setSimulationsList((prev) => [
-      ...prev,
-      { id: simulationsList.length + 1, name: className, date },
-    ]);
-
-    setClassName('');
-    setDate('');
-  };
-
   const viewSimulation = (id, name) => {
     navigate(`/${id}`, {
       state: { className: name }
     });
   };
 
-  const deleteSimulation = (id) => {
+  const deleteSimulation = (e, id) => {
+    e.stopPropagation();
+    
     setSimulationsList(
       simulationsList.filter((simulationItem) => simulationItem.id !== id)
     );
@@ -50,13 +35,15 @@ function Simulations({ user }) {
       </div>
 
       <AddForm
-        onSubmit={onSubmit}
+        date
         inputOnePlaceholder="Enter class name"
         inputOneValue={className}
         setInputOne={setClassName}
         inputTwoPlaceholder="Enter date"
         inputTwoValue={date}
         setInputTwo={setDate}
+        list={simulationsList}
+        setList={setSimulationsList}
       />
 
       <SimulationList

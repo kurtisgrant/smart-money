@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import { useLocation } from 'react-router-dom';
 import generateMockMarketData from '../helpers/generateMockMarketData';
+import generateRandomString from '../helpers/generateRandomString';
 import GraphWithPlayhead from '../components/GraphWithPlayhead';
 import StudentList from '../components/StudentList';
 import SingleFieldForm from '../components/SingleFieldForm';
@@ -12,32 +13,16 @@ function NewSimulation() {
 	const [randomMarketData, setRandomMarketData] = useState([]);
 	const [studentsList, setStudentsList] = useState([]);
 	const [studentName, setStudentName] = useState('');
-	const [accessCode, setAccessCode] = useState('');
-	// const { state } = useLocation();
+	const [accessCode, setAccessCode] = useState(generateRandomString(5));
 
 	const randomizeMarketData = () => {
 		const data = getRandomMarketData();
 		setRandomMarketData(data);
 	};
+
 	useEffect(() => {
 		randomizeMarketData();
 	}, []);
-
-	const onSubmit = (e) => {
-		e.preventDefault();
-
-		if (!studentName || !accessCode) {
-			return alert('Please fill out both student name and access code.');
-		}
-
-		setStudentsList((prev) => [
-			...prev,
-			{ id: studentsList.length + 1, name: studentName, accessCode },
-		]);
-
-		setStudentName('');
-		setAccessCode('');
-	};
 
 	const deleteStudent = (id) => {
 		setStudentsList(
@@ -56,7 +41,6 @@ function NewSimulation() {
 						label="Simulation Name"
 						id="class-name"
 						placeholder="Simulation Name"
-					// inputValue={state?.className}
 					/>
 				</div>
 				<div className="simulation-view-right">
@@ -74,13 +58,15 @@ function NewSimulation() {
 					<Button green>Add Students</Button>
 				</div>
 				<AddForm
-					onSubmit={onSubmit}
+					accessCode
 					inputOnePlaceholder="Enter student name"
 					inputOneValue={studentName}
 					setInputOne={setStudentName}
 					inputTwoPlaceholder="Enter access code"
 					inputTwoValue={accessCode}
 					setInputTwo={setAccessCode}
+					list={studentsList}
+					setList={setStudentsList}
 				/>
 
 				<StudentList studentsList={studentsList} onDelete={deleteStudent} />
