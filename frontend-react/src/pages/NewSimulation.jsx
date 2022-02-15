@@ -17,7 +17,7 @@ function NewSimulation() {
 		e.preventDefault();
 
 		if (!studentName || !accessCode) {
-			return alert('Please fill out both class name and date.');
+			return alert('Please fill out both student name and access code.');
 		}
 
 		setStudentsList((prev) => [
