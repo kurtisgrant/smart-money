@@ -1,9 +1,24 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Chart, Utils } from 'chart.js';
+import { Chart } from 'chart.js';
 
 function GraphWithPlayhead({ marketData, currentMonth, zeroIndex }) {
   const chartRef = useRef(null);
   const [chart, setChart] = useState(null);
+
+
+  // TODO: Update chart on new data. Not working yet.
+  // useEffect(() => {
+  //   if (!chart) return;
+  //   const workingData = marketData.map((price, i) => {
+  //     return { x: i - zeroIndex, y: price };
+  //   })
+
+  //   setChart(prevChart => {
+  //     prevChart.data.datasets.data = workingData;
+  //     return prevChart.update();
+  //   });
+
+  // }, [marketData]);
 
   useEffect(() => {
     if (!chartRef) return;
@@ -46,7 +61,7 @@ function GraphWithPlayhead({ marketData, currentMonth, zeroIndex }) {
     });
 
     setChart(newChart);
-  }, [chartRef, marketData, currentMonth, zeroIndex]);
+  }, [chartRef]);
 
   if (!chartRef) return;
 

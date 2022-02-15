@@ -56,7 +56,7 @@ function NewSimulation() {
 						label="Simulation Name"
 						id="class-name"
 						placeholder="Simulation Name"
-						// inputValue={state?.className}
+					// inputValue={state?.className}
 					/>
 				</div>
 				<div className="simulation-view-right">
