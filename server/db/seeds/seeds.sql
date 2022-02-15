@@ -1,7 +1,7 @@
 INSERT INTO teachers (name, email, password)
-VALUES ('CLASS-1', 'kurtis.grant@lhl.com', '123456789'),
-       ('CLASS-2', 'lighthouse.labs@lhl.com', '234567891'),
-       ('CLASS-3', 'git.hub@lhl.com', '345678912');
+VALUES ('Kurtis Grant', 'kurtis.grant@lhl.com', '123456789'),
+       ('Lighthouse Labs', 'lighthouse.labs@lhl.com', '234567891'),
+       ('Git Hub', 'git.hub@lhl.com', '345678912');
 
 INSERT INTO simulations(name,
                         simulation_key,
@@ -13,150 +13,7 @@ INSERT INTO simulations(name,
                         teacher_id)
 VALUES ('SIMULATION-1',
         'A1B2C3',
-        '[{
-          "Date": "2017-04-01",
-          "SP500": "2359.31",
-          "Dividend": "46.66",
-          "Earnings": "101.53",
-          "Consumer Price Index": "244.52",
-          "Long Interest Rate": "2.3",
-          "Real Price": "2410.56",
-          "Real Dividend": "47.67",
-          "Real Earnings": "103.74",
-          "PE10": "28.9"
-        }, {
-          "Date": "2017-05-01",
-          "SP500": "2395.35",
-          "Dividend": "46.94",
-          "Earnings": "102.78",
-          "Consumer Price Index": "244.73",
-          "Long Interest Rate": "2.3",
-          "Real Price": "2445.29",
-          "Real Dividend": "47.92",
-          "Real Earnings": "104.92",
-          "PE10": "29.31"
-        }, {
-          "Date": "2017-06-01",
-          "SP500": "2433.99",
-          "Dividend": "47.22",
-          "Earnings": "104.02",
-          "Consumer Price Index": "244.96",
-          "Long Interest Rate": "2.19",
-          "Real Price": "2482.48",
-          "Real Dividend": "48.16",
-          "Real Earnings": "106.09",
-          "PE10": "29.75"
-        }, {
-          "Date": "2017-07-01",
-          "SP500": "2454.1",
-          "Dividend": "47.54",
-          "Earnings": "105.04",
-          "Consumer Price Index": "244.79",
-          "Long Interest Rate": "2.32",
-          "Real Price": "2504.72",
-          "Real Dividend": "48.52",
-          "Real Earnings": "107.21",
-          "PE10": "30.0"
-        }, {
-          "Date": "2017-08-01",
-          "SP500": "2456.22",
-          "Dividend": "47.85",
-          "Earnings": "106.06",
-          "Consumer Price Index": "245.52",
-          "Long Interest Rate": "2.21",
-          "Real Price": "2499.4",
-          "Real Dividend": "48.69",
-          "Real Earnings": "107.92",
-          "PE10": "29.91"
-        }, {
-          "Date": "2017-09-01",
-          "SP500": "2492.84",
-          "Dividend": "48.17",
-          "Earnings": "107.08",
-          "Consumer Price Index": "246.82",
-          "Long Interest Rate": "2.2",
-          "Real Price": "2523.31",
-          "Real Dividend": "48.76",
-          "Real Earnings": "108.39",
-          "PE10": "30.17"
-        }, {
-          "Date": "2017-10-01",
-          "SP500": "2557.0",
-          "Dividend": "48.42",
-          "Earnings": "108.01",
-          "Consumer Price Index": "246.66",
-          "Long Interest Rate": "2.36",
-          "Real Price": "2589.89",
-          "Real Dividend": "49.05",
-          "Real Earnings": "109.4",
-          "PE10": "30.92"
-        }, {
-          "Date": "2017-11-01",
-          "SP500": "2593.61",
-          "Dividend": "48.68",
-          "Earnings": "108.95",
-          "Consumer Price Index": "246.67",
-          "Long Interest Rate": "2.35",
-          "Real Price": "2626.9",
-          "Real Dividend": "49.3",
-          "Real Earnings": "110.35",
-          "PE10": "31.3"
-        }, {
-          "Date": "2017-12-01",
-          "SP500": "2664.34",
-          "Dividend": "48.93",
-          "Earnings": "109.88",
-          "Consumer Price Index": "246.52",
-          "Long Interest Rate": "2.4",
-          "Real Price": "2700.13",
-          "Real Dividend": "49.59",
-          "Real Earnings": "111.36",
-          "PE10": "32.09"
-        }, {
-          "Date": "2018-01-01",
-          "SP500": "2789.8",
-          "Dividend": "49.29",
-          "Earnings": "",
-          "Consumer Price Index": "247.87",
-          "Long Interest Rate": "2.58",
-          "Real Price": "2811.96",
-          "Real Dividend": "49.68",
-          "Real Earnings": "",
-          "PE10": "33.31"
-        }, {
-          "Date": "2018-02-01",
-          "SP500": "2705.16",
-          "Dividend": "49.64",
-          "Earnings": "",
-          "Consumer Price Index": "248.99",
-          "Long Interest Rate": "2.86",
-          "Real Price": "2714.34",
-          "Real Dividend": "49.81",
-          "Real Earnings": "",
-          "PE10": "32.12"
-        }, {
-          "Date": "2018-03-01",
-          "SP500": "2702.77",
-          "Dividend": "50.0",
-          "Earnings": "",
-          "Consumer Price Index": "249.55",
-          "Long Interest Rate": "2.84",
-          "Real Price": "2705.82",
-          "Real Dividend": "50.06",
-          "Real Earnings": "",
-          "PE10": "31.99"
-        }, {
-          "Date": "2018-04-01",
-          "SP500": "2642.19",
-          "Dividend": "",
-          "Earnings": "",
-          "Consumer Price Index": "249.84",
-          "Long Interest Rate": "2.8",
-          "Real Price": "2642.19",
-          "Real Dividend": "",
-          "Real Earnings": "",
-          "PE10": "31.19"
-        }]',
+        '[44.51, 43.36, 41.71, 46.86, 51.91, 53.80, 52.96, 50.58, 51.53, 53.51, 55.87]',
         2,
         FALSE,
         400000,
@@ -164,15 +21,15 @@ VALUES ('SIMULATION-1',
         1);
 
 INSERT INTO students (name, access_code, simulation_id)
-VALUES ('Jeffery Park', 'abcde', 1),
-       ('Robert Gladue', 'abcde', 1),
-       ('John Doe', 'abcde', 1),
-       ('Adam Johns', 'bcdea', 1),
-       ('Sam Lee', 'bcdea', 1),
-       ('John Deere', 'bcdea', 1),
-       ('Sally Johnson', 'cdeab', 1),
-       ('Danielle Li', 'cdeab', 1),
-       ('Tony Su', 'cdeab', 1);
+VALUES ('Jeffery Park', '5TPUn', 1),
+       ('Robert Gladue', 'fplTZ', 1),
+       ('John Doe', 'ajkff', 1),
+       ('Adam Johns', 'xYT3i', 1),
+       ('Sam Lee', 'tizae', 1),
+       ('John Deere', 'q1Ceu', 1),
+       ('Sally Johnson', 'CWc4g', 1),
+       ('Danielle Li', 'unOp0', 1),
+       ('Tony Su', '6MxBe', 1);
 
 INSERT INTO accounts (account_type, balance, student_id)
 VALUES ('Chequing', 30000, 1),
