@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import SimulationList from '../components/SimulationList';
 import AddForm from '../components/AddForm';
@@ -8,6 +9,8 @@ function Simulations({ user }) {
 	const [simulationsList, setSimulationsList] = useState([]);
 	const [className, setClassName] = useState('');
 	const [date, setDate] = useState('');
+	const navigate = useNavigate();
+
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -24,6 +27,12 @@ function Simulations({ user }) {
 		setClassName('');
 		setDate('');
 	};
+
+	const viewSimulation = (id, name) => {
+		navigate(`/${id}`, {
+			state: { className: name }
+		});
+	}
 
 	const deleteSimulation = (id) => {
 		setSimulationsList(
@@ -51,6 +60,7 @@ function Simulations({ user }) {
 
 			<SimulationList
 				simulationList={simulationsList}
+				onClick={viewSimulation}
 				onDelete={deleteSimulation}
 			/>
 		</div>
