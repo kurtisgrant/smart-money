@@ -12,6 +12,8 @@ const getSimulation = (simulationKey) => {
 
 function SimulationContainer({ user, setUser }) {
   const [simulationData, setSimulationData] = useState(undefined);
+  
+
   const { simulation_key } = useParams();
 
   // Get simulation data using simulation key from url parameter

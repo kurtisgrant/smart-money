@@ -10,21 +10,27 @@ export default function generateMarketData(options) {
     months,
   } = options;
 
+  // Filter data from sp500 to get only requested years
   const historicalSP500 = sp500.filter(row => {
     const year = Number(row.date.slice(0, 4));
     return (year >= firstYearSeed && year <= lastYearSeed);
   });
 
+  // Get average pcnt change and average standard deviation between months of data
   const [
     monthlyMeanChange,
     monthlyStdDevChange
   ] = getMonthlyMeanAndStdDevChanges(historicalSP500, adjustForInflation);
 
 
+  // Initialize array to hold market data
   const simMktData = [startPrice];
 
+  // Loop for X months of data, adding each prediction one at a time
   // Start at 1, since startPrice is provided
   for (let i = 1; i < months; i++) {
+
+    // Get prediction based on last price added
     const price = getProjectedMarketPrice(
       simMktData[simMktData.length - 1],
       monthlyMeanChange,
@@ -32,6 +38,8 @@ export default function generateMarketData(options) {
     );
     simMktData.push(Number(price.toFixed(2)));
   }
+
+  // Log preview of data
   console.log("Market Data Generated.\n\n");
   console.log("Preview: ");
   console.log('0: $' + simMktData[0]);
@@ -47,12 +55,19 @@ export default function generateMarketData(options) {
   console.log(simMktData);
 };
 
+
 const getMonthlyMeanAndStdDevChanges = (data, useRealPrices) => {
 
+  // Depending whether we want inflation or not, 
+  // we'll use this key to access the correct 
+  // data from the filtered historical data
   const priceKey = useRealPrices ? 'yr2000Price' : 'price';
 
-  let marketMonthPcntChanges = [];
+  // Array for the percent change +/- between
+  // each month of historical data
+  const marketMonthPcntChanges = [];
 
+  // Loop through data, calculating pcnt changes
   // Start at second month
   for (let i = 1; i < data.length; i++) {
 
@@ -61,12 +76,14 @@ const getMonthlyMeanAndStdDevChanges = (data, useRealPrices) => {
     marketMonthPcntChanges.push((thisMonthPrice - prevMonthPrice) / prevMonthPrice);
   }
 
+  // Use d3 functions to get average pcnt change and average standard deviation
   const meanMonthlyChange = mean(marketMonthPcntChanges);
   const stdDevMonthlyChange = deviation(marketMonthPcntChanges);
 
   return [meanMonthlyChange, stdDevMonthlyChange];
 
 };
+
 
 const getProjectedMarketPrice = (currentPrice, monthlyMeanChange, monthlyStdDevChange) => {
   const drift = monthlyMeanChange - (monthlyStdDevChange * monthlyStdDevChange) / 2;
