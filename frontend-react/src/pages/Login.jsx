@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Form from '../components/Form';
+import SingleFieldForm from '../components/SingleFieldForm';
 import Button from '../components/Button';
 import './Login.scss';
 
@@ -13,7 +13,7 @@ function Login({ setUser }) {
 	return (
 		<div className="login-container">
 			<h2>Login</h2>
-			<Form
+			<SingleFieldForm
 				label="Email"
 				id="email"
 				placeholder="Enter email"

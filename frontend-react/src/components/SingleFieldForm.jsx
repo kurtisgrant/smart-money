@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Form.scss';
+import './SingleFieldForm.scss';
 
 function Form({ label, id, placeholder, inputValue, setValue, handleSubmit }) {
 	return (
