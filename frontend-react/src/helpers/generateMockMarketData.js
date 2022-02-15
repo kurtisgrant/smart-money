@@ -53,6 +53,8 @@ export default function generateMarketData(options) {
   console.log(`${simMktData.length - 1}: $` + simMktData[simMktData.length - 1]);
   console.log('\nRaw data: ');
   console.log(simMktData);
+
+  return simMktData;
 };
 
 

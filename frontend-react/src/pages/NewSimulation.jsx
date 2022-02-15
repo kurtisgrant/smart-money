@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import LineChart from '../components/LineChart';
+import React, { useState, useEffect } from 'react';
+// import { useLocation } from 'react-router-dom';
+import generateMockMarketData from '../helpers/generateMockMarketData';
+import GraphWithPlayhead from '../components/GraphWithPlayhead';
 import StudentList from '../components/StudentList';
 import SingleFieldForm from '../components/SingleFieldForm';
 import Button from '../components/Button';
@@ -8,10 +9,19 @@ import AddForm from '../components/AddForm';
 import './NewSimulation.scss';
 
 function NewSimulation() {
+	const [randomMarketData, setRandomMarketData] = useState([]);
 	const [studentsList, setStudentsList] = useState([]);
 	const [studentName, setStudentName] = useState('');
 	const [accessCode, setAccessCode] = useState('');
-	const { state } = useLocation();
+	// const { state } = useLocation();
+
+	const randomizeMarketData = () => {
+		const data = getRandomMarketData();
+		setRandomMarketData(data);
+	};
+	useEffect(() => {
+		randomizeMarketData();
+	}, []);
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -35,19 +45,22 @@ function NewSimulation() {
 		);
 	};
 
+	if (!randomMarketData.length) return null;
+
 	return (
 		<div className="simulation-container">
 			<div className="simulation-view">
 				<div className="simulation-view-left">
 					<h2>New Simulation</h2>
 					<SingleFieldForm
-						label="Class Name"
+						label="Simulation Name"
 						id="class-name"
-						inputValue={state.className}
+						placeholder="Simulation Name"
+					// inputValue={state?.className}
 					/>
 				</div>
 				<div className="simulation-view-right">
-					<LineChart />
+					<GraphWithPlayhead marketData={randomMarketData} currentMonth={0} zeroIndex={10 * 12} />
 					<div className="simulation-buttons">
 						<Button green>Randomize</Button>
 						<Button white>Confirm</Button>
@@ -75,5 +88,15 @@ function NewSimulation() {
 		</div>
 	);
 }
+
+const getRandomMarketData = () => {
+	return generateMockMarketData({
+		firstYearSeed: 1950, // Min: 1871
+		lastYearSeed: 2015, // Max: 2018
+		adjustForInflation: true, // true: Adjust to Today's dollars, false: Allow inflation
+		startPrice: 10, // First price in fake market data
+		months: 720, // How many months of data do you want?
+	});
+};
 
 export default NewSimulation;
