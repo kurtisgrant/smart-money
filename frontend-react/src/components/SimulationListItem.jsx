@@ -8,7 +8,7 @@ const SimulationListItem = function ({ id, name, date, onClick, onDelete }) {
 			<div className="col-1">{name}</div>
 			<div className="col-2">{date}</div>
 			<div className="col-3">
-				<FaTrashAlt size={15} onClick={() => onDelete(id)} />
+				<FaTrashAlt size={15} onClick={(e) => onDelete(e, id)} />
 			</div>
 		</div>
 	);

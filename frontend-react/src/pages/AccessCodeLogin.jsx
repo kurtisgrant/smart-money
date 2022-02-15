@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { UserContext } from '../UserContext';
 
 
-function AccessCodeLogin({ setUser }) {
+function AccessCodeLogin() {
+  const { setUser } = useContext(UserContext);
 
   const handleSubmit = () => {
-    setUser({ id: 8, name: 'Johnny Appleseed', type: 'student' })
-  }
+    setUser({ id: 8, name: 'Johnny Appleseed', type: 'student' });
+  };
   return (
     <div>
       <h2>Enter Access Code</h2>
