@@ -14,7 +14,7 @@ const SimulationList = function ({ simulationList, onDelete }) {
 	));
 
 	return (
-		<section className="students">
+		<section className="simulations">
 			<div className="simulation-list">{simulationListItems}</div>
 		</section>
 	);
