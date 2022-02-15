@@ -13,9 +13,9 @@ module.exports = (db) => {
   router.post('/api/student/login', (req, res) => {
     console.log(req.body);
     const accessCode = req.body.access_code;
-    const query = "SELECT * FROM students WHERE access_code = $1", [accessCode];
+    const query = "SELECT * FROM students WHERE access_code = $1";
 
-    db.query(query)
+    db.query(query, [accessCode])
       .then(data => {
         console.log(data.rows)
         res.json(data.rows);

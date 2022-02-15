@@ -12,8 +12,8 @@ module.exports = (db) => {
   //return JSON of teacher object OR null if not found
   router.post('/api/teacher/login', (req, res) => {
     const email = req.body.email;
-    const query = "SELECT * FROM teachers WHERE email = $1", [email];
-    db.query(query)
+    const query = "SELECT * FROM teachers WHERE email = $1";
+    db.query(query, [email])
       .then(data => {
         console.log(data.rows)
         res.json(data.rows)
