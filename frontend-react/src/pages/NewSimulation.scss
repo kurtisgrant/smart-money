@@ -5,7 +5,7 @@
 	.simulation-view {
 		display: flex;
     align-items: center;
-    height: 400px;
+
 
 		.simulation-view-left {
 			flex: 1;
@@ -22,7 +22,7 @@
 			flex: 3;
 
       .chart {
-        width: 100%;
+        width: 95%;
       }
 
       .button {
@@ -42,15 +42,4 @@
       margin-bottom: 20px;
     }
   }
-
-	// h1 {
-	//   margin-bottom: 50px;
-	// }
-
-	// .subheading {
-	//   display: flex;
-	//   justify-content: space-between;
-	//   align-items: center;
-	//   margin-bottom: 20px;
-	// }
 }
