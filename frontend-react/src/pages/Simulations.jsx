@@ -43,7 +43,7 @@ function Simulations({ user }) {
 	return (
 		<div className="simulations-container">
 			<h1>Welcome back {user.name}!</h1>
-			<div className="subheading">
+			<div className="simulations-form-heading">
 				<h2>My Simulations</h2>
 				<Button green>Add Simulation</Button>
 			</div>

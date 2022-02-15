@@ -1,0 +1,39 @@
+.simulation-container {
+	display: flex;
+	flex-direction: column;
+
+	.simulation-view {
+		display: flex;
+
+		simulation-view-left {
+			flex: 3;
+		}
+
+		simulation-view-right {
+			flex: 1;
+		}
+	}
+
+  .simulation-student-list {
+    display: flex;
+    flex-direction: column;
+    
+    .simulations-form-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+  }
+
+	// h1 {
+	//   margin-bottom: 50px;
+	// }
+
+	// .subheading {
+	//   display: flex;
+	//   justify-content: space-between;
+	//   align-items: center;
+	//   margin-bottom: 20px;
+	// }
+}
