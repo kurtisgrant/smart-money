@@ -1,0 +1,45 @@
+.simulation-container {
+	display: flex;
+	flex-direction: column;
+
+	.simulation-view {
+		display: flex;
+    align-items: center;
+
+
+		.simulation-view-left {
+			flex: 1;
+
+      h2 {
+        margin-bottom: 20px;
+      }
+		}
+
+		.simulation-view-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+			flex: 3;
+
+      .chart {
+        width: 95%;
+      }
+
+      .button {
+        margin: 5px;
+      }
+		}
+	}
+
+  .simulation-student-list {
+    display: flex;
+    flex-direction: column;
+    
+    .simulations-form-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+  }
+}

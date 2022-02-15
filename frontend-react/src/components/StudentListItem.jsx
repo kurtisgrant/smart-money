@@ -1,18 +1,18 @@
 import React from "react";
+import { FaTrashAlt } from 'react-icons/fa';
 import './StudentListItem.scss';
 
 
-const StudentListItem = function (props) {
+const StudentListItem = function ({ id, name, accessCode, onDelete }) {
   
   return (
-    <li className='student-item'>
-      {/* hardcoded values for now until props passed down */}
-      {props.name ? <p>{props.name}</p> : <p>Johnny Appleseed</p>}
-      {props.accessCode && <p>{props.accessCode}</p>}
-      {props.chequing && <p>${props.chequing}</p>}
-      {props.savings && <p>{props.savings}</p>}
-      {props.investment && <p>{props.investment}</p>}
-    </li>
+		<div className="student-item">
+			<div className="col-1">{name}</div>
+			<div className="col-2">{accessCode}</div>
+			<div className="col-3">
+				<FaTrashAlt size={15} onClick={() => onDelete(id)} />
+			</div>
+		</div>
   );
 };
 

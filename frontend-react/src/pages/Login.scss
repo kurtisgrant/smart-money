@@ -1,4 +1,4 @@
-.container {
+.login-container {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -7,38 +7,14 @@
 	margin-right: auto;
 	margin-left: auto;
 
-	header {
+	h2 {
 		margin: 50px 0;
 		width: 100%;
 		font-size: 30px;
     font-weight: bold;
 	}
 
-	.login-form {
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-	}
-
-	label {
-		display: block;
-		padding-left: 10px;
-		padding-bottom: 5px;
-		font-size: 15px;
-		color: #828282;
-	}
-
-	input {
-		width: 100%;
-		border-radius: 20px;
-		padding: 7px 10px;
-		margin-bottom: 20px;
-		border: 1px solid #828282;
-		color: #828282;
-	}
-
-	input:focus {
-		outline: none;
-		border: 1.5px solid #3dae70;
+	.button {
+		align-self: flex-start;
 	}
 }

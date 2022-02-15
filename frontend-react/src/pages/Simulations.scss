@@ -1,0 +1,15 @@
+.simulations-container {
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    margin-bottom: 50px;
+  }
+
+  .simulations-form-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+}

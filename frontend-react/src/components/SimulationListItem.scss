@@ -1,4 +1,4 @@
-.student-item {
+.simulation-item {
   display: flex;
   justify-content:space-between;
   align-items: center;
@@ -26,7 +26,7 @@
   }
 }
 
-.student-item:hover {
+.simulation-item:hover {
   cursor: pointer;
   border: 1px solid #3dae70;
 }
