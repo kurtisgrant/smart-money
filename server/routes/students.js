@@ -10,7 +10,7 @@ module.exports = (db) => {
   });
 
   //return JSON with student object OR null if not found
-  router.post('/api/student/login', (req, res) => {
+  router.post('/login', (req, res) => {
     console.log(req.body);
     const accessCode = req.body.access_code;
     const query = "SELECT * FROM students WHERE access_code = $1";
