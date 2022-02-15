@@ -4,6 +4,7 @@ import './styles/App.scss';
 import Navbar from './components/Navbar';
 import IndexContainer from './containers/IndexContainer';
 import SimulationContainer from './containers/SimulationContainer';
+import NewSimulation from './pages/NewSimulation';
 
 // Temp for testing
 // (See console in browser to view data)
@@ -40,6 +41,7 @@ function App() {
         <Routes>
           <Route path="/" element={<IndexContainer user={appState.user} setUser={setUser} />} />
           <Route path="/sim/:simulation_key" element={<SimulationContainer user={appState.user} setUser={setUser} />} />
+          <Route path="/new" element={<NewSimulation />} />
         </Routes>
       </div>
     </div>

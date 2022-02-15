@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import SimulationList from '../components/SimulationList';
 import AddForm from '../components/AddForm';
@@ -8,6 +9,8 @@ function Simulations({ user }) {
 	const [simulationsList, setSimulationsList] = useState([]);
 	const [className, setClassName] = useState('');
 	const [date, setDate] = useState('');
+	const navigate = useNavigate();
+
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -25,6 +28,12 @@ function Simulations({ user }) {
 		setDate('');
 	};
 
+	const viewSimulation = (id, name) => {
+		navigate(`/${id}`, {
+			state: { className: name }
+		});
+	}
+
 	const deleteSimulation = (id) => {
 		setSimulationsList(
 			simulationsList.filter((simulationItem) => simulationItem.id !== id)
@@ -34,7 +43,7 @@ function Simulations({ user }) {
 	return (
 		<div className="simulations-container">
 			<h1>Welcome back {user.name}!</h1>
-			<div className="subheading">
+			<div className="simulations-form-heading">
 				<h2>My Simulations</h2>
 				<Button green>Add Simulation</Button>
 			</div>
@@ -51,6 +60,7 @@ function Simulations({ user }) {
 
 			<SimulationList
 				simulationList={simulationsList}
+				onClick={viewSimulation}
 				onDelete={deleteSimulation}
 			/>
 		</div>

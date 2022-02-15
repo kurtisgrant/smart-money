@@ -6,10 +6,6 @@ import './Login.scss';
 function Login({ setUser }) {
 	const [email, setEmail] = useState('');
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-	};
-
 	return (
 		<div className="login-container">
 			<h2>Login</h2>
@@ -19,7 +15,6 @@ function Login({ setUser }) {
 				placeholder="Enter email"
 				inputValue={email}
 				setValue={setEmail}
-				handleSubmit={handleSubmit}
 			/>
 			<Button
 				green

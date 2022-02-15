@@ -1,11 +1,32 @@
 .student-item {
-  height: 50px;
-  width: 1000px;
-  border: 1px solid black;
-  border-radius: 5px;
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  justify-content:space-between;
   align-items: center;
-  margin: 10px;
+  border: 1px solid #828282;
+  border-radius: 5px;
+  height: 50px;
+  width: 100%;
+  margin: 0.5rem 0;
+
+  .col-1 {
+    margin-left: 20px;
+  }
+
+  .col-3 {
+    cursor: pointer;
+    margin-right: 20px;
+  }
+
+  .col-3:hover {
+    filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.25));
+  }
+
+  .col-3:active {
+    transform: scale(0.97);
+  }
+}
+
+.student-item:hover {
+  cursor: pointer;
+  border: 1px solid #3dae70;
 }

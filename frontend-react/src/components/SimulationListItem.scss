@@ -2,7 +2,7 @@
   display: flex;
   justify-content:space-between;
   align-items: center;
-  border: 1px solid #3dae70;
+  border: 1px solid #828282;
   border-radius: 5px;
   height: 50px;
   width: 100%;
@@ -24,4 +24,9 @@
   .col-3:active {
     transform: scale(0.97);
   }
+}
+
+.simulation-item:hover {
+  cursor: pointer;
+  border: 1px solid #3dae70;
 }
