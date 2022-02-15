@@ -14,5 +14,11 @@ module.exports = (db) => {
       .catch(e => console.log(e.message))
   });
 
+  // router.post('/sim', (req, res) => {
+  //   const simID = req.body.simulation_id;
+
+  //   const query = "INSERT INTO simulations(name, )"
+  // })
+
   return router;
 };

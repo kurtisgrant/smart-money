@@ -9,5 +9,19 @@ module.exports = (db) => {
       .catch(e => console.log(e.message))
   });
 
+  //return JSON with student object OR null if not found
+  router.post('/api/student/login', (req, res) => {
+    console.log(req.body);
+    const accessCode = req.body.access_code;
+    const query = "SELECT * FROM students WHERE access_code = $1", [accessCode];
+
+    db.query(query)
+      .then(data => {
+        console.log(data.rows)
+        res.json(data.rows);
+      })
+      .catch(e => console.log(e.message))
+  })
+
   return router;
 };
