@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../UserContext';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
@@ -6,7 +7,8 @@ import SimulationList from '../components/SimulationList';
 import AddForm from '../components/AddForm';
 import './Simulations.scss';
 
-function Simulations({ user }) {
+function Simulations() {
+  const { user } = useContext(UserContext);
   const [simulationsList, setSimulationsList] = useState([]);
   const [className, setClassName] = useState('');
   const [date, setDate] = useState('');

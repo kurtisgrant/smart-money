@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../UserContext';
 import SingleFieldForm from '../components/SingleFieldForm';
 import Button from '../components/Button';
 import './Login.scss';
 
-function Login({ setUser }) {
+function Login() {
+	const { setUser } = useContext(UserContext)
 	const [email, setEmail] = useState('');
 
 	return (
