@@ -41,7 +41,7 @@ function App() {
         <Routes>
           <Route path="/" element={<IndexContainer user={appState.user} setUser={setUser} />} />
           <Route path="/sim/:simulation_key" element={<SimulationContainer user={appState.user} setUser={setUser} />} />
-          <Route path="/:simulation_id" element={<NewSimulation />} />
+          <Route path="/new" element={<NewSimulation />} />
         </Routes>
       </div>
     </div>
