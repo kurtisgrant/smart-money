@@ -1,23 +1,56 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
+import generateRandomString from '../helpers/generateRandomString';
 import Button from './Button';
 import './AddForm.scss';
 
 function AddForm({
-	onSubmit,
+	date,
+	accessCode,
 	inputOneValue,
 	inputOnePlaceholder,
-	setInputOne,
 	inputTwoValue,
 	inputTwoPlaceholder,
-	setInputTwo,
+	list,
+	setList
 }) {
+	const [inputOne, setInputOne] = useState(inputOneValue || '');
+	const [inputTwo, setInputTwo] = useState(inputTwoValue || '');
+
+	const onSubmit = (e) => {
+    e.preventDefault();
+
+    if (!inputOne || !inputTwo) {
+      return alert('Please fill out both fields.');
+    }
+
+		if (date) {
+			setList((prev) => [
+				...prev,
+				{ id: list.length + 1, name: inputOne, date: inputTwo },
+			]);
+
+			setInputOne('');
+			setInputTwo('');
+		}
+
+		if (accessCode) {
+			setList((prev) => [
+				...prev,
+				{ id: list.length + 1, name: inputOne, accessCode: inputTwo },
+			]);
+
+			setInputOne('');
+			setInputTwo(generateRandomString(5));
+		}
+  };
+
 	return (
 		<form className="add-form" onSubmit={onSubmit}>
 			<>
 				<input
 					type="text"
 					placeholder={inputOnePlaceholder}
-					value={inputOneValue}
+					value={inputOne}
 					onChange={(e) => setInputOne(e.target.value)}
 				/>
 			</>
@@ -25,7 +58,7 @@ function AddForm({
 				<input
 					type="text"
 					placeholder={inputTwoPlaceholder}
-					value={inputTwoValue}
+					value={inputTwo}
 					onChange={(e) => setInputTwo(e.target.value)}
 				/>
 			</>
