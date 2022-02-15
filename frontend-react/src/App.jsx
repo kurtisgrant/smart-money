@@ -1,20 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { UserContext } from './UserContext';
 import { Routes, Route } from 'react-router-dom';
 import './styles/App.scss';
 import Navbar from './components/Navbar';
-import IndexContainer from './containers/IndexContainer';
+import Login from './pages/Login';
+import Simulations from './pages/Simulations';
+import SimulationControlPanel from './pages/SimulationControlPanel';
+import StudentDashboard from './pages/StudentDashboard';
+import AccessCodeLogin from './pages/AccessCodeLogin';
 import SimulationContainer from './containers/SimulationContainer';
 import NewSimulation from './pages/NewSimulation';
 
 function App() {
-  const [appState, setAppState] = useState({ user: null });
+
+  const [user, setUserState] = useState(null);
+
   const setUser = (user) => {
-    sessionStorage.setItem('user', JSON.stringify(user));
-    setAppState({ ...appState, user });
-  };
-  const logout = () => {
-    sessionStorage.removeItem('user');
-    setAppState({ ...appState, user: null });
+    if (user === null) {
+      sessionStorage.removeItem('user');
+      setUserState(null);
+    } else {
+      sessionStorage.setItem('user', JSON.stringify(user));
+      setUserState(user);
+    }
   };
 
   useEffect(() => {
@@ -25,14 +33,18 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar appState={appState} logout={logout} />
-      <div className="main-container">
-        <Routes>
-          <Route path="/" element={<IndexContainer user={appState.user} setUser={setUser} />} />
-          <Route path="/sim/:simulation_key" element={<SimulationContainer user={appState.user} setUser={setUser} />} />
-          <Route path="/new" element={<NewSimulation />} />
-        </Routes>
-      </div>
+      <UserContext.Provider value={{ user, setUser }}>
+        <Navbar />
+        <div className="main-container">
+          <Routes>
+            <Route path="/" element={user?.type === 'teacher' ? <Simulations /> : <Login />} />
+            <Route path="/sim/:simulationKey" element={
+              user?.type === 'teacher' ? <SimulationControlPanel /> :
+                (user?.type === 'student' ? <StudentDashboard /> : <AccessCodeLogin />)} />
+            <Route path="/new" element={user?.type === 'teacher' ? <NewSimulation /> : <Login />} />
+          </Routes>
+        </div>
+      </UserContext.Provider>
     </div>
   );
 }

@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../UserContext';
 import { useParams } from 'react-router-dom';
 import SimulationControlPanel from '../pages/SimulationControlPanel';
 import StudentDashboard from '../pages/StudentDashboard';
 import AccessCodeLogin from '../pages/AccessCodeLogin';
+
 
 // TODO: Function sends ajax request for simulation data
 const getSimulation = (simulationKey) => {
@@ -10,11 +12,10 @@ const getSimulation = (simulationKey) => {
   return new Promise((resolve) => setTimeout(() => resolve(dataFromServer), Math.random() * 3000));
 };
 
-function SimulationContainer({ user, setUser }) {
-  const [simulationData, setSimulationData] = useState(undefined);
-  
-
+function SimulationContainer() {
+  const { user } = useContext(UserContext)
   const { simulation_key } = useParams();
+  const [simulationData, setSimulationData] = useState(undefined);
 
   // Get simulation data using simulation key from url parameter
   useEffect(() => {
@@ -25,7 +26,7 @@ function SimulationContainer({ user, setUser }) {
   if (simulationData === undefined) return <div>Loading...</div>;
   if (simulationData === null) return <div>404: Not Found</div>;
 
-  if (simulationData && !user) return <AccessCodeLogin setUser={setUser} simulationKey={simulation_key} />;
+  if (simulationData && !user) return <AccessCodeLogin />;
 
   if (user.id === Number(simulationData.teacherId) && user.type === 'teacher') {
     return <SimulationControlPanel simulationKey={simulation_key} />;
