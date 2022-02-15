@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import LineChart from '../components/LineChart';
 import StudentList from '../components/StudentList';
+import SingleFieldForm from '../components/SingleFieldForm';
 import Button from '../components/Button';
 import AddForm from '../components/AddForm';
 import './NewSimulation.scss';
@@ -28,7 +29,7 @@ function NewSimulation() {
 		setAccessCode('');
 	};
 
-  const deleteStudent = (id) => {
+	const deleteStudent = (id) => {
 		setStudentsList(
 			studentsList.filter((studentItem) => studentItem.id !== id)
 		);
@@ -39,12 +40,21 @@ function NewSimulation() {
 			<div className="simulation-view">
 				<div className="simulation-view-left">
 					<h2>New Simulation</h2>
+					<SingleFieldForm
+						label="Class Name"
+						id="class-name"
+						inputValue={state.className}
+					/>
 				</div>
 				<div className="simulation-view-right">
-					<h2>New Simulation</h2>
 					<LineChart />
+					<div className="simulation-buttons">
+						<Button green>Randomize</Button>
+						<Button white>Confirm</Button>
+					</div>
 				</div>
 			</div>
+
 			<div className="simulation-student-list">
 				<div className="simulations-form-heading">
 					<h2>Students</h2>
@@ -60,10 +70,7 @@ function NewSimulation() {
 					setInputTwo={setAccessCode}
 				/>
 
-				<StudentList
-					studentsList={studentsList}
-					onDelete={deleteStudent}
-				/>
+				<StudentList studentsList={studentsList} onDelete={deleteStudent} />
 			</div>
 		</div>
 	);
