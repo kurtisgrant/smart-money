@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { UserContext } from './UserContext';
 import { Routes, Route } from 'react-router-dom';
 import './styles/App.scss';
@@ -8,7 +8,6 @@ import Simulations from './pages/Simulations';
 import SimulationControlPanel from './pages/SimulationControlPanel';
 import StudentDashboard from './pages/StudentDashboard';
 import AccessCodeLogin from './pages/AccessCodeLogin';
-import SimulationContainer from './containers/SimulationContainer';
 import NewSimulation from './pages/NewSimulation';
 
 function App() {
