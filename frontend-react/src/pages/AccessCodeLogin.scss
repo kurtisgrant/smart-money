@@ -1,0 +1,21 @@
+.login-container-student {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 80%;
+	margin-right: auto;
+	margin-left: auto;
+
+	h3 {
+		margin: 50px 0;
+	}
+
+  .login-student-form {
+    width: 40%;
+  }
+
+	// .button {
+	// 	align-self: flex-start;
+	// }
+}

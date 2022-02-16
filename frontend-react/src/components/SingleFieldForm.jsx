@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './SingleFieldForm.scss';
 
 function Form({ label, id, placeholder, inputValue, setValue }) {
