@@ -13,10 +13,11 @@ module.exports = (db) => {
   router.post('/login', (req, res) => {
     const email = req.body.email;
     const query = "SELECT * FROM teachers WHERE email = $1";
+    
     db.query(query, [email])
       .then(data => {
-        console.log(data.rows)
         let user = data.rows[0]
+        
         user.type = 'teacher';
         res.json(user);
       }) 

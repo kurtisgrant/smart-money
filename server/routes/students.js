@@ -11,14 +11,15 @@ module.exports = (db) => {
 
   //return JSON with student object OR null if not found
   router.post('/login', (req, res) => {
-    console.log(req.body);
-    const accessCode = req.body.access_code;
+    const accessCode = req.body.accessCode;
     const query = "SELECT * FROM students WHERE access_code = $1";
 
     db.query(query, [accessCode])
       .then(data => {
-        console.log(data.rows)
-        res.json(data.rows);
+        let user = data.rows[0];
+
+        user.type = 'student';
+        res.json(user);
       })
       .catch(e => console.log(e.message))
   })
