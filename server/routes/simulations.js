@@ -4,21 +4,21 @@ module.exports = (db) => {
   router.get('/', (req, res) => {
     const query = "SELECT * FROM simulations";
     
-    // check to see if text datatype can be parsed to JSON
     db.query(query)
-      .then(data => {
-        const mock_data = data.rows[0].mock_market_data;
-
-        res.json(JSON.parse(mock_data));
-      })
-      .catch(e => console.log(e.message))
+    .then(data => res.json(data.rows))
+    .catch(e => console.log(e.message))
   });
 
-  // router.post('/sim', (req, res) => {
-  //   const simID = req.body.simulation_id;
+  router.post('/', (req, res) => {
+    const { inputOne, inputTwo, id } = req.body;
+    const query = `
+    INSERT INTO simulations(name, created_date, teacher_id)
+    VALUES ($1, $2, $3)
+    RETURNING *
+    `
 
-  //   const query = "INSERT INTO simulations(name, )"
-  // })
+    db.query(query, [inputOne, inputTwo, id])
+  })
 
   return router;
 };
