@@ -16,7 +16,9 @@ module.exports = (db) => {
     db.query(query, [email])
       .then(data => {
         console.log(data.rows)
-        res.json(data.rows)
+        let user = data.rows[0]
+        user.type = 'teacher';
+        res.json(user);
       }) 
       .catch(e => console.log(e.message))
   })
