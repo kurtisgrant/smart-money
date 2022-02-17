@@ -12,4 +12,10 @@
     align-items: center;
     margin-bottom: 20px;
   }
+
+  .simulation-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
 }
