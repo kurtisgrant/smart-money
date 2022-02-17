@@ -21,7 +21,18 @@ module.exports = (db) => {
 		db.query(query, [inputOne, inputTwo, id]);
 	});
 
-	//return JSON with student object OR null if not found
+	// delete student
+	router.delete('/:id', (req, res) => {
+		const { id } = req.params;
+
+		const query = `
+      DELETE FROM students
+      WHERE id = $1`;
+
+		db.query(query, [id]);
+	});
+
+	// return JSON with student object OR null if not found
 	router.post('/login', (req, res) => {
 		const accessCode = req.body.accessCode;
 		const query = 'SELECT * FROM students WHERE access_code = $1';
