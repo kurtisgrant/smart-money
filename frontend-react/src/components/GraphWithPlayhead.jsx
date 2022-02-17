@@ -5,23 +5,9 @@ function GraphWithPlayhead({ marketData, currentMonth, zeroIndex }) {
   const chartRef = useRef(null);
   const [chart, setChart] = useState(null);
 
-
-  // TODO: Update chart on new data. Not working yet.
-  // useEffect(() => {
-  //   if (!chart) return;
-  //   const workingData = marketData.map((price, i) => {
-  //     return { x: i - zeroIndex, y: price };
-  //   })
-
-  //   setChart(prevChart => {
-  //     prevChart.data.datasets.data = workingData;
-  //     return prevChart.update();
-  //   });
-
-  // }, [marketData]);
-
   useEffect(() => {
     if (!chartRef) return;
+    if (chart) chart.destroy();
 
     const workingData = marketData.map((price, i) => {
       return { x: i - zeroIndex, y: price };
@@ -61,13 +47,13 @@ function GraphWithPlayhead({ marketData, currentMonth, zeroIndex }) {
     });
 
     setChart(newChart);
-  }, [chartRef]);
+  }, [chartRef, marketData]);
 
   if (!chartRef) return;
 
   return (
     <div className="chart-container">
-      <canvas ref={chartRef} id="market-data" width="600" height="320"></canvas>
+      <canvas ref={chartRef} id="market-data" width="560" height="320"></canvas>
     </div>
   );
 }
