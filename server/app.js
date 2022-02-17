@@ -15,14 +15,19 @@ const studentsRouter = require('./routes/students');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
-
-io.on('connection', (socket) => {
-  console.log('a user connected');
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
 });
 
-server.listen(5000, () => {
-  console.log('Listening for socket.io connections on port 5000');
+io.on('connection', (socket) => {
+  console.log('a user connected with socket id: ', socket.id);
+});
+
+server.listen(4545, () => {
+  console.log('Listening for socket.io connections on port 4545');
 });
 
 app.use(logger('dev'));
