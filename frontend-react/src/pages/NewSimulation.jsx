@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../UserContext';
+import { Link } from 'react-router-dom';
 import generateMockMarketData from '../helpers/generateMockMarketData';
 import generateRandomString from '../helpers/generateRandomString';
 import GraphWithPlayhead from '../components/GraphWithPlayhead';
@@ -18,6 +19,8 @@ function NewSimulation() {
 	const [newStudentName, setNewStudentName] = useState('');
 	const [simulationName, setSimulationName] = useState('');
 
+	const simulationKey = generateRandomString(6);
+
 	const randomizeMarketData = () => {
 		const data = getRandomMarketData();
 		setRandomMarketData(data);
@@ -25,28 +28,53 @@ function NewSimulation() {
 
 	useEffect(() => {
 		randomizeMarketData();
-
 	}, []);
 
 	const addStudent = () => {
-		setStudents([...students, { name: newStudentName, accessCode: generateRandomString(5) }]);
+		if (!newStudentName) return alert('Student name cannot be empty.');
+
+		setStudents([
+			...students,
+			{ name: newStudentName, accessCode: generateRandomString(5) },
+		]);
 		setNewStudentName('');
 	};
 
 	const deleteStudent = (accessCode) => {
-		setStudents(students.filter(stu => stu.accessCode !== accessCode));
+		setStudents(students.filter((stu) => stu.accessCode !== accessCode));
 	};
 
-	const saveSimulation = () => {
-		const simulationKey = generateRandomString(6);
-		const teacherId = user.id;
-		const simulationInfo = { simulationName, simulationKey, studentIncome, studentExpense, randomMarketData, teacherId, students };
+	const saveSimulation = (e) => {
+		if (students.length === 0) {
+			e.preventDefault();
+			return alert('At least one student is needed.');
+		} else if (!simulationName) {
+			e.preventDefault();
+			return alert('Simulation name cannot be empty.');
+		} else if (!studentIncome) {
+			e.preventDefault();
+			return alert('Student income cannot be empty.');
+		}	else if (!studentExpense) {
+			e.preventDefault();
+			return alert('Student expense cannot be empty.');
+		} else {
+			const teacherId = user.id;
+			const simulationInfo = {
+				simulationName,
+				simulationKey,
+				studentIncome,
+				studentExpense,
+				randomMarketData,
+				teacherId,
+				students,
+			};
 
-		axios.post('/api/simulations', simulationInfo)
+			axios.post('/api/simulations', simulationInfo);
 
-		setSimulationName('');
-		setStudentIncome('');
-		setStudentExpense('');
+			setSimulationName('');
+			setStudentIncome('');
+			setStudentExpense('');
+		}
 	};
 
 	if (!randomMarketData.length) return null;
@@ -57,9 +85,9 @@ function NewSimulation() {
 				<div className="simulation-view-left">
 					<h2>New Simulation</h2>
 					<SingleFieldForm
-						label="Class Name"
-						id="class-name"
-						placeholder="Enter class name"
+						label="Simulation Name"
+						id="simulation-name"
+						placeholder="Enter simulation name"
 						inputValue={simulationName}
 						setValue={setSimulationName}
 					/>
@@ -93,22 +121,25 @@ function NewSimulation() {
 			<div className="simulation-student-list">
 				<div className="simulations-form-heading">
 					<h2>Students</h2>
-					<Button green onClick={saveSimulation}>
-						Save Simulation
-					</Button>
+					<Link to={`/sim/${simulationKey}`}>
+						<Button green onClick={saveSimulation}>
+							Save Simulation
+						</Button>
+					</Link>
 				</div>
-
-				</div>
-				<div className="add-student">
-					<input
-						value={newStudentName}
-						onChange={(e) => setNewStudentName(e.target.value)}
-						placeholder="Student name"
-					/>
-					<Button green onClick={addStudent}>Add Student</Button>
-				</div>
-				<StudentList studentsList={students} onDelete={deleteStudent} />
 			</div>
+			<div className="add-student">
+				<input
+					value={newStudentName}
+					onChange={(e) => setNewStudentName(e.target.value)}
+					placeholder="Student name"
+				/>
+				<Button green onClick={addStudent}>
+					Add Student
+				</Button>
+			</div>
+			<StudentList studentsList={students} onDelete={deleteStudent} />
+		</div>
 	);
 }
 
