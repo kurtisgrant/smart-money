@@ -9,11 +9,13 @@ function Login() {
 	const { setUser } = useContext(UserContext);
 	const [email, setEmail] = useState('');
 
+	const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
+
 	const login = () => {
 		const userInfo = { email };
 
 		axios
-			.post('http://localhost:5000/api/teachers/login', userInfo)
+			.post(apiEndpoint + '/teachers/login', userInfo)
 			.then((res) => {
 				const user = res.data;
 

@@ -14,11 +14,13 @@ function Simulations() {
 	const [className, setClassName] = useState('');
 	const [date, setDate] = useState('');
 	const navigate = useNavigate();
-  const teacherId = user.id
+	const teacherId = user.id;
+
+	const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
 
 	useEffect(() => {
 		axios
-			.get(`http://localhost:5000/api/simulations/list/${teacherId}`)
+			.get(apiEndpoint + `/simulations/list/${teacherId}`)
 			.then((res) => {
 				setSimulationsList(res.data);
 			});
@@ -33,7 +35,7 @@ function Simulations() {
 	const deleteSimulation = (e, id) => {
 		e.stopPropagation();
 
-		axios.delete(`http://localhost:5000/api/simulations/${id}`);
+		axios.delete(apiEndpoint + `/simulations/${id}`);
 
 		setSimulationsList(
 			simulationsList.filter((simulationItem) => simulationItem.id !== id)

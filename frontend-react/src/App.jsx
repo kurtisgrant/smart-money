@@ -16,6 +16,8 @@ function App() {
   const [socket, setSocket] = useState(null);
   const [user, setUserState] = useState(null);
 
+  const wsEndpoint = process.env.REACT_APP_WS_ENDPOINT;
+
   const setUser = (user) => {
     if (user === null) {
       sessionStorage.removeItem('user');
@@ -28,14 +30,14 @@ function App() {
 
   // On first render:
   useEffect(() => {
-    
+
     // Set user if stored in session storage
     const sessionUser = JSON.parse(sessionStorage.getItem('user'));
     console.log('Setting user from session storage: ', sessionUser);
     sessionUser && setUser(sessionUser);
 
     // Establish socket connection with server
-    const s = io('http://localhost:4545');
+    const s = io(wsEndpoint);
     s.on('connect', () => {
       console.log(`Socket connection established (in App.jsx)\n  ↳ My socket id is: ${s.id}`);
       const clientId = s.id;
@@ -44,11 +46,11 @@ function App() {
       });
     });
     setSocket(s);
-    
+
     // Unsubscribe from events to prevent memory leaks
     return () => {
       s.removeAllListeners();
-    }
+    };
   }, []);
 
   // When user state changes, inform server

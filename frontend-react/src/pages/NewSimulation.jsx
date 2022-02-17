@@ -18,6 +18,8 @@ function NewSimulation() {
 	const { state } = useLocation();
 	const { className, simulationId, teacherId } = state;
 
+	const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
+
 	const randomizeMarketData = () => {
 		const data = getRandomMarketData();
 		setRandomMarketData(data);
@@ -27,16 +29,16 @@ function NewSimulation() {
 		randomizeMarketData();
 
 		axios
-			.get(`http://localhost:5000/api/students/list/${simulationId}`)
+			.get(apiEndpoint + `/students/list/${simulationId}`)
 			.then((res) => {
 				setStudentsList(res.data);
 			});
 	}, []);
 
-	console.log(studentsList)
+	console.log(studentsList);
 
 	const deleteStudent = (id) => {
-		axios.delete(`http://localhost:5000/api/students/${id}`);
+		axios.delete(apiEndpoint + `/students/${id}`);
 
 		setStudentsList(
 			studentsList.filter((studentItem) => studentItem.id !== id)
