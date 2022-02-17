@@ -9,13 +9,12 @@ function AccessCodeLogin() {
 	const { setUser } = useContext(UserContext);
 	const [accessCode, setAccessCode] = useState('');
 
-	const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
 
 	const login = () => {
 		const userInfo = { accessCode };
 
 		axios
-			.post(apiEndpoint + '/students/login', userInfo)
+			.post('/api/students/login', userInfo)
 			.then((res) => {
 				const user = res.data;
 
