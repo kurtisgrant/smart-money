@@ -9,3 +9,12 @@
   @include mixins.main-left-right-padding;
   @include mixins.main-content-verticle-padding;
 }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+li {
+  list-style-type: none;
+}
