@@ -37,7 +37,7 @@ module.exports = (db) => {
 		db.query(querySimulations, [
 			simulationName,
 			simulationKey,
-			randomMarketData,
+			JSON.stringify(randomMarketData),
 			studentIncome,
 			studentExpense,
 			teacherId,
