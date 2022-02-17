@@ -38,10 +38,15 @@ function NewSimulation() {
 	};
 
 	const saveSimulation = () => {
-		const classInfo = { simulationName, studentIncome, studentExpense, randomMarketData, students };
+		const simulationKey = generateRandomString(6);
+		const teacherId = user.id;
+		const classInfo = { simulationName, simulationKey, studentIncome, studentExpense, randomMarketData, teacherId, students };
 
 		axios.post('/api/simulations', classInfo)
 
+		setSimulationName('');
+		setStudentIncome('');
+		setStudentExpense('');
 	};
 
 	if (!randomMarketData.length) return null;

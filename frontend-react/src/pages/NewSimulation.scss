@@ -4,50 +4,52 @@
 
 	.simulation-view {
 		display: flex;
-    align-items: center;
-
+		align-items: center;
 
 		.simulation-view-left {
-      align-self: flex-start;
+			align-self: flex-start;
 			flex: 1;
 
-      h2 {
-        margin-bottom: 20px;
-      }
+			h2 {
+				margin-bottom: 20px;
+			}
 		}
 
 		.simulation-view-right {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
 			flex: 3;
 
-      .chart {
-        width: 95%;
-      }
+			.chart {
+				width: 95%;
+			}
 
-      .button {
-        margin: 5px;
-      }
+			.button {
+				margin: 5px;
+			}
 		}
 	}
 
-  .simulation-student-list {
-    display: flex;
-    flex-direction: column;
-    
-    .simulations-form-heading {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
+	.simulation-student-list {
+		display: flex;
+		flex-direction: column;
 
-    .add-student {
-      display: flex;
-      flex-direction: row;
+		.simulations-form-heading {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 20px;
+		}
+	}
 
-      
+	.add-student {
+		display: flex;
+    align-items: center;
+
+    input {
+      flex: 3;
+      margin: 0;
     }
-  }
+	}
 }
