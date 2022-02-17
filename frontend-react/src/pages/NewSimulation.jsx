@@ -15,6 +15,8 @@ function NewSimulation() {
 	const { user } = useContext(UserContext);
 	const [randomMarketData, setRandomMarketData] = useState([]);
 	const [className, setClassName] = useState('');
+	const [studentIncome, setStudentIncome] = useState('');
+	const [studentExpense, setStudentExpense] = useState('');
 	const [studentsList, setStudentsList] = useState([]);
 	const [studentName, setStudentName] = useState('');
 	const [accessCode, setAccessCode] = useState(generateRandomString(5));
@@ -38,10 +40,17 @@ function NewSimulation() {
 
 	const deleteStudent = (id) => {
 		// axios.delete(`/api/students/${id}`);
-		
+
 		setStudentsList(
 			studentsList.filter((studentItem) => studentItem.id !== id)
 		);
+	};
+
+	const saveSimulation = () => {
+		const classInfo = { className, studentIncome, studentExpense, randomMarketData };
+		const studentsInfo = { studentName, accessCode };
+
+		axios.post('/api/simulations', classInfo)
 	};
 
 	if (!randomMarketData.length) return null;
@@ -58,6 +67,20 @@ function NewSimulation() {
 						inputValue={className}
 						setValue={setClassName}
 					/>
+					<SingleFieldForm
+						label="Student Income ($)"
+						id="student-income"
+						placeholder="Set student income"
+						inputValue={studentIncome}
+						setValue={setStudentIncome}
+					/>
+					<SingleFieldForm
+						label="Student Expense ($)"
+						id="student-expense"
+						placeholder="Set student expense"
+						inputValue={studentExpense}
+						setValue={setStudentExpense}
+					/>
 				</div>
 				<div className="simulation-view-right">
 					<GraphWithPlayhead
@@ -67,7 +90,6 @@ function NewSimulation() {
 					/>
 					<div className="simulation-buttons">
 						<Button green>Randomize</Button>
-						<Button white>Confirm</Button>
 					</div>
 				</div>
 			</div>
@@ -75,7 +97,9 @@ function NewSimulation() {
 			<div className="simulation-student-list">
 				<div className="simulations-form-heading">
 					<h2>Students</h2>
-					<Button green>Add Students</Button>
+					<Button green onClick={saveSimulation}>
+						Save Simulation
+					</Button>
 				</div>
 				<AddForm
 					accessCode
