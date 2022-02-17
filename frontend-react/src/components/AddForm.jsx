@@ -18,6 +18,8 @@ function AddForm({
 	const [inputOne, setInputOne] = useState(inputOneValue || '');
 	const [inputTwo, setInputTwo] = useState(inputTwoValue || '');
 
+	const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
+
 	const onSubmit = (e) => {
 		e.preventDefault();
 
@@ -28,7 +30,7 @@ function AddForm({
 		if (date) {
 			const inputFields = { inputOne, inputTwo, id };
 
-			axios.post('http://localhost:5000/api/simulations', inputFields);
+			axios.post(apiEndpoint + '/simulations', inputFields);
 			// .then((res) => {
 			// 	const list = res.data;
 			// });
@@ -42,7 +44,7 @@ function AddForm({
 		if (accessCode) {
 			const inputFields = { inputOne, inputTwo, id };
 
-			axios.post('http://localhost:5000/api/students', inputFields);
+			axios.post(apiEndpoint + '/students', inputFields);
 
 			setList((prev) => [
 				...prev,
