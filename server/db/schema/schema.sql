@@ -15,7 +15,7 @@ CREATE TABLE teachers (
 CREATE TABLE simulations (
   id SERIAL PRIMARY KEY NOT NULL,
   name VARCHAR(255) NOT NULL,
-  created_date DATE,
+  created_date TIMESTAMP NOT NULL DEFAULT NOW(),
   simulation_key VARCHAR(255),
   mock_market_data TEXT,
   current_month INT,

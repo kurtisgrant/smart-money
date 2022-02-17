@@ -38,7 +38,7 @@ function Simulations() {
 			<h1>Welcome back {user.name}!</h1>
 			<div className="simulations-form-heading">
 				<h2>My Simulations</h2>
-				<Button green>Add Simulation</Button>
+				<Link to="/new"><Button green>Add Simulation</Button></Link>
 			</div>
 
 			<section className="simulations">

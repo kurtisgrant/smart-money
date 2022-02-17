@@ -4,7 +4,6 @@ VALUES ('Kurtis Grant', 'kurtis.grant@lhl.com', '123456789'),
        ('Git Hub', 'git.hub@lhl.com', '345678912');
 
 INSERT INTO simulations(name,
-                        created_date,
                         simulation_key,
                         mock_market_data,
                         current_month,
@@ -13,7 +12,6 @@ INSERT INTO simulations(name,
                         expense,
                         teacher_id)
 VALUES ('SIMULATION-1',
-        '2022-02-16',
         'A1B2C3',
         '[44.51, 43.36, 41.71, 46.86, 51.91, 53.80, 52.96, 50.58, 51.53, 53.51, 55.87]',
         2,

@@ -10,11 +10,13 @@ import axios from 'axios';
 import './NewSimulation.scss';
 
 function NewSimulation() {
+	const { user } = useContext(UserContext);
 	const [randomMarketData, setRandomMarketData] = useState([]);
 	const [students, setStudents] = useState([]);
+	const [studentIncome, setStudentIncome] = useState('');
+	const [studentExpense, setStudentExpense] = useState('');
 	const [newStudentName, setNewStudentName] = useState('');
 	const [simulationName, setSimulationName] = useState('');
-	const teacher = useContext(UserContext);
 
 	const randomizeMarketData = () => {
 		const data = getRandomMarketData();
@@ -30,8 +32,21 @@ function NewSimulation() {
 		setStudents([...students, { name: newStudentName, accessCode: generateRandomString(5) }]);
 		setNewStudentName('');
 	};
+
 	const deleteStudent = (id) => {
 		setStudents(students.filter(stu => stu.id !== id));
+	};
+
+	const saveSimulation = () => {
+		const simulationKey = generateRandomString(6);
+		const teacherId = user.id;
+		const classInfo = { simulationName, simulationKey, studentIncome, studentExpense, randomMarketData, teacherId, students };
+
+		axios.post('/api/simulations', classInfo)
+
+		setSimulationName('');
+		setStudentIncome('');
+		setStudentExpense('');
 	};
 
 	if (!randomMarketData.length) return null;
@@ -42,9 +57,25 @@ function NewSimulation() {
 				<div className="simulation-view-left">
 					<h2>New Simulation</h2>
 					<SingleFieldForm
-						label="Simulation Name"
+						label="Class Name"
 						id="class-name"
+						placeholder="Enter class name"
 						inputValue={simulationName}
+						setValue={setSimulationName}
+					/>
+					<SingleFieldForm
+						label="Student Income ($)"
+						id="student-income"
+						placeholder="Set student income"
+						inputValue={studentIncome}
+						setValue={setStudentIncome}
+					/>
+					<SingleFieldForm
+						label="Student Expense ($)"
+						id="student-expense"
+						placeholder="Set student expense"
+						inputValue={studentExpense}
+						setValue={setStudentExpense}
 					/>
 				</div>
 				<div className="simulation-view-right">
@@ -62,6 +93,11 @@ function NewSimulation() {
 			<div className="simulation-student-list">
 				<div className="simulations-form-heading">
 					<h2>Students</h2>
+					<Button green onClick={saveSimulation}>
+						Save Simulation
+					</Button>
+				</div>
+
 				</div>
 				<div className="add-student">
 					<input
@@ -73,7 +109,6 @@ function NewSimulation() {
 				</div>
 				<StudentList studentsList={students} onDelete={deleteStudent} />
 			</div>
-		</div>
 	);
 }
 
