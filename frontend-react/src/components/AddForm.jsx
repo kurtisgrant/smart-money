@@ -1,48 +1,58 @@
 import { Fragment, useState } from 'react';
 import generateRandomString from '../helpers/generateRandomString';
 import Button from './Button';
+import axios from 'axios';
 import './AddForm.scss';
 
 function AddForm({
 	date,
 	accessCode,
+	id,
 	inputOneValue,
 	inputOnePlaceholder,
 	inputTwoValue,
 	inputTwoPlaceholder,
 	list,
-	setList
+	setList,
 }) {
 	const [inputOne, setInputOne] = useState(inputOneValue || '');
 	const [inputTwo, setInputTwo] = useState(inputTwoValue || '');
 
 	const onSubmit = (e) => {
-    e.preventDefault();
+		e.preventDefault();
 
-    if (!inputOne || !inputTwo) {
-      return alert('Please fill out both fields.');
-    }
+		if (!inputOne || !inputTwo) {
+			return alert('Please fill out both fields.');
+		}
 
 		if (date) {
-			setList((prev) => [
-				...prev,
-				{ id: list.length + 1, name: inputOne, date: inputTwo },
-			]);
+			const inputFields = { inputOne, inputTwo, id };
+
+			axios.post('http://localhost:5000/api/simulations', inputFields);
+			// .then((res) => {
+			// 	const list = res.data;
+			// });
+
+			setList((prev) => [...prev, { name: inputOne, date: inputTwo }]);
 
 			setInputOne('');
 			setInputTwo('');
 		}
 
 		if (accessCode) {
+			const inputFields = { inputOne, inputTwo, id };
+
+			axios.post('http://localhost:5000/api/students', inputFields);
+
 			setList((prev) => [
 				...prev,
-				{ id: list.length + 1, name: inputOne, accessCode: inputTwo },
+				{ name: inputOne, accessCode: inputTwo },
 			]);
 
 			setInputOne('');
 			setInputTwo(generateRandomString(5));
 		}
-  };
+	};
 
 	return (
 		<form className="add-form" onSubmit={onSubmit}>

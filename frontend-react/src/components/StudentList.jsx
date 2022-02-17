@@ -7,7 +7,7 @@ const StudentList = function ({ studentsList, onDelete }) {
 			key={studentsListItem.id}
 			id={studentsListItem.id}
 			name={studentsListItem.name}
-			accessCode={studentsListItem.accessCode}
+			accessCode={studentsListItem.accessCode || studentsListItem.accesscode}
       onDelete={onDelete}
 		/>
 	));
