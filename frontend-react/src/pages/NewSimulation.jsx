@@ -69,7 +69,7 @@ function NewSimulation() {
 				students,
 			};
 
-			axios.post('/api/simulations', simulationInfo);
+		axios.post('/api/simulations', simulationInfo);
 
 			setSimulationName('');
 			setStudentIncome('');
@@ -113,7 +113,7 @@ function NewSimulation() {
 						zeroIndex={10 * 12}
 					/>
 					<div className="simulation-buttons">
-						<Button green>Randomize</Button>
+						<Button green onClick={randomizeMarketData}>Randomize</Button>
 					</div>
 				</div>
 			</div>
@@ -134,9 +134,7 @@ function NewSimulation() {
 					onChange={(e) => setNewStudentName(e.target.value)}
 					placeholder="Student name"
 				/>
-				<Button green onClick={addStudent}>
-					Add Student
-				</Button>
+				<Button green onClick={addStudent}>Add Student</Button>
 			</div>
 			<StudentList studentsList={students} onDelete={deleteStudent} />
 		</div>
