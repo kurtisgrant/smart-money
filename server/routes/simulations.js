@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 module.exports = (db) => {
+  // show list of all simulations
   router.get('/', (req, res) => {
     const query = "SELECT * FROM simulations";
     
@@ -9,6 +10,7 @@ module.exports = (db) => {
     .catch(e => console.log(e.message))
   });
 
+  // create new simulation
   router.post('/', (req, res) => {
     const { inputOne, inputTwo, id } = req.body;
     const query = `
@@ -20,9 +22,20 @@ module.exports = (db) => {
     db.query(query, [inputOne, inputTwo, id])
   });
 
+  // delete simulation
+  router.delete('/:id', (req, res) => {
+    const { id } = req.params;
+
+    const query = `
+    DELETE FROM simulations
+    WHERE id = $1`
+
+    db.query(query, [id])
+  });
+
+  // show list of simulations for specific teacher
   router.get('/list/:teacherId', (req, res) => {
     const { teacherId } = req.params;
-    console.log('list:', req.params);
 
     const query = `
     SELECT id, name, created_date AS date FROM simulations
