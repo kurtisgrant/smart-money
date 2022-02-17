@@ -18,7 +18,21 @@ module.exports = (db) => {
     `
 
     db.query(query, [inputOne, inputTwo, id])
-  })
+  });
+
+  router.get('/list/:teacherId', (req, res) => {
+    const { teacherId } = req.params;
+    console.log('list:', req.params);
+
+    const query = `
+    SELECT id, name, created_date AS date FROM simulations
+    WHERE teacher_id = $1
+    `
+
+    db.query(query, [teacherId])
+      .then(data => res.json(data.rows))
+      .catch(e => console.log(e.message))
+  });
 
   return router;
 };
