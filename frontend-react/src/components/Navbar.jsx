@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import './Navbar.scss';
 import { UserContext } from '../UserContext';
 import Button from './Button';
@@ -16,7 +17,9 @@ function Navbar({ appState, logout }) {
 	return (
 		<div className="navbar">
 			<div className="logo">
-				<h1>Logo</h1>
+				<Link to="/" style={{textDecoration: 'none', color: 'white'}}>
+					<h1>Logo</h1>
+				</Link>
 			</div>
 			{user && authUserDiv}
 		</div>
