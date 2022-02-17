@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import generateMockMarketData from '../helpers/generateMockMarketData';
 import generateRandomString from '../helpers/generateRandomString';
 import GraphWithPlayhead from '../components/GraphWithPlayhead';
@@ -7,6 +7,7 @@ import StudentList from '../components/StudentList';
 import SingleFieldForm from '../components/SingleFieldForm';
 import Button from '../components/Button';
 import AddForm from '../components/AddForm';
+import axios from 'axios';
 import './NewSimulation.scss';
 
 function NewSimulation() {
@@ -14,6 +15,8 @@ function NewSimulation() {
 	const [studentsList, setStudentsList] = useState([]);
 	const [studentName, setStudentName] = useState('');
 	const [accessCode, setAccessCode] = useState(generateRandomString(5));
+	const { state } = useLocation();
+	const { className, simulationId, teacherId } = state;
 
 	const randomizeMarketData = () => {
 		const data = getRandomMarketData();
@@ -22,9 +25,19 @@ function NewSimulation() {
 
 	useEffect(() => {
 		randomizeMarketData();
+
+		axios
+			.get(`http://localhost:5000/api/students/list/${simulationId}`)
+			.then((res) => {
+				setStudentsList(res.data);
+			});
 	}, []);
 
+	console.log(studentsList)
+
 	const deleteStudent = (id) => {
+		axios.delete(`http://localhost:5000/api/students/${id}`);
+
 		setStudentsList(
 			studentsList.filter((studentItem) => studentItem.id !== id)
 		);
@@ -40,11 +53,15 @@ function NewSimulation() {
 					<SingleFieldForm
 						label="Simulation Name"
 						id="class-name"
-						placeholder="Simulation Name"
+						inputValue={className}
 					/>
 				</div>
 				<div className="simulation-view-right">
-					<GraphWithPlayhead marketData={randomMarketData} currentMonth={0} zeroIndex={10 * 12} />
+					<GraphWithPlayhead
+						marketData={randomMarketData}
+						currentMonth={0}
+						zeroIndex={10 * 12}
+					/>
 					<div className="simulation-buttons">
 						<Button green>Randomize</Button>
 						<Button white>Confirm</Button>
@@ -59,10 +76,10 @@ function NewSimulation() {
 				</div>
 				<AddForm
 					accessCode
+					id={simulationId}
 					inputOnePlaceholder="Enter student name"
 					inputOneValue={studentName}
 					setInputOne={setStudentName}
-					inputTwoPlaceholder="Enter access code"
 					inputTwoValue={accessCode}
 					setInputTwo={setAccessCode}
 					list={studentsList}

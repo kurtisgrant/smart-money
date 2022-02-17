@@ -40,7 +40,7 @@ function App() {
             <Route path="/sim/:simulationKey" element={
               user?.type === 'teacher' ? <SimulationControlPanel /> :
                 (user?.type === 'student' ? <StudentDashboard /> : <AccessCodeLogin />)} />
-            <Route path="/new" element={user?.type === 'teacher' ? <NewSimulation /> : <Login />} />
+            <Route path="/new/:simId" element={user?.type === 'teacher' ? <NewSimulation /> : <Login />} />
           </Routes>
         </div>
       </UserContext.Provider>
