@@ -13,7 +13,7 @@ module.exports = (db) => {
 	router.post('/', (req, res) => {
 		const { inputOne, inputTwo, id } = req.body;
 		const query = `
-      INSERT INTO simulations(name, created_date, teacher_id)
+      INSERT INTO students(name, access_code, simulation_id)
       VALUES ($1, $2, $3)
       RETURNING *
       `;
@@ -33,6 +33,19 @@ module.exports = (db) => {
 				user.type = 'student';
 				res.json(user);
 			})
+			.catch((e) => console.log(e.message));
+	});
+
+	// show list of students for specific simulation
+	router.get('/list/:simulationId', (req, res) => {
+		const { simulationId } = req.params;
+		const query = `
+      SELECT id, name, access_code AS accessCode FROM students
+      WHERE simulation_id = $1
+      `;
+
+		db.query(query, [simulationId])
+			.then((data) => res.json(data.rows))
 			.catch((e) => console.log(e.message));
 	});
 
