@@ -1,27 +1,64 @@
 const router = require('express').Router();
 
 module.exports = (db) => {
-  router.get('/', (req, res) => {
-    const query = "SELECT * FROM students";
-    
-    db.query(query)
-      .then(data => res.json(data.rows))
-      .catch(e => console.log(e.message))
-  });
+	router.get('/', (req, res) => {
+		const query = 'SELECT * FROM students';
 
-  //return JSON with student object OR null if not found
-  router.post('/login', (req, res) => {
-    console.log(req.body);
-    const accessCode = req.body.access_code;
-    const query = "SELECT * FROM students WHERE access_code = $1";
+		db.query(query)
+			.then((data) => res.json(data.rows))
+			.catch((e) => console.log(e.message));
+	});
 
-    db.query(query, [accessCode])
-      .then(data => {
-        console.log(data.rows)
-        res.json(data.rows);
-      })
-      .catch(e => console.log(e.message))
-  })
+	// create new student
+	router.post('/', (req, res) => {
+		const { inputOne, inputTwo, id } = req.body;
+		const query = `
+      INSERT INTO students(name, access_code, simulation_id)
+      VALUES ($1, $2, $3)
+      RETURNING *
+      `;
 
-  return router;
+		db.query(query, [inputOne, inputTwo, id]);
+	});
+
+	// delete student
+	router.delete('/:id', (req, res) => {
+		const { id } = req.params;
+
+		const query = `
+      DELETE FROM students
+      WHERE id = $1`;
+
+		db.query(query, [id]);
+	});
+
+	// return JSON with student object OR null if not found
+	router.post('/login', (req, res) => {
+		const accessCode = req.body.accessCode;
+		const query = 'SELECT * FROM students WHERE access_code = $1';
+
+		db.query(query, [accessCode])
+			.then((data) => {
+				let user = data.rows[0];
+
+				user.type = 'student';
+				res.json(user);
+			})
+			.catch((e) => console.log(e.message));
+	});
+
+	// show list of students for specific simulation
+	router.get('/list/:simulationId', (req, res) => {
+		const { simulationId } = req.params;
+		const query = `
+      SELECT id, name, access_code AS accessCode FROM students
+      WHERE simulation_id = $1
+      `;
+
+		db.query(query, [simulationId])
+			.then((data) => res.json(data.rows))
+			.catch((e) => console.log(e.message));
+	});
+
+	return router;
 };

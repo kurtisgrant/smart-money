@@ -1,0 +1,18 @@
+.student-list-balance {
+  width: 100%;
+  border-spacing: 0 1em;
+
+  th, td {
+    width: 25%;
+    text-align: center;
+  }
+
+  .student {
+    outline: 1px solid #828282;
+    border-radius: 5px;
+  }
+
+  td {
+    height: 40px;
+  }
+}

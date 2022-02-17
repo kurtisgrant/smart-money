@@ -8,7 +8,7 @@ const SimulationList = function ({ simulationList, onClick, onDelete }) {
 			key={simulationListItem.id}
 			id={simulationListItem.id}
 			name={simulationListItem.name}
-			date={simulationListItem.date}
+			date={simulationListItem.date.slice(0, 10)}
 			onClick={onClick}
       onDelete={onDelete}
 		/>
@@ -22,3 +22,6 @@ const SimulationList = function ({ simulationList, onClick, onDelete }) {
 };
 
 export default SimulationList;
+
+
+// || new Date(simulationListItem.created_date).toLocaleString().split(",")[0] 
