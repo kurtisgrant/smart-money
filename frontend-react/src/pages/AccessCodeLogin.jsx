@@ -23,9 +23,7 @@ function AccessCodeLogin() {
 	};
 	return (
 		<div className="login-container-student">
-			<h2>Welcome to Mrs. Krabappel's</h2>
-			<h2>Class 4M97</h2>
-			<h3>Enter Access Code</h3>
+			<h2>Enter Access Code</h2>
 			<div className="login-student-form">
 				<SingleFieldForm
 					label="Access Code"

@@ -42,7 +42,6 @@ function Login() {
 			>
 				Login
 			</Button>
-			<p>(Just click login to login as Mrs. K)</p>
 		</div>
 	);
 }
