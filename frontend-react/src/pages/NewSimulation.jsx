@@ -33,16 +33,16 @@ function NewSimulation() {
 		setNewStudentName('');
 	};
 
-	const deleteStudent = (id) => {
-		setStudents(students.filter(stu => stu.id !== id));
+	const deleteStudent = (accessCode) => {
+		setStudents(students.filter(stu => stu.accessCode !== accessCode));
 	};
 
 	const saveSimulation = () => {
 		const simulationKey = generateRandomString(6);
 		const teacherId = user.id;
-		const classInfo = { simulationName, simulationKey, studentIncome, studentExpense, randomMarketData, teacherId, students };
+		const simulationInfo = { simulationName, simulationKey, studentIncome, studentExpense, randomMarketData, teacherId, students };
 
-		axios.post('/api/simulations', classInfo)
+		axios.post('/api/simulations', simulationInfo)
 
 		setSimulationName('');
 		setStudentIncome('');
