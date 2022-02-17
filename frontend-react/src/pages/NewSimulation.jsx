@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../UserContext';
 import generateMockMarketData from '../helpers/generateMockMarketData';
 import generateRandomString from '../helpers/generateRandomString';
 import GraphWithPlayhead from '../components/GraphWithPlayhead';
 import StudentList from '../components/StudentList';
 import SingleFieldForm from '../components/SingleFieldForm';
 import Button from '../components/Button';
-import AddForm from '../components/AddForm';
 import axios from 'axios';
 import './NewSimulation.scss';
 
 function NewSimulation() {
 	const [randomMarketData, setRandomMarketData] = useState([]);
-	const [studentsList, setStudentsList] = useState([]);
-	const [studentName, setStudentName] = useState('');
-	const [accessCode, setAccessCode] = useState(generateRandomString(5));
-	const { state } = useLocation();
-	const { className, simulationId, teacherId } = state;
+	const [students, setStudents] = useState([]);
+	const [newStudentName, setNewStudentName] = useState('');
+	const [simulationName, setSimulationName] = useState('');
+	const teacher = useContext(UserContext);
 
 	const randomizeMarketData = () => {
 		const data = getRandomMarketData();
@@ -26,21 +24,14 @@ function NewSimulation() {
 	useEffect(() => {
 		randomizeMarketData();
 
-		axios
-			.get(`/api/students/list/${simulationId}`)
-			.then((res) => {
-				setStudentsList(res.data);
-			});
 	}, []);
 
-	console.log(studentsList);
-
+	const addStudent = () => {
+		setStudents([...students, { name: newStudentName, accessCode: generateRandomString(5) }]);
+		setNewStudentName('');
+	};
 	const deleteStudent = (id) => {
-		axios.delete(`/api/students/${id}`);
-
-		setStudentsList(
-			studentsList.filter((studentItem) => studentItem.id !== id)
-		);
+		setStudents(students.filter(stu => stu.id !== id));
 	};
 
 	if (!randomMarketData.length) return null;
@@ -53,7 +44,7 @@ function NewSimulation() {
 					<SingleFieldForm
 						label="Simulation Name"
 						id="class-name"
-						inputValue={className}
+						inputValue={simulationName}
 					/>
 				</div>
 				<div className="simulation-view-right">
@@ -64,7 +55,6 @@ function NewSimulation() {
 					/>
 					<div className="simulation-buttons">
 						<Button green>Randomize</Button>
-						<Button white>Confirm</Button>
 					</div>
 				</div>
 			</div>
@@ -72,21 +62,16 @@ function NewSimulation() {
 			<div className="simulation-student-list">
 				<div className="simulations-form-heading">
 					<h2>Students</h2>
-					<Button green>Add Students</Button>
 				</div>
-				<AddForm
-					accessCode
-					id={simulationId}
-					inputOnePlaceholder="Enter student name"
-					inputOneValue={studentName}
-					setInputOne={setStudentName}
-					inputTwoValue={accessCode}
-					setInputTwo={setAccessCode}
-					list={studentsList}
-					setList={setStudentsList}
-				/>
-
-				<StudentList studentsList={studentsList} onDelete={deleteStudent} />
+				<div className="add-student">
+					<input
+						value={newStudentName}
+						onChange={(e) => setNewStudentName(e.target.value)}
+						placeholder="Student name"
+					/>
+					<Button green onClick={addStudent}>Add Student</Button>
+				</div>
+				<StudentList studentsList={students} onDelete={deleteStudent} />
 			</div>
 		</div>
 	);
