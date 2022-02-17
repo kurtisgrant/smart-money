@@ -46,7 +46,7 @@ function AddForm({
 
 			setList((prev) => [
 				...prev,
-				{ name: inputOne, accessCode: inputTwo },
+				{ id: list.length + 1, name: inputOne, accessCode: inputTwo },
 			]);
 
 			setInputOne('');

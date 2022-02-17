@@ -10,6 +10,8 @@ import './Simulations.scss';
 
 function Simulations() {
 	const { user } = useContext(UserContext);
+	console.log(user)
+
 	const [simulationsList, setSimulationsList] = useState([]);
 	const [className, setClassName] = useState('');
 	const [date, setDate] = useState('');
@@ -24,11 +26,11 @@ function Simulations() {
 			});
 	}, []);
 
-	const viewSimulation = (id, name, user) => {
-		navigate(`/new/${id}`, {
-			state: { className: name, simulationId: id, teacherId },
-		});
-	};
+	// const viewSimulation = (id, name, user) => {
+	// 	navigate(`/new/${id}`, {
+	// 		state: { className: name, simulationId: id, teacherId },
+	// 	});
+	// };
 
 	const deleteSimulation = (e, id) => {
 		e.stopPropagation();
@@ -45,7 +47,7 @@ function Simulations() {
 			<h1>Welcome back {user.name}!</h1>
 			<div className="simulations-form-heading">
 				<h2>My Simulations</h2>
-				<Button green>Add Simulation</Button>
+				<Link to="/new"><Button green>Add Simulation</Button></Link>
 			</div>
 
 			<AddForm
@@ -63,7 +65,7 @@ function Simulations() {
 
 			<SimulationList
 				simulationList={simulationsList}
-				onClick={viewSimulation}
+				// onClick={viewSimulation}
 				onDelete={deleteSimulation}
 			/>
 		</div>

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../UserContext';
+// import { useLocation } from 'react-router-dom';
 import generateMockMarketData from '../helpers/generateMockMarketData';
 import generateRandomString from '../helpers/generateRandomString';
 import GraphWithPlayhead from '../components/GraphWithPlayhead';
@@ -11,12 +12,14 @@ import axios from 'axios';
 import './NewSimulation.scss';
 
 function NewSimulation() {
+	const { user } = useContext(UserContext);
 	const [randomMarketData, setRandomMarketData] = useState([]);
+	const [className, setClassName] = useState('');
 	const [studentsList, setStudentsList] = useState([]);
 	const [studentName, setStudentName] = useState('');
 	const [accessCode, setAccessCode] = useState(generateRandomString(5));
-	const { state } = useLocation();
-	const { className, simulationId, teacherId } = state;
+	// const { state } = useLocation();
+	// const { className, simulationId, teacherId } = state;
 
 	const randomizeMarketData = () => {
 		const data = getRandomMarketData();
@@ -26,18 +29,16 @@ function NewSimulation() {
 	useEffect(() => {
 		randomizeMarketData();
 
-		axios
-			.get(`/api/students/list/${simulationId}`)
-			.then((res) => {
-				setStudentsList(res.data);
-			});
+		// axios
+		// 	.get(`/api/students/list/${simulationId}`)
+		// 	.then((res) => {
+		// 		setStudentsList(res.data);
+		// 	});
 	}, []);
 
-	console.log(studentsList);
-
 	const deleteStudent = (id) => {
-		axios.delete(`/api/students/${id}`);
-
+		// axios.delete(`/api/students/${id}`);
+		
 		setStudentsList(
 			studentsList.filter((studentItem) => studentItem.id !== id)
 		);
@@ -51,9 +52,11 @@ function NewSimulation() {
 				<div className="simulation-view-left">
 					<h2>New Simulation</h2>
 					<SingleFieldForm
-						label="Simulation Name"
+						label="Class Name"
 						id="class-name"
+						placeholder="Enter class name"
 						inputValue={className}
+						setValue={setClassName}
 					/>
 				</div>
 				<div className="simulation-view-right">
@@ -76,7 +79,7 @@ function NewSimulation() {
 				</div>
 				<AddForm
 					accessCode
-					id={simulationId}
+					// id={simulationId}
 					inputOnePlaceholder="Enter student name"
 					inputOneValue={studentName}
 					setInputOne={setStudentName}
