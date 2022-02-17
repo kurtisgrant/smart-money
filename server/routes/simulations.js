@@ -12,14 +12,20 @@ module.exports = (db) => {
 
   // create new simulation
   router.post('/', (req, res) => {
-    const { inputOne, inputTwo, id } = req.body;
+    console.log(req.body)
+    let { className, studentIncome, studentExpense, randomMarketData } = req.body;
+    
+    // convert dollars to cents
+    studentIncome *= 100;
+    studentExpense *= 100;
+
     const query = `
-    INSERT INTO simulations(name, created_date, teacher_id)
-    VALUES ($1, $2, $3)
+    INSERT INTO simulations(name, simulation_key, , mock_market_data, income, expense, teacher_id)
+    VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING *
     `
 
-    db.query(query, [inputOne, inputTwo, id])
+    db.query(query, [className, studentIncome, studentExpense, randomMarketData])
   });
 
   // delete simulation
