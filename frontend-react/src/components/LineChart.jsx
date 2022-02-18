@@ -7,7 +7,7 @@ import {
   LineElement,
   Title,
   Tooltip,
-  Legend,
+  Legend
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import './LineChart.scss';
@@ -22,36 +22,22 @@ ChartJS.register(
   Legend
 );
 
-ChartJS.pluginService.register({
-  
-})
+ChartJS.register({
+  id: 'arbitraryLine',
+  beforeDraw(chart, args, options) {
+    const {
+      ctx,
+      chartArea: { top, right, bottom, left, width, height },
+      scales: { x, y }
+    } = chart;
+    ctx.save();
 
-export const options = {
-  responsive: true,
-  elements: {
-    point: {
-      radius: 0
-    }
-  },
-  scales: {
-    x: {
-      grid: {
-        drawOnChartArea: false,
-        drawTicks: false
-      },
-      ticks: {
-        autoSkip: false
-      }
-    },
-    y: {
-      ticks: {
-        callback: function(index) {
-          return '$' + index;
-        }
-      }
-    }
+    const xVal = x.getPixelForValue(options.lineIndex);
+    ctx.strokeStyle = '#3DAE70';
+    ctx.strokeRect(xVal, top, 0, height);
+    ctx.restore();
   }
-};
+});
 
 const LineChart = ({ marketData, currentMonth }) => {
 
@@ -65,6 +51,37 @@ const LineChart = ({ marketData, currentMonth }) => {
       tension: 0
     }]
   });
+  const [options, setOptions] = useState({
+    responsive: true,
+    elements: {
+      point: {
+        radius: 0
+      }
+    },
+    scales: {
+      x: {
+        grid: {
+          drawOnChartArea: false,
+          drawTicks: false
+        },
+        ticks: {
+          autoSkip: false
+        }
+      },
+      y: {
+        ticks: {
+          callback: function(index) {
+            return '$' + index;
+          }
+        }
+      }
+    },
+    plugins: {
+      arbitraryLine: {
+        lineIndex: marketData.findIndex(d => d.x === 0)
+      }
+    }
+  });
 
   useEffect(() => {
     setData({
@@ -76,9 +93,43 @@ const LineChart = ({ marketData, currentMonth }) => {
         borderColor: '#3DAE70',
         tension: 0
       }]
-    })
+    });
 
-  }, [marketData])
+  }, [marketData]);
+
+  useEffect(() => {
+    setOptions({
+      responsive: true,
+      elements: {
+        point: {
+          radius: 0
+        }
+      },
+      scales: {
+        x: {
+          grid: {
+            drawOnChartArea: false,
+            drawTicks: false
+          },
+          ticks: {
+            autoSkip: false
+          }
+        },
+        y: {
+          ticks: {
+            callback: function(index) {
+              return '$' + index;
+            }
+          }
+        }
+      },
+      plugins: {
+        arbitraryLine: {
+          lineIndex: marketData.findIndex(d => d.x === 0)
+        }
+      }
+    });
+  }, [currentMonth]);
 
 
   return (
