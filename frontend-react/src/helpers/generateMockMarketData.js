@@ -39,21 +39,6 @@ export default function generateMarketData(options) {
     simMktData.push(Number(price.toFixed(2)));
   }
 
-  // Log preview of data
-  console.log("Market Data Generated.\n\n");
-  console.log("Preview: ");
-  console.log('0: $' + simMktData[0]);
-  console.log('1: $' + simMktData[1]);
-  console.log('2: $' + simMktData[2]);
-  console.log('3: $' + simMktData[3]);
-  console.log("  ...");
-  console.log(`${simMktData.length - 4}: $` + simMktData[simMktData.length - 4]);
-  console.log(`${simMktData.length - 3}: $` + simMktData[simMktData.length - 3]);
-  console.log(`${simMktData.length - 2}: $` + simMktData[simMktData.length - 2]);
-  console.log(`${simMktData.length - 1}: $` + simMktData[simMktData.length - 1]);
-  console.log('\nRaw data: ');
-  console.log(simMktData);
-
   return simMktData;
 };
 

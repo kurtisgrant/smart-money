@@ -33,7 +33,6 @@ function App() {
 
     // Set user if stored in session storage
     const sessionUser = JSON.parse(sessionStorage.getItem('user'));
-    console.log('Setting user from session storage: ', sessionUser);
     sessionUser && setUser(sessionUser);
 
     // Establish socket connection with server
