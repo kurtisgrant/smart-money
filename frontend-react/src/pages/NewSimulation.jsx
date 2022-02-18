@@ -3,7 +3,6 @@ import { UserContext } from '../UserContext';
 import { Link } from 'react-router-dom';
 import generateMockMarketData from '../helpers/generateMockMarketData';
 import generateRandomString from '../helpers/generateRandomString';
-import GraphWithPlayhead from '../components/GraphWithPlayhead';
 import LineChart from '../components/LineChart';
 import StudentList from '../components/StudentList';
 import SingleFieldForm from '../components/SingleFieldForm';
