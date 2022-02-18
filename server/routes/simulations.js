@@ -63,13 +63,12 @@ module.exports = (db) => {
 						student.name,
 						student.accessCode,
 						simulationId,
-					])
-						.then((res) => {
-							const student = res.rows[0];
-							const chequingsValue = studentIncome + studentExpense;
+					]).then((res) => {
+						const student = res.rows[0];
+						const chequingsValue = studentIncome + studentExpense;
 
-							db.query(insertAccounts, [0, student.id, 0, chequingsValue]);
-						});
+						db.query(insertAccounts, [0, student.id, 0, chequingsValue]);
+					});
 				}
 			})
 			.catch((err) => console.log(err.message));
@@ -96,6 +95,20 @@ module.exports = (db) => {
     `;
 
 		db.query(query, [teacherId])
+			.then((data) => res.json(data.rows))
+			.catch((e) => console.log(e.message));
+	});
+
+	// return income and expense monthly cashflow for specific simulation
+	router.get('/cashflow/:simulationKey', (req, res) => {
+		const { simulationKey } = req.params;
+
+		const query = `
+			SELECT income, expense FROM simulations
+			WHERE simulation_key = $1
+			`;
+
+		db.query(query, [simulationKey])
 			.then((data) => res.json(data.rows))
 			.catch((e) => console.log(e.message));
 	});
