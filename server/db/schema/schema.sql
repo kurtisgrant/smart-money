@@ -19,7 +19,7 @@ CREATE TABLE simulations (
   simulation_key VARCHAR(255),
   mock_market_data TEXT,
   current_month INT,
-  simulation_state BOOLEAN,
+  is_playing BOOLEAN DEFAULT FALSE,
   income BIGINT,
   expense BIGINT,
   teacher_id INTEGER REFERENCES teachers(id) ON DELETE CASCADE
