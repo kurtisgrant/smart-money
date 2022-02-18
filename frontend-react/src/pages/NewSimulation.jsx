@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import generateMockMarketData from '../helpers/generateMockMarketData';
 import generateRandomString from '../helpers/generateRandomString';
 import GraphWithPlayhead from '../components/GraphWithPlayhead';
+import LineChart from '../components/LineChart';
 import StudentList from '../components/StudentList';
 import SingleFieldForm from '../components/SingleFieldForm';
 import Button from '../components/Button';
@@ -107,11 +108,12 @@ function NewSimulation() {
 					/>
 				</div>
 				<div className="simulation-view-right">
-					<GraphWithPlayhead
+					{/* <GraphWithPlayhead
 						marketData={randomMarketData}
 						currentMonth={0}
 						zeroIndex={10 * 12}
-					/>
+					/> */}
+					{randomMarketData.length && <LineChart marketData={randomMarketData} currentMonth={0} /> }
 					<div className="simulation-buttons">
 						<Button green onClick={randomizeMarketData}>Randomize</Button>
 					</div>
@@ -147,7 +149,9 @@ const getRandomMarketData = () => {
 		lastYearSeed: 2015, // Max: 2018
 		adjustForInflation: true, // true: Adjust to Today's dollars, false: Allow inflation
 		startPrice: 10, // First price in fake market data
-		months: 720, // How many months of data do you want?
+		months: 721, // How many months of data do you want?
+	}).map((val, i) => {
+		return { x: i - 120, y: val}
 	});
 };
 
