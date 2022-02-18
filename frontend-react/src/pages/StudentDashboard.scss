@@ -1,0 +1,134 @@
+.dashboard-container {
+	display: flex;
+	flex-direction: column;
+
+	.dashboard-top {
+		display: flex;
+		height: 40vh;
+		margin-bottom: 50px;
+
+		.dashboard-top-left {
+			flex: 1;
+			align-self: center;
+
+			.cashflow {
+				display: flex;
+				align-items: center;
+				margin: 15px 0;
+
+				.col-1 {
+					color: #ffffff;
+					background-color: #828282;
+					border-top-left-radius: 1.5rem;
+					border-bottom-left-radius: 1.5rem;
+					padding: 10px;
+					flex: 1;
+					text-align: center;
+				}
+
+				.col-1-green {
+					color: #ffffff;
+					background-color: #3dae70;
+					border-top-left-radius: 1.5rem;
+					border-bottom-left-radius: 1.5rem;
+					padding: 10px;
+					flex: 1;
+					text-align: center;
+				}
+
+				.col-2 {
+					color: #828282;
+					background-color: #f2f2f2;
+					border-top-right-radius: 1.5rem;
+					border-bottom-right-radius: 1.5rem;
+					padding: 10px;
+					flex: 2;
+					text-align: center;
+				}
+			}
+		}
+
+		.dashboard-top-right {
+			border: 1px solid #828282;
+			margin-left: 10px;
+			flex: 2;
+		}
+	}
+
+	.dashboard-bottom {
+		display: flex;
+		height: 40vh;
+
+		.dashboard-bottom-left {
+			flex: 1;
+      align-self: center;
+
+			.allocation {
+				display: flex;
+				align-items: center;
+				margin: 15px 0;
+
+				.col-1 {
+					color: #ffffff;
+					background-color: #3dae70;
+					border-top-left-radius: 1.5rem;
+					border-bottom-left-radius: 1.5rem;
+					padding: 10px;
+					flex: 2.5;
+					text-align: center;
+				}
+
+				.col-2 {
+					color: #3dae70;
+					font-weight: 600;
+					background-color: #f2f2f2;
+					padding: 10px;
+					padding-left: 50px;
+					flex: 1;
+					text-align: center;
+					cursor: pointer;
+				}
+
+				.col-3 {
+					color: #828282;
+					background-color: #f2f2f2;
+					padding: 10px;
+					flex: 2;
+					text-align: center;
+				}
+
+				.col-4 {
+					color: #3dae70;
+					font-weight: 600;
+					background-color: #f2f2f2;
+					border-top-right-radius: 1.5rem;
+					border-bottom-right-radius: 1.5rem;
+					padding: 10px;
+					padding-right: 50px;
+					flex: 1;
+					text-align: center;
+					cursor: pointer;
+				}
+			}
+
+			.chequings {
+
+        .col-1 {
+					background-color: #828282;
+				}
+
+        .col-2, .col-4 {
+          padding-top: 20px;
+          padding-bottom: 20px;
+          cursor: default;
+        }
+			}
+		}
+
+		.dashboard-bottom-right {
+			border: 1px solid #828282;
+			margin-left: 10px;
+			flex: 1;
+		}
+	}
+}
