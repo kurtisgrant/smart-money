@@ -125,7 +125,7 @@ const LineChart = ({ marketData, currentMonth }) => {
       },
       plugins: {
         arbitraryLine: {
-          lineIndex: marketData.findIndex(d => d.x === 0)
+          lineIndex: marketData.findIndex(d => d.x === currentMonth)
         }
       }
     });
