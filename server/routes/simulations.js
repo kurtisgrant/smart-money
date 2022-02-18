@@ -43,19 +43,32 @@ module.exports = (db) => {
 			teacherId,
 		])
 			.then((res) => {
+				console.log('students:', students);
+				console.log('res2:', res.rows[0]);
 				const simulationId = res.rows[0].id;
 
 				for (const student of students) {
 					const queryStudents = `
             INSERT INTO students(name, access_code, simulation_id)
             VALUES ($1, $2, $3)
+						RETURNING *
           `;
+
+					const insertAccounts = `
+						INSERT INTO accounts(account_type, balance, student_id)
+						VALUES ('Savings', $1, $2), ('Investments', $3, $2), ('Chequings', $4, $2)
+					`;
 
 					db.query(queryStudents, [
 						student.name,
 						student.accessCode,
 						simulationId,
-					]);
+					]).then((res) => {
+						const student = res.rows[0];
+						const chequingsValue = studentIncome + studentExpense;
+
+						db.query(insertAccounts, [0, student.id, 0, chequingsValue]);
+					});
 				}
 			})
 			.catch((err) => console.log(err.message));
@@ -82,6 +95,20 @@ module.exports = (db) => {
     `;
 
 		db.query(query, [teacherId])
+			.then((data) => res.json(data.rows))
+			.catch((e) => console.log(e.message));
+	});
+
+	// return income and expense monthly cashflow for specific simulation
+	router.get('/cashflow/:simulationKey', (req, res) => {
+		const { simulationKey } = req.params;
+
+		const query = `
+			SELECT income, expense FROM simulations
+			WHERE simulation_key = $1
+			`;
+
+		db.query(query, [simulationKey])
 			.then((data) => res.json(data.rows))
 			.catch((e) => console.log(e.message));
 	});
