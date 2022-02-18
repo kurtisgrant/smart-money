@@ -11,6 +11,8 @@ function SimulationControlPanel() {
   const { simulationKey } = useParams();
   const { user } = useContext(UserContext);
   const { socket } = useContext(SocketContext);
+	const [marketData, setMarketData] = useState([])
+	const [currentMonth, setCurrentMonth] = useState(0)
 
   useEffect(() => {
     if (!socket) return;
@@ -28,7 +30,7 @@ function SimulationControlPanel() {
 	return (
 		<div className="simulation-control-panel-container">
 			<div className="simulation-control-panel">
-				<LineChart />
+				<LineChart marketData={marketData} currentMonth={currentMonth} />
 				<div className="simulation-run-buttons">
 					<Button green>Play</Button>
 					<Button white>Pause</Button>
