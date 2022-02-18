@@ -56,23 +56,19 @@ module.exports = (db) => {
 
 					const insertAccounts = `
 						INSERT INTO accounts(account_type, balance, student_id)
-						VALUES ('Savings', $1, $2), ('Chequings', $3, $2), ('Investments', $4, $2)
+						VALUES ('Savings', $1, $2), ('Investments', $3, $2), ('Chequings', $4, $2)
 					`;
 
-					db
-						.query(queryStudents, [
-							student.name,
-							student.accessCode,
-							simulationId,
-						])
+					db.query(queryStudents, [
+						student.name,
+						student.accessCode,
+						simulationId,
+					])
 						.then((res) => {
 							const student = res.rows[0];
-							const chequings = studentIncome + studentExpense;
-							console.log('res3:', res.rows[0]);
-							
-							return db.query(insertAccounts, [0, student.id, chequings, 0]);
-						}).then((res) => {
+							const chequingsValue = studentIncome + studentExpense;
 
+							db.query(insertAccounts, [0, student.id, 0, chequingsValue]);
 						});
 				}
 			})
