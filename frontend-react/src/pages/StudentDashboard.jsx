@@ -22,24 +22,49 @@ function StudentDashboard() {
     .then((res) => {
       const incomeData = Number(res.data[0].income) / 100;
       const expenseData = Number(res.data[0].expense) / 100;
-      
+      const surplusData = incomeData - expenseData
+
       setIncome(incomeData);
       setExpense(expenseData);
-      setSurplus(incomeData - expenseData);
+      setSurplus(surplusData);
+      setChequings(surplusData);
     })
     .catch((err) => console.log(err.message));
     
   }, [])
 
-	const decreaseAmount = () => {
+  useEffect(() => {
+    setChequings(surplus - savings - investments);
+
+  }, [savings, investments, surplus])
+
+	const decreaseSavingsAmount = () => {
 		if (savings > 0) {
 			setSavings(savings - 50);
 		}
 	};
 
-	const increaseAmount = () => {
-		setSavings(savings + 50);
+	const increaseSavingsAmount = () => {
+    if (savings + 50 + investments > surplus) {
+      return
+    }
+
+    setSavings(savings + 50);
 	};
+
+  const decreaseInvestmentsAmount = () => {
+    if (investments > 0) {
+			setInvestments(investments - 50);
+		}
+  }
+
+  const increaseInvestmentsAmount = () => {
+    if (investments + 50 + savings > surplus) {
+      return
+    }
+    
+    setInvestments(investments + 50);
+  }
 
 	useEffect(() => {
 		if (!socket) return;
@@ -79,28 +104,28 @@ function StudentDashboard() {
 					<h3>Monthly Allocations</h3>
 					<div className="allocation">
 						<span className="col-1">Savings</span>
-						<span className="col-2" onClick={decreaseAmount}>
+						<span className="col-2" onClick={decreaseSavingsAmount}>
 							-
 						</span>
-						<span className="col-3">{savings}</span>
-						<span className="col-4" onClick={increaseAmount}>
+						<span className="col-3">${savings.toLocaleString()}</span>
+						<span className="col-4" onClick={increaseSavingsAmount}>
 							+
 						</span>
 					</div>
           <div className="allocation">
 						<span className="col-1">Investments</span>
-						<span className="col-2" onClick={decreaseAmount}>
+						<span className="col-2" onClick={decreaseInvestmentsAmount}>
 							-
 						</span>
-						<span className="col-3">{investments}</span>
-						<span className="col-4" onClick={increaseAmount}>
+						<span className="col-3">${investments.toLocaleString()}</span>
+						<span className="col-4" onClick={increaseInvestmentsAmount}>
 							+
 						</span>
 					</div>
           <div className="allocation chequings">
 						<span className="col-1">Chequings</span>
 						<span className="col-2"></span>
-						<span className="col-3">{chequings}</span>
+						<span className="col-3">${chequings.toLocaleString()}</span>
 						<span className="col-4"></span>
 					</div>
 				</div>
