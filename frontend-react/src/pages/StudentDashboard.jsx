@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { UserContext } from '../UserContext';
 import { SocketContext } from '../SocketContext';
 import './StudentDashboard.scss';
+import axios from 'axios';
 
 function StudentDashboard() {
 	const { simulationKey } = useParams();
@@ -14,6 +15,21 @@ function StudentDashboard() {
 	const [savings, setSavings] = useState(0);
 	const [investments, setInvestments] = useState(0);
 	const [chequings, setChequings] = useState(0);
+
+  useEffect(() => {
+    axios
+    .get(`http://localhost:8080/api/simulations/cashflow/${simulationKey}`)
+    .then((res) => {
+      const incomeData = Number(res.data[0].income) / 100;
+      const expenseData = Number(res.data[0].expense) / 100;
+      
+      setIncome(incomeData);
+      setExpense(expenseData);
+      setSurplus(incomeData - expenseData);
+    })
+    .catch((err) => console.log(err.message));
+    
+  }, [])
 
 	const decreaseAmount = () => {
 		if (savings > 0) {
@@ -45,15 +61,15 @@ function StudentDashboard() {
 					<h3>Monthly Cashflow</h3>
 					<div className="cashflow">
 						<span className="col-1">Income</span>
-						<span className="col-2">$4,705 / m</span>
+						<span className="col-2">${income.toLocaleString()} / m</span>
 					</div>
 					<div className="cashflow">
 						<span className="col-1">Expenses</span>
-						<span className="col-2">$3,949 / m</span>
+						<span className="col-2">${expense.toLocaleString()} / m</span>
 					</div>
 					<div className="cashflow">
 						<span className="col-1-green">Surplus</span>
-						<span className="col-2">$756 / m</span>
+						<span className="col-2">${surplus.toLocaleString()} / m</span>
 					</div>
 				</div>
 				<div className="dashboard-top-right"></div>
