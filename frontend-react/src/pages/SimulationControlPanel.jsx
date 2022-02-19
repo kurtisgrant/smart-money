@@ -5,27 +5,51 @@ import { SocketContext } from '../SocketContext';
 import LineChart from '../components/LineChart';
 import StudentListBalance from '../components/StudentListBalance';
 import Button from '../components/Button';
+import axios from 'axios';
 import './SimulationControlPanel.scss';
 
 function SimulationControlPanel() {
-  const { simulationKey } = useParams();
-  const { user } = useContext(UserContext);
-  const { socket } = useContext(SocketContext);
-	const [marketData, setMarketData] = useState([])
-	const [currentMonth, setCurrentMonth] = useState(0)
+	const { simulationKey } = useParams();
+	const { user } = useContext(UserContext);
+	const { socket } = useContext(SocketContext);
+	const [marketData, setMarketData] = useState([]);
+	const [currentMonth, setCurrentMonth] = useState(0);
+	const [studentsBalance, setStudentsBalance] = useState([]);
 
-  useEffect(() => {
-    if (!socket) return;
-    /* 
-     * TODO: emit event indicating that 
-     * I'm the teacher of X simulation
-     * and I would like to be notified 
-     * of all related student account
-     * values and the current point in
-     * the simulation as it is updated
-     */
+	useEffect(() => {
+		axios
+			.get(`http://localhost:8080/api/students/list/${simulationKey}`)
+			.then((res) => {
+				console.log('Students returned from axios req: ', res.data);
 
-  }, [socket]);
+				setStudentsBalance(res.data);
+			})
+			.catch((err) => console.log(err.message));
+	}, []);
+
+	const studentsBalanceList = studentsBalance.map(student => {
+		const { stuId: id, name, che, sav, inv } = student;
+		return (
+			<tr key={id} className="student">
+				<td>{name}</td>
+				<td>${sav}</td>
+				<td>${inv}</td>
+				<td>${che}</td>
+			</tr>
+		);
+	});
+
+	useEffect(() => {
+		if (!socket) return;
+		/*
+		 * TODO: emit event indicating that
+		 * I'm the teacher of X simulation
+		 * and I would like to be notified
+		 * of all related student account
+		 * values and the current point in
+		 * the simulation as it is updated
+		 */
+	}, [socket]);
 
 	return (
 		<div className="simulation-control-panel-container">
@@ -40,7 +64,17 @@ function SimulationControlPanel() {
 				<div className="list-heading">
 					<h2>Students</h2>
 				</div>
-				<StudentListBalance />
+				<table className="student-list-balance">
+					<tbody>
+						<tr>
+							<th>Name</th>
+							<th>Savings</th>
+							<th>Investments</th>
+							<th>Chequings</th>
+						</tr>
+						{studentsBalanceList}
+					</tbody>
+				</table>
 			</div>
 		</div>
 	);

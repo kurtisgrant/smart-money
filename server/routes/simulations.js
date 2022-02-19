@@ -65,7 +65,7 @@ module.exports = (db) => {
 						simulationId,
 					]).then((res) => {
 						const student = res.rows[0];
-						const chequingsValue = studentIncome + studentExpense;
+						const chequingsValue = studentIncome - studentExpense;
 
 						db.query(insertAccounts, [0, student.id, 0, chequingsValue]);
 					});
