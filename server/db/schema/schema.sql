@@ -18,7 +18,7 @@ CREATE TABLE simulations (
   created_date TIMESTAMP NOT NULL DEFAULT NOW(),
   simulation_key VARCHAR(255),
   mock_market_data TEXT,
-  current_month INT,
+  current_month INT DEFAULT 0,
   is_playing BOOLEAN DEFAULT FALSE,
   income BIGINT,
   expense BIGINT,
