@@ -40,8 +40,22 @@ function SimulationControlPanel() {
 				});
 
 				setStudentsBalance(studentsData);
-			});
-	}, [simulationKey]);
+			})
+			.catch((err) => console.log(err.message));
+	}, []);
+
+	const studentsBalanceList = Object.keys(studentsBalance).map((studentId) => {
+		const studentData = studentsBalance[studentId];
+
+		return (
+			<tr key={studentId} className="student">
+				<td>{studentData.name}</td>
+				<td>${studentData.accountType.savings.toLocaleString()}</td>
+				<td>${studentData.accountType.investments.toLocaleString()}</td>
+				<td>${studentData.accountType.chequings.toLocaleString()}</td>
+			</tr>
+		);
+	});
 
 	useEffect(() => {
 		if (!socket) return;
@@ -76,7 +90,8 @@ function SimulationControlPanel() {
 							<th>Investments</th>
 							<th>Chequings</th>
 						</tr>
-						{Object.keys(studentsBalance).map((studentId) => {
+						{studentsBalanceList}
+						{/* {Object.keys(studentsBalance).map((studentId) => {
 							const studentData = studentsBalance[studentId]
 
 							return (
@@ -87,7 +102,7 @@ function SimulationControlPanel() {
 									<td>${studentData.accountType.chequings.toLocaleString()}</td>
 								</tr>
 							);
-						})}
+						})} */}
 					</tbody>
 				</table>
 			</div>
