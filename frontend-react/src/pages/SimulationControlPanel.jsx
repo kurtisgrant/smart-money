@@ -14,14 +14,34 @@ function SimulationControlPanel() {
 	const { socket } = useContext(SocketContext);
 	const [marketData, setMarketData] = useState([]);
 	const [currentMonth, setCurrentMonth] = useState(0);
+	const [studentsBalance, setStudentsBalance] = useState([]);
 
 	useEffect(() => {
 		axios
 			.get(`http://localhost:8080/api/students/list/${simulationKey}`)
 			.then((res) => {
-				console.log(res.data);
+				const studentsData = {};
+
+				res.data.map((data) => {
+					if (!studentsData[data.student_id]) {
+						studentsData[data.student_id] = {
+							name: data.name,
+							accountType: {
+								savings: 0,
+								investments: 0,
+								chequings: 0,
+							},
+						};
+					}
+
+					studentsData[data.student_id].accountType[data.account_type.toLowerCase()] = Number(data.balance) / 100;
+
+					return studentsData;
+				});
+
+				setStudentsBalance(studentsData);
 			});
-	}, []);
+	}, [simulationKey]);
 
 	useEffect(() => {
 		if (!socket) return;
@@ -56,24 +76,18 @@ function SimulationControlPanel() {
 							<th>Investments</th>
 							<th>Chequings</th>
 						</tr>
-						<tr className="student">
-							<th>John Doe</th>
-							<td>$1,000</td>
-							<td>$500</td>
-							<td>$500</td>
-						</tr>
-						<tr className="student">
-							<th>Adam Johns</th>
-							<td>$900</td>
-							<td>$300</td>
-							<td>$800</td>
-						</tr>
-						<tr className="student">
-							<th>Sam Lee</th>
-							<td>$500</td>
-							<td>$500</td>
-							<td>$1,000</td>
-						</tr>
+						{Object.keys(studentsBalance).map((studentId) => {
+							const studentData = studentsBalance[studentId]
+
+							return (
+								<tr key={studentId} className="student">
+									<td>{studentData.name}</td>
+									<td>${studentData.accountType.savings.toLocaleString()}</td>
+									<td>${studentData.accountType.investments.toLocaleString()}</td>
+									<td>${studentData.accountType.chequings.toLocaleString()}</td>
+								</tr>
+							);
+						})}
 					</tbody>
 				</table>
 			</div>
