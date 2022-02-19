@@ -20,39 +20,21 @@ function SimulationControlPanel() {
 		axios
 			.get(`http://localhost:8080/api/students/list/${simulationKey}`)
 			.then((res) => {
-				const studentsData = {};
+				console.log('Students returned from axios req: ', res.data);
 
-				res.data.map((data) => {
-					if (!studentsData[data.student_id]) {
-						studentsData[data.student_id] = {
-							name: data.name,
-							accountType: {
-								savings: 0,
-								investments: 0,
-								chequings: 0,
-							},
-						};
-					}
-
-					studentsData[data.student_id].accountType[data.account_type.toLowerCase()] = Number(data.balance) / 100;
-
-					return studentsData;
-				});
-
-				setStudentsBalance(studentsData);
+				setStudentsBalance(res.data);
 			})
 			.catch((err) => console.log(err.message));
 	}, []);
 
-	const studentsBalanceList = Object.keys(studentsBalance).map((studentId) => {
-		const studentData = studentsBalance[studentId];
-
+	const studentsBalanceList = studentsBalance.map(student => {
+		const { stuId: id, name, che, sav, inv } = student;
 		return (
-			<tr key={studentId} className="student">
-				<td>{studentData.name}</td>
-				<td>${studentData.accountType.savings.toLocaleString()}</td>
-				<td>${studentData.accountType.investments.toLocaleString()}</td>
-				<td>${studentData.accountType.chequings.toLocaleString()}</td>
+			<tr key={id} className="student">
+				<td>{name}</td>
+				<td>${sav}</td>
+				<td>${inv}</td>
+				<td>${che}</td>
 			</tr>
 		);
 	});
@@ -91,18 +73,6 @@ function SimulationControlPanel() {
 							<th>Chequings</th>
 						</tr>
 						{studentsBalanceList}
-						{/* {Object.keys(studentsBalance).map((studentId) => {
-							const studentData = studentsBalance[studentId]
-
-							return (
-								<tr key={studentId} className="student">
-									<td>{studentData.name}</td>
-									<td>${studentData.accountType.savings.toLocaleString()}</td>
-									<td>${studentData.accountType.investments.toLocaleString()}</td>
-									<td>${studentData.accountType.chequings.toLocaleString()}</td>
-								</tr>
-							);
-						})} */}
 					</tbody>
 				</table>
 			</div>

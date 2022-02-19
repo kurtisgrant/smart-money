@@ -57,9 +57,23 @@ module.exports = (db) => {
 			JOIN simulations ON simulations.id = students.simulation_id
 			WHERE simulations.id = (SELECT id FROM simulations WHERE simulation_key = $1)
     `;
-
 		db.query(query, [simulationKey])
-			.then((data) => res.json(data.rows))
+			.then(data => {
+				let stuData = {};
+				for (const row of data.rows) {
+					const { student_id: stuId, account_type: acntType, balance: bal, name } = row;
+					if (!stuData[stuId]) {
+						stuData[stuId] = { stuId, name };
+						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
+					} else {
+						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
+					}
+				}
+				stuData = Object.values(stuData);
+				console.log('Sending data for request to "/list/:simulationKey": ', stuData);
+				return stuData;
+			})
+			.then((data) => res.json(data))
 			.catch((e) => console.log(e.message));
 	});
 
