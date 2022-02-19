@@ -49,8 +49,8 @@ module.exports = (db) => {
 
 				for (const student of students) {
 					const queryStudents = `
-            INSERT INTO students(name, access_code, simulation_id)
-            VALUES ($1, $2, $3)
+            INSERT INTO students(name, access_code, simulation_id, income, expense)
+            VALUES ($1, $2, $3, $4, $5)
 						RETURNING *
           `;
 
@@ -63,6 +63,8 @@ module.exports = (db) => {
 						student.name,
 						student.accessCode,
 						simulationId,
+						studentIncome,
+						studentExpense,
 					]).then((res) => {
 						const student = res.rows[0];
 						const chequingsValue = studentIncome - studentExpense;

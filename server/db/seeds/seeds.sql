@@ -20,16 +20,16 @@ VALUES ('SIMULATION-1',
         300000,
         1);
 
-INSERT INTO students (name, access_code, simulation_id)
-VALUES ('Jeffery Park', '5TPUn', 1),
-       ('Robert Gladue', 'fplTZ', 1),
-       ('John Doe', 'ajkff', 1),
-       ('Adam Johns', 'xYT3i', 1),
-       ('Sam Lee', 'tizae', 1),
-       ('John Deere', 'q1Ceu', 1),
-       ('Sally Johnson', 'CWc4g', 1),
-       ('Danielle Li', 'unOp0', 1),
-       ('Tony Su', '6MxBe', 1);
+INSERT INTO students (name, access_code, simulation_id, income, expense, savings_allocation, investment_allocation)
+VALUES ('Jeffery Park', '5TPUn', 1, 300000, 280000, 5000, 12000),
+       ('Robert Gladue', 'fplTZ', 1, 300000, 280000, 5000, 12000),
+       ('John Doe', 'ajkff', 1, 300000, 280000, 5000, 12000),
+       ('Adam Johns', 'xYT3i', 1, 300000, 280000, 5000, 12000),
+       ('Sam Lee', 'tizae', 1, 300000, 280000, 5000, 12000),
+       ('John Deere', 'q1Ceu', 1, 300000, 280000, 5000, 12000),
+       ('Sally Johnson', 'CWc4g', 1, 300000, 280000, 5000, 12000),
+       ('Danielle Li', 'unOp0', 1, 300000, 280000, 5000, 12000),
+       ('Tony Su', '6MxBe', 1, 300000, 280000, 5000, 12000);
 
 INSERT INTO accounts (account_type, balance, student_id)
 VALUES ('Chequing', 30000, 1),
