@@ -12,7 +12,8 @@ module.exports = (db) => {
 
 	// create new simulation
 	router.post('/', (req, res) => {
-		console.log(req.body);
+		console.log('newsimulation post');
+		console.log({ requestBody: req.body, students: req.body.students });
 		let {
 			simulationName,
 			simulationKey,
@@ -22,11 +23,13 @@ module.exports = (db) => {
 			teacherId,
 			students,
 		} = req.body;
-
+		
+		console.log('LINE 27', randomMarketData);
 		// convert dollars to cents
 		studentIncome *= 100;
 		studentExpense *= 100;
 
+		console.log('LINE 32');
 		// insert simulation info to simulations table
 		const querySimulations = `
     INSERT INTO simulations(name, simulation_key, mock_market_data, income, expense, teacher_id)
@@ -34,42 +37,59 @@ module.exports = (db) => {
     RETURNING *
     `;
 
-		db.query(querySimulations, [
-			simulationName,
-			simulationKey,
-			JSON.stringify(randomMarketData),
-			studentIncome,
-			studentExpense,
-			teacherId,
-		])
-			.then((res) => {
-				console.log('students:', students);
-				console.log('res2:', res.rows[0]);
-				const simulationId = res.rows[0].id;
+		console.log('LINE 40');
 
-				for (const student of students) {
-					const queryStudents = `
-            INSERT INTO students(name, access_code, simulation_id)
-            VALUES ($1, $2, $3)
-						RETURNING *
-          `;
 
-					const insertAccounts = `
-						INSERT INTO accounts(account_type, balance, student_id)
-						VALUES ('Savings', $1, $2), ('Investments', $3, $2), ('Chequings', $4, $2)
-					`;
+		const studentsBalanceData = (simulationId) => students.map((student) => {
+				const queryStudents = `
+					INSERT INTO students(name, access_code, simulation_id)
+					VALUES ($1, $2, $3)
+					RETURNING *
+				`;
 
-					db.query(queryStudents, [
+				return db
+					.query(queryStudents, [
 						student.name,
 						student.accessCode,
 						simulationId,
-					]).then((res) => {
+					])
+					.then((res) => {
+						console.log('LINE 68');
 						const student = res.rows[0];
 						const chequingsValue = studentIncome - studentExpense;
 
-						db.query(insertAccounts, [0, student.id, 0, chequingsValue]);
+						const insertAccounts = `
+							INSERT INTO accounts(account_type, balance, student_id)
+							VALUES ('Savings', $1, $2), ('Investments', $3, $2), ('Chequings', $4, $2)
+							RETURNING *
+						`;
+
+						return db
+							.query(insertAccounts, [0, student.id, 0, chequingsValue])
+							.then((res) => {
+								console.log('promise resolved 1 res =>', res.rows[0]);
+								return res.rows[0];
+								// resolve()
+							});
 					});
-				}
+
+		});
+
+		return db
+			.query(querySimulations, [
+				simulationName,
+				simulationKey,
+				JSON.stringify(randomMarketData),
+				studentIncome, 
+				studentExpense,
+				teacherId,
+			])
+			.then((response) => {
+				console.log('LINE 50');
+				const simulationId = response.rows[0].id;
+				// studentsBalanceData(simulationId)
+
+				res.send(studentsBalanceData(simulationId));
 			})
 			.catch((err) => console.log(err.message));
 	});
@@ -82,7 +102,11 @@ module.exports = (db) => {
     DELETE FROM simulations
     WHERE id = $1`;
 
-		db.query(query, [id]);
+		db.query(query, [id])
+			.then(() => {
+				res.send(`${id} deleted`)
+			})
+			.catch((err) => res.status(500))
 	});
 
 	// show list of simulations for specific teacher
@@ -115,3 +139,15 @@ module.exports = (db) => {
 
 	return router;
 };
+
+// const testingAsync = async () => {
+// 	const myValue = await db.query('blah )')
+
+// 	return myValue
+// }
+
+// const testingAsyncWithPromise = () => {
+// 	const myValue = Promise.resolve(db.query('blah )'))
+
+// 	return myValue
+// }

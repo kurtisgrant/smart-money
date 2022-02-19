@@ -28,7 +28,7 @@ function AddForm({
 		if (date) {
 			const inputFields = { inputOne, inputTwo, id };
 
-			axios.post('/api/simulations', inputFields);
+			// axios.post('/api/simulations', inputFields);
 			// .then((res) => {
 			// 	const list = res.data;
 			// });

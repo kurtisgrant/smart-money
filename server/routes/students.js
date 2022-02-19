@@ -60,6 +60,7 @@ module.exports = (db) => {
 		db.query(query, [simulationKey])
 			.then(data => {
 				let stuData = {};
+				console.log('DATA.ROWS ==>', data.rows)
 				for (const row of data.rows) {
 					const { student_id: stuId, account_type: acntType, balance: bal, name } = row;
 					if (!stuData[stuId]) {
