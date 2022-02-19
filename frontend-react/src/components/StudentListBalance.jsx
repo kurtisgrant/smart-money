@@ -7,9 +7,9 @@ const StudentListBalance = function() {
 			<tbody>
 				<tr>
 					<th>Name</th>
-					<th>Chequing</th>
-					<th>Saving</th>
-					<th>Investment</th>
+					<th>Savings</th>
+					<th>Investments</th>
+					<th>Chequings</th>
 				</tr>
 				<tr className="student">
 					<th>John Doe</th>

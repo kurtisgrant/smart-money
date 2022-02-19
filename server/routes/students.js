@@ -48,14 +48,16 @@ module.exports = (db) => {
 	});
 
 	// show list of students for specific simulation
-	router.get('/list/:simulationId', (req, res) => {
-		const { simulationId } = req.params;
+	router.get('/list/:simulationKey', (req, res) => {
+		const { simulationKey } = req.params;
 		const query = `
-      SELECT id, name, access_code AS accessCode FROM students
-      WHERE simulation_id = $1
-      `;
+			SELECT students.name, accounts.*
+			FROM accounts
+			JOIN students ON students.id = accounts.student_id
+			JOIN simulations ON simulations.id = (SELECT id FROM simulations WHERE simulation_key = $1)
+    `;
 
-		db.query(query, [simulationId])
+		db.query(query, [simulationKey])
 			.then((data) => res.json(data.rows))
 			.catch((e) => console.log(e.message));
 	});
