@@ -1,3 +1,5 @@
+const INTERVAL_SECONDS = 3;
+
 
 module.exports = (io, db) => {
   let serveClientsInterval;
@@ -15,20 +17,63 @@ module.exports = (io, db) => {
         ↳ user was: ${socket.data.user?.name || 'not logged in'}`);
       updateSocketsCount();
     });
+
     socket.on('CLIENT_LOGIN', (user) => {
       socket.data.user = user;
       console.log(
         `👤  ${user.name} logged in.
         ↳ user obj: `, user);
     });
+
     socket.on('CLIENT_LOGOUT', () => {
       console.log(`\n👻  ${socket.data.user.name} logged out.`);
       socket.data.user = null;
+    });
+
+    /* 
+     * This TOGGLE_ISPLAYING is a spaghetti-like.
+     * some of this functionality should ultimately
+     * be abstracted away or performed by HTTP requests
+     */
+
+    socket.on('TOGGLE_ISPLAYING', async simulationKey => {
+      console.log(`\n⏯  ${socket.data.user.name} requested play/pause.`);
+
+      const user = socket.data.user;
+      const ownsSimulation = await db.query('SELECT teacher_id FROM simulations WHERE simulation_key = $1', [simulationKey])
+        .then(data => data.rows[0]?.teacher_id === user.id && user.type === 'teacher');
+
+      if (!ownsSimulation) return;
+
+      db.query('UPDATE simulations SET is_playing = NOT is_playing WHERE simulation_key = $1 RETURNING id, name, simulation_key, is_playing, teacher_id', [simulationKey])
+        .then(data => console.log('   ↳ updated values: ', data.rows));
     });
   });
 
   async function serveSimulationClients() {
     process.stdout.write(".");
+
+    /* 
+     * Same here. The serveSimulaitonClients 
+     * function will need helper functions
+     */
+
+    const runningSimulations = await db
+      .query('SELECT id, teacher_id, current_month, mock_market_data FROM simulations WHERE is_playing = TRUE')
+      .then(data => data.rows);
+
+    if (!runningSimulations.length) return;
+    const ids = runningSimulations.map(s => s.id).join(',');
+    const updatedSimulations = await db
+      .query(`UPDATE simulations SET current_month = current_month + 1 WHERE id IN (${ids}) RETURNING id, teacher_id, current_month, mock_market_data`)
+      .then(data => data.rows);
+
+    const sockets = await io.fetchSockets();
+    for (const socket of sockets) {
+      if (socket.data.user?.type === 'teacher') {
+        socket.emit('CTRL_PANEL_UPDATE', updatedSimulations.find(s => s.teacher_id === socket.data.user?.id));
+      }
+    }
   }
 
   async function updateSocketsCount() {
@@ -40,7 +85,7 @@ module.exports = (io, db) => {
   }
   function startServingClients() {
     if (!serveClientsInterval) {
-      serveClientsInterval = setInterval(serveSimulationClients, 1000);
+      serveClientsInterval = setInterval(serveSimulationClients, INTERVAL_SECONDS * 1000);
     }
   }
   function stopServingClients() {

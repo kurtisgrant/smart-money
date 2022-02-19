@@ -17,18 +17,19 @@ function SimulationControlPanel() {
 	const [isPlaying, setIsPlaying] = useState(false);
 
 	const playPauseHandler = () => {
-		socket.emit('TOGGLE_ISPLAYING');
+		socket.emit('TOGGLE_ISPLAYING', simulationKey);
 		console.log('Sent request to toggle play/pause state');
 	};
 
 	const updateHandler = (ctrlPanelUpdate) => {
-		const { isPlaying, currentMonth, studentData } = ctrlPanelUpdate;
+		// Ultimately will receive current month & student data
+		// const { current_month: currentMonth, studentData } = ctrlPanelUpdate;
+		const { current_month: currentMonth } = ctrlPanelUpdate;
+
 		console.log('CTRL panel update received: ');
-		console.log('isPlaying: ', isPlaying);
 		console.log('currentMonth: ', currentMonth);
-		console.log('studentData: ', studentData);
-		// setIsPlaying(isPlaying);
-		// setCurrentMonth(currentMonth);
+		// console.log('studentData: ', studentData);
+		setCurrentMonth(currentMonth);
 		// setStudentData(studentData);
 	};
 
