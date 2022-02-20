@@ -23,6 +23,7 @@ function SimulationControlPanel() {
 		axios
 			.get(`/api/students/list/${simulationKey}`)
 			.then((res) => {
+				console.log(res.data)
 				setStudentsBalance(res.data);
 			})
 			.catch((err) => console.log(err.message));
@@ -35,11 +36,11 @@ function SimulationControlPanel() {
 	}, []);
 
 	const studentsBalanceList = studentsBalance.map(student => {
-		const { stuId: id, name, che, sav, inv } = student;
-		console.log(id, name, che, sav, inv)
+		const { stuId: id, stuAccCode: studentAccessCode, name, che, sav, inv } = student;
+
 		return (
 			<tr key={id} className="student">
-				<td>{name}</td>
+				<td>{name} <span className="student-access-code">({studentAccessCode})</span></td>
 				<td>${Number(sav).toLocaleString()}</td>
 				<td>${Number(inv).toLocaleString()}</td>
 				<td>${Number(che).toLocaleString()}</td>
@@ -107,7 +108,7 @@ function SimulationControlPanel() {
 				<table className="student-list-balance">
 					<tbody>
 						<tr>
-							<th>Name</th>
+							<th>Name (Access Code)</th>
 							<th>Savings</th>
 							<th>Investments</th>
 							<th>Chequings</th>
