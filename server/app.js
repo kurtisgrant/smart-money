@@ -4,10 +4,13 @@ const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const setupWebSockets = require('./webSockets/setupWebSockets');
-const serveSimulations = require('./simulationServer')
+const serveSimulations = require('./simulationServer');
 
 // Database connection
 const db = require('./configs/db.config');
+
+const { toggleIsPlaying } = require('./db/dbHelpers')(db);
+toggleIsPlaying(1).then(console.log);
 
 const app = express();
 
