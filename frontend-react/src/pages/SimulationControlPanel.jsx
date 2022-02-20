@@ -4,6 +4,7 @@ import { UserContext } from '../UserContext';
 import { SocketContext } from '../SocketContext';
 import LineChart from '../components/LineChart';
 import StudentListBalance from '../components/StudentListBalance';
+import CopyClipboard from '../components/CopyClipboard';
 import Button from '../components/Button';
 import axios from 'axios';
 import './SimulationControlPanel.scss';
@@ -91,6 +92,7 @@ function SimulationControlPanel() {
 
 	return (
 		<div className="simulation-control-panel-container">
+			<CopyClipboard accessLink="http://localhost:3000/sim/h8jO2N" />
 			<div className="simulation-control-panel">
 				<LineChart marketData={marketData} currentMonth={currentMonth} />
 				<div className="simulation-run-buttons">
