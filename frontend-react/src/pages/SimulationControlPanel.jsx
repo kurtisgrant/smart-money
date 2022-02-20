@@ -14,6 +14,8 @@ function SimulationControlPanel() {
 	const { socket } = useContext(SocketContext);
 	const [marketData, setMarketData] = useState([]);
 	const [currentMonth, setCurrentMonth] = useState(0);
+	const [studentData, setStudentData] = useState([]);
+	const [isPlaying, setIsPlaying] = useState(false);
 	const [studentsBalance, setStudentsBalance] = useState([]);
 
 	useEffect(() => {
@@ -39,6 +41,23 @@ function SimulationControlPanel() {
 		);
 	});
 
+	const playPauseHandler = () => {
+		socket.emit('TOGGLE_ISPLAYING', simulationKey);
+		console.log('Sent request to toggle play/pause state');
+	};
+
+	const updateHandler = (ctrlPanelUpdate) => {
+		// Ultimately will receive current month & student data
+		// const { current_month: currentMonth, studentData } = ctrlPanelUpdate;
+		const { current_month: currentMonth } = ctrlPanelUpdate;
+
+		console.log('CTRL panel update received: ');
+		console.log('currentMonth: ', currentMonth);
+		// console.log('studentData: ', studentData);
+		setCurrentMonth(currentMonth);
+		// setStudentData(studentData);
+	};
+
 	useEffect(() => {
 		if (!socket) return;
 		/*
@@ -49,6 +68,14 @@ function SimulationControlPanel() {
 		 * values and the current point in
 		 * the simulation as it is updated
 		 */
+
+		socket.on('CTRL_PANEL_UPDATE', updateHandler);
+		socket.emit('REQ_CTRL_PANEL_UPDATE', simulationKey);
+
+		return () => {
+			socket.off('CTRL_PANEL_UPDATE', updateHandler);
+		};
+
 	}, [socket]);
 
 	return (
@@ -56,8 +83,11 @@ function SimulationControlPanel() {
 			<div className="simulation-control-panel">
 				<LineChart marketData={marketData} currentMonth={currentMonth} />
 				<div className="simulation-run-buttons">
-					<Button green>Play</Button>
-					<Button white>Pause</Button>
+					{
+						isPlaying ?
+							<Button white onClick={playPauseHandler}>Pause</Button> :
+							<Button green onClick={playPauseHandler}>Play</Button>
+					}
 				</div>
 			</div>
 			<div className="simulation-control-panel-student-list">
