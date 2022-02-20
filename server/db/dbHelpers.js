@@ -49,7 +49,7 @@ const dbHelpers = (db) => {
       //   { student_id, name, accountBalances: { che: 0, sav: 0, inv: 0 }, allocations: { sav: 0, inv: 0 }, income, expense }
       // ];
     },
-    
+
     // Return array with following structure:
     // [{ id, price, quantity, account_id }];
     getMarketTransactionsForStudent: (studentId) => {
@@ -59,7 +59,7 @@ const dbHelpers = (db) => {
       JOIN accounts ON accounts.student_id = students.id
       JOIN market_transactions ON market_transactions.account_id = accounts.id
       WHERE students.id = $1
-      `
+      `;
 
       return db.query(query, [studentId])
         .then((data) => data.rows)
@@ -68,63 +68,48 @@ const dbHelpers = (db) => {
 
     // Performs multiple database queries to set balances for each account
     setAccountBalances: (studentId, cheBal, savBal, invBal) => {
-      console.log(typeof studentId, typeof cheBal, typeof savBal, typeof invBal)
+      console.log(typeof studentId, typeof cheBal, typeof savBal, typeof invBal);
       //
       const query = `
       UPDATE accounts SET balance = CASE
-        WHEN account_type = 'Chequing' then $2
-        WHEN account_type = 'Savings' then $3
-        WHEN account_type = 'Investment' then 3000
+        WHEN account_type = 'Chequing' then $2::BIGINT
+        WHEN account_type = 'Savings' then $3::BIGINT
+        WHEN account_type = 'Investment' then $4::BIGINT
         end
       WHERE student_id = $1
       RETURNING *
-      `
+      `;
 
-      return db.query(query, [studentId, cheBal, savBal])
+      return db.query(query, [studentId, cheBal, savBal, invBal])
         .then((data) => data.rows)
         .catch((e) => console.log(e.message));
-
-      // !!!DOES NOT WORK WHEN $4 IS ADDED!!! WHY????
-      // const query = `
-      // UPDATE accounts SET balance = CASE
-      //   WHEN account_type = 'Chequing' then $2
-      //   WHEN account_type = 'Savings' then $3
-      //   WHEN account_type = 'Investment' then $4
-      //   end
-      // WHERE student_id = $1
-      // RETURNING *
-      // `
-
-      // return db.query(query, [studentId, cheBal, savBal, invBal])
-      //   .then((data) => data.rows)
-      //   .catch((e) => console.log(e.message));
     },
 
     submitMarketTransaction: (studentId, quantity) => {
-      const accountType = 'Investment';
 
       const queryAccountId = `
         SELECT accounts.id
         FROM accounts
         JOIN students ON students.id = accounts.student_id
-        WHERE students.id = $1 AND accounts.account_type = $2
-      `
+        WHERE students.id = $1 AND accounts.account_type = 'Investment'
+      `;
 
       const querySubmitTrans = `
         INSERT INTO market_transactions (price, quantity, account_id)
-        VALUES (100, $1, $2);
-      `
+        VALUES ($1::BIGINT, $2, $3)
+        RETURNING *
+      `;
 
-      return db.query(queryAccountId, [studentId, accountType])
+      return db.query(queryAccountId, [studentId])
         .then((data) => {
           const accountId = data.rows[0].id;
 
           // data is being inserted but data.rows is empty
           // i think we need to pass in price as parameter as well?
-          return db.query(querySubmitTrans, [quantity, accountId])
-            .then((data) => data.rows)
+          return db.query(querySubmitTrans, [100, quantity, accountId])
+            .then((data) => data.rows);
         })
-        .catch((e) => console.log(e.message))
+        .catch((e) => console.log(e.message));
 
 
     }
