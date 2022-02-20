@@ -29,16 +29,17 @@ function App() {
     } else {
       sessionStorage.setItem('user', JSON.stringify(user));
       setUserState(user);
-      setupSocket();
+      setupSocket(user);
     }
   };
 
-  const setupSocket = () => {
+  const setupSocket = (userObj) => {
 
     // Establish socket connection with server
     const s = io(wsEndpoint);
     s.on('connect', () => {
       console.log(`Socket connection established (in App.jsx)\n  ↳ My socket id is: ${s.id}`);
+      s.emit('SET_USER', userObj);
       const clientId = s.id;
       s.on('disconnect', () => {
         console.log(`Socket connection lost. Client id was: ${clientId}`);
