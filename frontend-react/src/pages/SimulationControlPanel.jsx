@@ -23,7 +23,7 @@ function SimulationControlPanel() {
 		axios
 			.get(`/api/students/list/${simulationKey}`)
 			.then((res) => {
-				console.log(res.data)
+				console.log(res.data);
 				setStudentsBalance(res.data);
 			})
 			.catch((err) => console.log(err.message));
@@ -49,13 +49,11 @@ function SimulationControlPanel() {
 	});
 
 	const playPauseHandler = () => {
-		axios.put(`/api/simulations/toggle/${simulationKey}`)
-			.then(res => {
-				console.log('Clicked play/pause', res);
-				setIsPlaying(res.data[0].is_playing);
-			});
+		socket.emit('PLAY_PAUSE_SIMULATION', simulationKey);
+
 		console.log('Sent request to toggle play/pause state');
 	};
+	const updateIsPlayingHandler = (newIsPlaying) => setIsPlaying(newIsPlaying);
 
 	const updateHandler = (ctrlPanelUpdate) => {
 		// Ultimately will receive current month & student data
@@ -80,6 +78,7 @@ function SimulationControlPanel() {
 		 * the simulation as it is updated
 		 */
 
+		socket.on('PLAY_PAUSE_UPDATE', updateIsPlayingHandler);
 		socket.on('CTRL_PANEL_UPDATE', updateHandler);
 		socket.emit('REQ_CTRL_PANEL_UPDATE', simulationKey);
 

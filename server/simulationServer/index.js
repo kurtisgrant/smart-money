@@ -1,10 +1,12 @@
 const INTERVAL_SECONDS = 1;
-const dbHelpers = require('../db/dbHelpers')
+const dbHelpers = require('../db/dbHelpers');
+const Simulation = require('./Simulation');
 
 
 module.exports = (io, db) => {
-  const { getSimulationById } = dbHelpers;
+  const { getSimulationId, getTeacherForSimulation, toggleIsPlaying, getRunningSimulations } = dbHelpers(db);
   let serveClientsInterval;
+  const loadedSimulations = [];
 
   io.on('connection', (socket) => {
     console.log('\n🟢 client connected. socket id: ', socket.id);
@@ -13,10 +15,24 @@ module.exports = (io, db) => {
     }
     socket.on('SET_USER', async (user) => {
       socket.user = user;
+      socket.isTeacher = user.type === 'teacher';
+      socket.isStudent = user.type === 'student';
       // user.type === 'student' && socket.simulatio
       console.log(
-        `👤  ${user.name} has been set as the socket user.
+        `👤   ${user.name} has been set as the socket user.
         ↳ user obj: `, user);
+    });
+
+    socket.on('PLAY_PAUSE_SIMULATION', async (simulationKey) => {
+      const simId = await getSimulationId(simulationKey);
+      const teacher = await getTeacherForSimulation(simId);
+      if (teacher.id !== socket.user.id || socket.isStudent) return;
+      const dbUpdatedRow = await toggleIsPlaying(simId);
+      const newIsPlaying = dbUpdatedRow.is_playing;
+      console.log(`\n⏯  ${socket.user.name} ${newIsPlaying ? 'started' : 'paused'} simulation ${simId} (${simulationKey})`);
+      socket.emit('PLAY_PAUSE_UPDATE', newIsPlaying);
+      newIsPlaying && updateLoadedSimulations()
+
     });
 
     socket.on('disconnect', (reason) => {
@@ -27,27 +43,6 @@ module.exports = (io, db) => {
       updateSocketsCount();
     });
 
-
-
-
-    /* 
-     * This TOGGLE_ISPLAYING is a spaghetti-like.
-     * some of this functionality should ultimately
-     * be abstracted away or performed by HTTP requests
-     */
-
-    socket.on('TOGGLE_ISPLAYING', async simulationKey => {
-      console.log(`\n⏯  ${socket.data.user.name} requested play/pause.`);
-
-      const user = socket.data.user;
-      const ownsSimulation = await db.query('SELECT teacher_id FROM simulations WHERE simulation_key = $1', [simulationKey])
-        .then(data => data.rows[0]?.teacher_id === user.id && user.type === 'teacher');
-
-      if (!ownsSimulation) return;
-
-      db.query('UPDATE simulations SET is_playing = NOT is_playing WHERE simulation_key = $1 RETURNING id, name, simulation_key, is_playing, teacher_id', [simulationKey])
-        .then(data => console.log('   ↳ updated values: ', data.rows));
-    });
   });
 
   async function serveSimulationClients() {
@@ -62,6 +57,8 @@ module.exports = (io, db) => {
       .query('SELECT id, teacher_id, current_month, mock_market_data FROM simulations WHERE is_playing = TRUE')
       .then(data => data.rows);
 
+
+
     if (!runningSimulations.length) return;
     const ids = runningSimulations.map(s => s.id).join(',');
     const updatedSimulations = await db
@@ -74,6 +71,10 @@ module.exports = (io, db) => {
         socket.emit('CTRL_PANEL_UPDATE', updatedSimulations.find(s => s.teacher_id === socket.data.user?.id));
       }
     }
+  }
+
+  async function updateLoadedSimulations() {
+    const runningSims = await getRunningSimulations()
   }
 
   async function updateSocketsCount() {
