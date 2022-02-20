@@ -26,6 +26,7 @@ const dbHelpers = (db) => {
       db.query(query, [simulationId])
         .then(data => {
           let stuData = {};
+
           for (const row of data.rows) {
             const { student_id: stuId, account_type: acntType, balance: bal, name } = row;
             if (!stuData[stuId]) {
@@ -35,6 +36,7 @@ const dbHelpers = (db) => {
               stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
             }
           }
+
           stuData = Object.values(stuData);
           console.log('Sending data for request to "/list/:simulationKey": ', stuData);
           return stuData;
@@ -47,6 +49,9 @@ const dbHelpers = (db) => {
       //   { student_id, name, accountBalances: { che: 0, sav: 0, inv: 0 }, allocations: { sav: 0, inv: 0 }, income, expense }
       // ];
     },
+    
+    // Return array with following structure:
+    // [{ id, price, quantity, account_id }];
     getMarketTransactionsForStudent: (studentId) => {
       const query = `
       SELECT students.id AS student_id, market_transactions.price, market_transactions.quantity, market_transactions.account_id
@@ -59,13 +64,40 @@ const dbHelpers = (db) => {
       return db.query(query, [studentId])
         .then((data) => data.rows)
         .catch((e) => console.log(e.message));
-      // Return array with following structure:
-      // [{ id, price, quantity, account_id }];
     },
 
+    // Performs multiple database queries to set balances for each account
     setAccountBalances: (studentId, cheBal, savBal, invBal) => {
+      console.log(typeof studentId, typeof cheBal, typeof savBal, typeof invBal)
+      //
+      const query = `
+      UPDATE accounts SET balance = CASE
+        WHEN account_type = 'Chequing' then $2
+        WHEN account_type = 'Savings' then $3
+        WHEN account_type = 'Investment' then 3000
+        end
+      WHERE student_id = $1
+      RETURNING *
+      `
 
-      // Performs multiple database queries to set balances for each account
+      return db.query(query, [studentId, cheBal, savBal])
+        .then((data) => data.rows)
+        .catch((e) => console.log(e.message));
+
+      // !!!DOES NOT WORK WHEN $4 IS ADDED!!! WHY????
+      // const query = `
+      // UPDATE accounts SET balance = CASE
+      //   WHEN account_type = 'Chequing' then $2
+      //   WHEN account_type = 'Savings' then $3
+      //   WHEN account_type = 'Investment' then $4
+      //   end
+      // WHERE student_id = $1
+      // RETURNING *
+      // `
+
+      // return db.query(query, [studentId, cheBal, savBal, invBal])
+      //   .then((data) => data.rows)
+      //   .catch((e) => console.log(e.message));
     },
 
     submitMarketTransaction: (studentId, quantity) => {
