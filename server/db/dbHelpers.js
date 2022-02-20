@@ -88,9 +88,10 @@ const dbHelpers = (db) => {
     submitMarketTransaction: (studentId, quantity) => {
 
       const queryAccountId = `
-        SELECT accounts.id
+        SELECT accounts.id, simulations.current_month, simulations.mock_market_data
         FROM accounts
         JOIN students ON students.id = accounts.student_id
+        JOIN simulations ON simulations.id = students.simulation_id
         WHERE students.id = $1 AND accounts.account_type = 'Investment'
       `;
 
@@ -102,11 +103,12 @@ const dbHelpers = (db) => {
 
       return db.query(queryAccountId, [studentId])
         .then((data) => {
-          const accountId = data.rows[0].id;
+          const { id: accountId, current_month: currentMonth, mock_market_data: jsonMarketData } = data.rows[0];
+          const marketData = JSON.parse(jsonMarketData);
+          const marketDataPoint = marketData.find(row => row.x === currentMonth);
+          const price = Math.round(marketDataPoint.y * 100);
 
-          // data is being inserted but data.rows is empty
-          // i think we need to pass in price as parameter as well?
-          return db.query(querySubmitTrans, [100, quantity, accountId])
+          return db.query(querySubmitTrans, [price, quantity, accountId])
             .then((data) => data.rows);
         })
         .catch((e) => console.log(e.message));
