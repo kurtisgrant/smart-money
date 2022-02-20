@@ -55,7 +55,7 @@ const dbHelpers = (db) => {
 
     setAccountBalances: (studentId, cheBal, savBal, invBal) => {
 
-      // Perfoms multiple database queries to set balances for each account
+      // Performs multiple database queries to set balances for each account
     },
 
     submitMarketTransaction: (studentId, quantity) => {

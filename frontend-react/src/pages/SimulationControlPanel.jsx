@@ -33,15 +33,16 @@ function SimulationControlPanel() {
 					setMarketData(JSON.parse(res.data[0].mock_market_data));
 				})
 	}, []);
-	console.log(marketData)
+
 	const studentsBalanceList = studentsBalance.map(student => {
 		const { stuId: id, name, che, sav, inv } = student;
+		console.log(id, name, che, sav, inv)
 		return (
 			<tr key={id} className="student">
 				<td>{name}</td>
-				<td>${sav}</td>
-				<td>${inv}</td>
-				<td>${che}</td>
+				<td>${Number(sav).toLocaleString()}</td>
+				<td>${Number(inv).toLocaleString()}</td>
+				<td>${Number(che).toLocaleString()}</td>
 			</tr>
 		);
 	});
