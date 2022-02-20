@@ -1,0 +1,7 @@
+
+class Simulation {
+  constructor(dbSimulationRow) {
+    
+  }
+
+}
