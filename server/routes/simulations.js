@@ -61,7 +61,6 @@ module.exports = (db) => {
 						return db
 							.query(insertAccounts, [0, student.id, 0, chequingsValue])
 							.then((res) => {
-								console.log('promise resolved 1 res =>', res.rows[0]);
 								return res.rows[0];
 							});
 					});
@@ -77,7 +76,6 @@ module.exports = (db) => {
 				teacherId,
 			])
 			.then((response) => {
-				console.log('LINE 50');
 				const simulationId = response.rows[0].id;
 
 				res.send(studentsBalanceData(simulationId));
@@ -120,6 +118,20 @@ module.exports = (db) => {
 			SELECT income, expense FROM simulations
 			WHERE simulation_key = $1
 			`;
+
+		db.query(query, [simulationKey])
+			.then((data) => res.json(data.rows))
+			.catch((e) => console.log(e.message));
+	});
+
+	// return market data created from new simulation
+	router.get('/marketdata/:simulationKey', (req, res) => {
+		const { simulationKey } = req.params;
+
+		const query = `
+			SELECT mock_market_data FROM simulations
+			WHERE simulation_key = $1
+		`;
 
 		db.query(query, [simulationKey])
 			.then((data) => res.json(data.rows))

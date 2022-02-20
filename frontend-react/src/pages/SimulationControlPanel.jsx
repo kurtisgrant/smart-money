@@ -21,14 +21,19 @@ function SimulationControlPanel() {
 	useEffect(() => {
 		// GET REQUEST HAPPENS HERE
 			axios
-				.get(`http://localhost:8080/api/students/list/${simulationKey}`)
+				.get(`/api/students/list/${simulationKey}`)
 				.then((res) => {
 					setStudentsBalance(res.data);
 				})
 				.catch((err) => console.log(err.message));
 
+			axios
+				.get(`/api/simulations/marketdata/${simulationKey}`)
+				.then((res) => {
+					setMarketData(JSON.parse(res.data[0].mock_market_data));
+				})
 	}, []);
-
+	console.log(marketData)
 	const studentsBalanceList = studentsBalance.map(student => {
 		const { stuId: id, name, che, sav, inv } = student;
 		return (
