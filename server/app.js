@@ -9,6 +9,10 @@ const cookieParser = require('cookie-parser');
 // Database connection
 const db = require('./configs/db.config');
 
+const { getRunningSimulations } = require('./db/dbHelpers')(db);
+
+getRunningSimulations().then(console.log);
+
 // Route files
 const teachersRouter = require('./routes/teachers');
 const simulationsRouter = require('./routes/simulations');
