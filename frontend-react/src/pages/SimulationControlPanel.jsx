@@ -24,7 +24,6 @@ function SimulationControlPanel() {
 		axios
 			.get(`/api/students/list/${simulationKey}`)
 			.then((res) => {
-				console.log(res.data);
 				setStudentsBalance(res.data);
 			})
 			.catch((err) => console.log(err.message));
