@@ -1,7 +1,9 @@
 const INTERVAL_SECONDS = 1;
+const dbHelpers = require('../db/dbHelpers')
 
 
 module.exports = (io, db) => {
+  const { getSimulationById } = dbHelpers;
   let serveClientsInterval;
 
   io.on('connection', (socket) => {
@@ -9,6 +11,13 @@ module.exports = (io, db) => {
     if (!serveClientsInterval) {
       startServingClients();
     }
+    socket.on('SET_USER', async (user) => {
+      socket.user = user;
+      // user.type === 'student' && socket.simulatio
+      console.log(
+        `👤  ${user.name} has been set as the socket user.
+        ↳ user obj: `, user);
+    });
 
     socket.on('disconnect', (reason) => {
       console.log(
@@ -18,17 +27,8 @@ module.exports = (io, db) => {
       updateSocketsCount();
     });
 
-    socket.on('CLIENT_LOGIN', (user) => {
-      socket.data.user = user;
-      console.log(
-        `👤  ${user.name} logged in.
-        ↳ user obj: `, user);
-    });
 
-    socket.on('CLIENT_LOGOUT', () => {
-      console.log(`\n👻  ${socket.data.user.name} logged out.`);
-      socket.data.user = null;
-    });
+
 
     /* 
      * This TOGGLE_ISPLAYING is a spaghetti-like.
