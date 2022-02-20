@@ -22,6 +22,11 @@ function Login() {
 			.catch((err) => console.log(err.message));
 	};
 
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		login();
+	}
+
 	return (
 		<div className="login-container">
 			<h2>Login</h2>
@@ -31,15 +36,9 @@ function Login() {
 				placeholder="Enter email"
 				inputValue={email}
 				setValue={setEmail}
+				handleSubmit={handleSubmit}
 			/>
-			<Button
-				green
-				onClick={
-					login
-					// () =>
-					// setUser({ id: 3, name: 'Mrs. Krabappel', type: 'teacher' })
-				}
-			>
+			<Button green onClick={login}>
 				Login
 			</Button>
 		</div>

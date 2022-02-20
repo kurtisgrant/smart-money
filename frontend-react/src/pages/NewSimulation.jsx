@@ -41,6 +41,10 @@ function NewSimulation() {
 		setNewStudentName('');
 	};
 
+	const handleAddStudent = (e) => {
+		e.key === 'Enter' && addStudent();
+	}
+
 	const deleteStudent = (accessCode) => {
 		setStudents(students.filter((stu) => stu.accessCode !== accessCode));
 	};
@@ -82,6 +86,7 @@ function NewSimulation() {
 			setSimulationName('');
 			setStudentIncome('');
 			setStudentExpense('');
+			setStudents([]);
 		}
 	};
 
@@ -144,6 +149,7 @@ function NewSimulation() {
 					value={newStudentName}
 					onChange={(e) => setNewStudentName(e.target.value)}
 					placeholder="Student name"
+					onKeyPress={handleAddStudent}
 				/>
 				<Button green onClick={addStudent}>
 					Add Student
