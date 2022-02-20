@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../UserContext';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import generateMockMarketData from '../helpers/generateMockMarketData';
 import generateRandomString from '../helpers/generateRandomString';
 import LineChart from '../components/LineChart';
@@ -18,6 +18,7 @@ function NewSimulation() {
 	const [studentExpense, setStudentExpense] = useState('');
 	const [newStudentName, setNewStudentName] = useState('');
 	const [simulationName, setSimulationName] = useState('');
+	let navigate = useNavigate();
 
 	const simulationKey = generateRandomString(6);
 
@@ -54,7 +55,7 @@ function NewSimulation() {
 		} else if (!studentIncome) {
 			e.preventDefault();
 			return alert('Student income cannot be empty.');
-		}	else if (!studentExpense) {
+		} else if (!studentExpense) {
 			e.preventDefault();
 			return alert('Student expense cannot be empty.');
 		} else {
@@ -69,7 +70,14 @@ function NewSimulation() {
 				students,
 			};
 
-		axios.post('/api/simulations', simulationInfo);
+			// POST REQUEST HAPPENS HERE
+			axios
+				.post('/api/simulations', simulationInfo)
+				.then(() => {
+					// redirect to the next page upon successful post request
+					navigate(`/sim/${simulationKey}`, { replace: true });
+				})
+				.catch((err) => console.log(err.message));
 
 			setSimulationName('');
 			setStudentIncome('');
@@ -112,9 +120,13 @@ function NewSimulation() {
 						currentMonth={0}
 						zeroIndex={10 * 12}
 					/> */}
-					{randomMarketData.length && <LineChart marketData={randomMarketData} currentMonth={0} /> }
+					{randomMarketData.length && (
+						<LineChart marketData={randomMarketData} currentMonth={0} />
+					)}
 					<div className="simulation-buttons">
-						<Button green onClick={randomizeMarketData}>Randomize</Button>
+						<Button green onClick={randomizeMarketData}>
+							Randomize
+						</Button>
 					</div>
 				</div>
 			</div>
@@ -122,11 +134,9 @@ function NewSimulation() {
 			<div className="simulation-student-list">
 				<div className="simulations-form-heading">
 					<h2>Students</h2>
-					<Link to={`/sim/${simulationKey}`}>
-						<Button green onClick={saveSimulation}>
-							Save Simulation
-						</Button>
-					</Link>
+					<Button green onClick={saveSimulation}>
+						Save Simulation
+					</Button>
 				</div>
 			</div>
 			<div className="add-student">
@@ -135,7 +145,9 @@ function NewSimulation() {
 					onChange={(e) => setNewStudentName(e.target.value)}
 					placeholder="Student name"
 				/>
-				<Button green onClick={addStudent}>Add Student</Button>
+				<Button green onClick={addStudent}>
+					Add Student
+				</Button>
 			</div>
 			<StudentList studentsList={students} onDelete={deleteStudent} />
 		</div>
@@ -150,7 +162,7 @@ const getRandomMarketData = () => {
 		startPrice: 10, // First price in fake market data
 		months: 721, // How many months of data do you want?
 	}).map((val, i) => {
-		return { x: i - 120, y: val}
+		return { x: i - 120, y: val };
 	});
 };
 

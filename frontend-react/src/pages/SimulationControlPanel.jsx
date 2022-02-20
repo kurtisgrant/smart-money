@@ -18,6 +18,17 @@ function SimulationControlPanel() {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [studentsBalance, setStudentsBalance] = useState([]);
 
+	useEffect(() => {
+		// GET REQUEST HAPPENS HERE
+			axios
+				.get(`http://localhost:8080/api/students/list/${simulationKey}`)
+				.then((res) => {
+					setStudentsBalance(res.data);
+				})
+				.catch((err) => console.log(err.message));
+
+	}, []);
+
 	const studentsBalanceList = studentsBalance.map(student => {
 		const { stuId: id, name, che, sav, inv } = student;
 		return (
@@ -29,17 +40,6 @@ function SimulationControlPanel() {
 			</tr>
 		);
 	});
-
-	useEffect(() => {
-		axios
-			.get(`http://localhost:8080/api/students/list/${simulationKey}`)
-			.then((res) => {
-				console.log('Students returned from axios req: ', res.data);
-
-				setStudentsBalance(res.data);
-			})
-			.catch((err) => console.log(err.message));
-	}, []);
 
 	const playPauseHandler = () => {
 		socket.emit('TOGGLE_ISPLAYING', simulationKey);

@@ -18,7 +18,6 @@ function Simulations() {
 		axios
 			.get(`/api/simulations/list/${teacherId}`)
 			.then((res) => {
-				console.log(res.data);
 				setSimulations(res.data);
 			});
 	}, []);
