@@ -9,8 +9,10 @@ const serveSimulations = require('./simulationServer');
 // Database connection
 const db = require('./configs/db.config');
 
-const { toggleIsPlaying } = require('./db/dbHelpers')(db);
-toggleIsPlaying(1).then(console.log);
+// const { setAccountBalances } = require('./db/dbHelpers')(db);
+// setAccountBalances(11, 10000, 20000, 30000).then(console.log);
+const { submitMarketTransaction } = require('./db/dbHelpers')(db);
+submitMarketTransaction(10, 1).then(console.log);
 
 const app = express();
 

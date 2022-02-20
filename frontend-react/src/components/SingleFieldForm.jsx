@@ -1,9 +1,9 @@
 import React from 'react';
 import './SingleFieldForm.scss';
 
-function Form({ label, id, placeholder, inputValue, setValue }) {
+function Form({ label, id, placeholder, inputValue, setValue, handleSubmit }) {
 	return (
-		<form className="single-field-form" autoComplete="off" onSubmit={(e) => e.preventDefault()}>
+		<form className="single-field-form" autoComplete="off" onSubmit={handleSubmit}>
 			<label htmlFor={id}>{label}</label>
 			<input
 				id={id}
