@@ -101,6 +101,30 @@ const dbHelpers = (db) => {
     },
 
     submitMarketTransaction: (studentId, quantity) => {
+      const accountType = 'Investment';
+
+      const queryAccountId = `
+        SELECT accounts.id
+        FROM accounts
+        JOIN students ON students.id = accounts.student_id
+        WHERE students.id = $1 AND accounts.account_type = $2
+      `
+
+      const querySubmitTrans = `
+        INSERT INTO market_transactions (price, quantity, account_id)
+        VALUES (100, $1, $2);
+      `
+
+      return db.query(queryAccountId, [studentId, accountType])
+        .then((data) => {
+          const accountId = data.rows[0].id;
+
+          // data is being inserted but data.rows is empty
+          // i think we need to pass in price as parameter as well?
+          return db.query(querySubmitTrans, [quantity, accountId])
+            .then((data) => data.rows)
+        })
+        .catch((e) => console.log(e.message))
 
 
     }
