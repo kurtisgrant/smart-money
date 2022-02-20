@@ -7,12 +7,27 @@ const dbHelpers = (db) => {
 
     // Get simulation & teacher by id
     getSimulationById: (simId) => {
-      return db.query(`SELECT simulations.*, teachers.name AS teacher_name, teachers.id AS teacher_id FROM simulations JOIN teachers ON simulations.teacher_id = teachers.id WHERE simulations.id = ${simId}`).then(data => data.rows[0]);
+      return db.query(`SELECT * FROM simulations WHERE id = ${simId}`).then(data => data.rows[0]);
+    },
+
+    // Get simulation & teacher by key
+    getSimulationByKey: (simKey) => {
+      return db.query(`SELECT * FROM simulations WHERE simulation_key = '${simKey}'`).then(data => data.rows[0]);
     },
 
     // Get simulation key by simulation id
     getSimulationKey: (simId) => {
-      return db.query(`SELECT simulation_key FROM simulations WHERE simulations.id = ${simId}`).then(data => data.rows[0]?.simulation_key);
+      return db.query(`SELECT simulation_key FROM simulations WHERE id = ${simId}`).then(data => data.rows[0]?.simulation_key);
+    },
+
+    // Get simulation id by simulation key
+    getSimulationId: (simKey) => {
+      return db.query(`SELECT id FROM simulations WHERE simulation_key = '${simKey}'`).then(data => data.rows[0]?.id);
+    },
+
+    // Get teacher for simulation by simulation id
+    getTeacherForSimulation: (simId) => {
+      return db.query(`SELECT teachers.* FROM simulations JOIN teachers ON teachers.id = simulations.teacher_id WHERE simulations.id = ${simId}`).then(data => data.rows[0]);
     },
 
     // Get all running simulations (teacher joined)
@@ -21,8 +36,8 @@ const dbHelpers = (db) => {
     },
 
     // Toggle play/pause state of simulation by simulation id
-    toggleIsPlaying: (simulationKey) => {
-      return db.query('UPDATE simulations SET is_playing = NOT is_playing WHERE simulation_key = $1 RETURNING id, name, simulation_key, is_playing, teacher_id', [simulationKey]).then(data => data.rows);
+    toggleIsPlaying: (simId) => {
+      return db.query('UPDATE simulations SET is_playing = NOT is_playing WHERE id = $1::INTEGER RETURNING id, name, simulation_key, is_playing, teacher_id', [simId]).then(data => data.rows[0]);
     },
 
     getStudentsAndAccounts: (simulationId) => {
