@@ -1,0 +1,77 @@
+INSERT INTO teachers (name, email, password)
+VALUES ('Kurtis Grant', 'kurtis.grant@lhl.com', '123456789'),
+       ('Lighthouse Labs', 'lighthouse.labs@lhl.com', '234567891'),
+       ('Git Hub', 'git.hub@lhl.com', '345678912');
+
+INSERT INTO simulations(name,
+                        simulation_key,
+                        mock_market_data,
+                        current_month,
+                        income,
+                        expense,
+                        teacher_id)
+VALUES ('SIMULATION-1',
+        'A1B2C3',
+        '[44.51, 43.36, 41.71, 46.86, 51.91, 53.80, 52.96, 50.58, 51.53, 53.51, 55.87]',
+        2,
+        400000,
+        300000,
+        1);
+
+INSERT INTO students (name, access_code, simulation_id, income, expense, savings_allocation, investment_allocation)
+VALUES ('Jeffery Park', '5TPUn', 1, 300000, 280000, 5000, 12000),
+       ('Robert Gladue', 'fplTZ', 1, 300000, 280000, 5000, 12000),
+       ('John Doe', 'ajkff', 1, 300000, 280000, 5000, 12000),
+       ('Adam Johns', 'xYT3i', 1, 300000, 280000, 5000, 12000),
+       ('Sam Lee', 'tizae', 1, 300000, 280000, 5000, 12000),
+       ('John Deere', 'q1Ceu', 1, 300000, 280000, 5000, 12000),
+       ('Sally Johnson', 'CWc4g', 1, 300000, 280000, 5000, 12000),
+       ('Danielle Li', 'unOp0', 1, 300000, 280000, 5000, 12000),
+       ('Tony Su', '6MxBe', 1, 300000, 280000, 5000, 12000);
+
+INSERT INTO accounts (account_type, balance, student_id)
+VALUES ('Chequing', 30000, 1),
+       ('Savings', 30000, 1),
+       ('Investment', 40000, 1),
+       ('Chequing', 40000, 2),
+       ('Savings', 10000, 2),
+       ('Investment', 50000, 2),
+       ('Chequing', 50000, 3),
+       ('Savings', 30000, 3),
+       ('Investment', 20000, 3),
+       ('Chequing', 20000, 4),
+       ('Savings', 10000, 4),
+       ('Investment', 70000, 4),
+       ('Chequing', 80000, 5),
+       ('Savings', 10000, 5),
+       ('Investment', 10000, 5),
+       ('Chequing', 20000, 6),
+       ('Savings', 50000, 6),
+       ('Investment', 30000, 6),
+       ('Chequing', 90000, 7),
+       ('Savings', 10000, 7),
+       ('Investment', 0, 7),
+       ('Chequing', 30000, 8),
+       ('Savings', 30000, 8),
+       ('Investment', 40000, 8),
+       ('Chequing', 40000, 9),
+       ('Savings', 10000, 9),
+       ('Investment', 50000, 9);
+
+-- INSERT INTO market_transactions (month, price, quantity, account_id)
+-- VALUES (10, 4000, 1, 3),
+--        (10, 5500, 1, 3),
+--        (10, 5000, 1, 6),
+--        (10, 6000, 1, 6),
+--        (10, 10000, 1, 9),
+--        (10, 6000, 1, 9),
+--        (20, 10000, 1, 12),
+--        (20, 6000, 1, 12),
+--        (20, 2000, 1, 15),
+--        (20, 6000, 1, 15),
+--        (20, 10000, 1, 18),
+--        (20, 6000, 1, 18),
+--        (30, 10000, 1, 24),
+--        (30, 6000, 1, 24),
+--        (30, 10000, 1, 27),
+--        (30, 6000, 1, 27);
