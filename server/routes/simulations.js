@@ -12,8 +12,6 @@ module.exports = (db) => {
 
 	// create new simulation
 	router.post('/', (req, res) => {
-		console.log('newsimulation post');
-		console.log({ requestBody: req.body, students: req.body.students });
 		let {
 			simulationName,
 			simulationKey,
@@ -23,13 +21,11 @@ module.exports = (db) => {
 			teacherId,
 			students,
 		} = req.body;
-		
-		console.log('LINE 27', randomMarketData);
+
 		// convert dollars to cents
 		studentIncome *= 100;
 		studentExpense *= 100;
 
-		console.log('LINE 32');
 		// insert simulation info to simulations table
 		const querySimulations = `
     INSERT INTO simulations(name, simulation_key, mock_market_data, income, expense, teacher_id)
@@ -37,10 +33,9 @@ module.exports = (db) => {
     RETURNING *
     `;
 
-		console.log('LINE 40');
-
-
-		const studentsBalanceData = (simulationId) => students.map((student) => {
+		// function for inserting students and accounts data
+		const studentsBalanceData = (simulationId) =>
+			students.map((student) => {
 				const queryStudents = `
 					INSERT INTO students(name, access_code, simulation_id)
 					VALUES ($1, $2, $3)
@@ -54,7 +49,6 @@ module.exports = (db) => {
 						simulationId,
 					])
 					.then((res) => {
-						console.log('LINE 68');
 						const student = res.rows[0];
 						const chequingsValue = studentIncome - studentExpense;
 
@@ -69,25 +63,22 @@ module.exports = (db) => {
 							.then((res) => {
 								console.log('promise resolved 1 res =>', res.rows[0]);
 								return res.rows[0];
-								// resolve()
 							});
 					});
-
-		});
+			});
 
 		return db
 			.query(querySimulations, [
 				simulationName,
 				simulationKey,
 				JSON.stringify(randomMarketData),
-				studentIncome, 
+				studentIncome,
 				studentExpense,
 				teacherId,
 			])
 			.then((response) => {
 				console.log('LINE 50');
 				const simulationId = response.rows[0].id;
-				// studentsBalanceData(simulationId)
 
 				res.send(studentsBalanceData(simulationId));
 			})
@@ -103,10 +94,8 @@ module.exports = (db) => {
     WHERE id = $1`;
 
 		db.query(query, [id])
-			.then(() => {
-				res.send(`${id} deleted`)
-			})
-			.catch((err) => res.status(500))
+			.then(() => res.send(`Simulation id: ${id} deleted`))
+			.catch((err) => res.status(500));
 	});
 
 	// show list of simulations for specific teacher
@@ -139,15 +128,3 @@ module.exports = (db) => {
 
 	return router;
 };
-
-// const testingAsync = async () => {
-// 	const myValue = await db.query('blah )')
-
-// 	return myValue
-// }
-
-// const testingAsyncWithPromise = () => {
-// 	const myValue = Promise.resolve(db.query('blah )'))
-
-// 	return myValue
-// }

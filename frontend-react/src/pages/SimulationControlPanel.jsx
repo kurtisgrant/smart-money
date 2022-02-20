@@ -21,17 +21,11 @@ function SimulationControlPanel() {
 			axios
 				.get(`http://localhost:8080/api/students/list/${simulationKey}`)
 				.then((res) => {
-					console.log('Students returned from axios req: ', res.data);
-	
 					setStudentsBalance(res.data);
 				})
 				.catch((err) => console.log(err.message));
 
 	}, []);
-
-	useEffect(() => {
-		console.log(studentsBalance);
-	}, [studentsBalance]);
 
 	const studentsBalanceList = studentsBalance.map(student => {
 		const { stuId: id, name, che, sav, inv } = student;

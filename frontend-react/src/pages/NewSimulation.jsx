@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../UserContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import generateMockMarketData from '../helpers/generateMockMarketData';
 import generateRandomString from '../helpers/generateRandomString';
 import LineChart from '../components/LineChart';
@@ -70,13 +70,11 @@ function NewSimulation() {
 				students,
 			};
 
-			console.log('data not sent');
-			console.log('simulationInfo', simulationInfo);
 			// POST REQUEST HAPPENS HERE
 			axios
 				.post('/api/simulations', simulationInfo)
 				.then(() => {
-					console.log('data sent');
+					// redirect to the next page upon successful post request
 					navigate(`/sim/${simulationKey}`, { replace: true });
 				})
 				.catch((err) => console.log(err.message));
@@ -136,11 +134,9 @@ function NewSimulation() {
 			<div className="simulation-student-list">
 				<div className="simulations-form-heading">
 					<h2>Students</h2>
-					{/* <Link to={`/sim/${simulationKey}`}> */}
-						<Button green onClick={saveSimulation}>
-							Save Simulation
-						</Button>
-					{/* </Link> */}
+					<Button green onClick={saveSimulation}>
+						Save Simulation
+					</Button>
 				</div>
 			</div>
 			<div className="add-student">
