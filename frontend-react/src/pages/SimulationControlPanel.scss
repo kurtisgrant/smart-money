@@ -1,23 +1,6 @@
 .simulation-control-panel-container {
 	display: flex;
 	flex-direction: column;
-
-  .access-link-container {
-    display: flex;
-    // justify-content: center;
-    align-items: center;
-    // width: 100%;
-    margin-bottom: 20px;
-
-    .access-link {
-      flex: 1;
-      margin-bottom: 0;
-    }
-
-    .access-link-copy {
-      flex: 2;
-    }
-  }
   
 	.simulation-control-panel {
     display: flex;

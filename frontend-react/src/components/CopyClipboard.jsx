@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../components/Button';
+import './CopyClipboard.scss'
 
 function CopyClipboard({ accessLink }) {
 	const [isCopied, setIsCopied] = useState(false);
@@ -24,7 +25,7 @@ function CopyClipboard({ accessLink }) {
   const buttonColor = isCopied ? 'green' : 'white';
 
 	return (
-		<div className="simulation-control-panel-container">
+		<div className="access-link-container-parent">
 			<div className="access-link-container">
 				<input className="access-link" type="text" value={accessLink} readOnly />
 				{/* <Button className="access-link-copy" {...(isCopied ? "green" : "white")} onClick={copyToClipboard}> */}
