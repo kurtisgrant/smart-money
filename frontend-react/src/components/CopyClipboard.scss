@@ -1,0 +1,17 @@
+.access-link-container-parent {
+  display: flex;
+  justify-content: center;
+
+  .access-link-container {
+    display: flex;
+    // justify-content: center;
+    align-items: center;
+    width: 50%;
+    margin-bottom: 20px;
+
+    .access-link {
+      margin-bottom: 0;
+      margin-right: 2%;
+    }
+  }
+}
