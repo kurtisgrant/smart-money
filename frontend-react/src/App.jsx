@@ -20,20 +20,20 @@ function App() {
 
   const setUser = (user) => {
     if (user === null) {
+      if (socket) {
+        socket.disconnect();
+        setSocket(null);
+      }
       sessionStorage.removeItem('user');
       setUserState(null);
     } else {
       sessionStorage.setItem('user', JSON.stringify(user));
       setUserState(user);
+      setupSocket();
     }
   };
 
-  // On first render:
-  useEffect(() => {
-
-    // Set user if stored in session storage
-    const sessionUser = JSON.parse(sessionStorage.getItem('user'));
-    sessionUser && setUser(sessionUser);
+  const setupSocket = () => {
 
     // Establish socket connection with server
     const s = io(wsEndpoint);
@@ -45,22 +45,21 @@ function App() {
       });
     });
     setSocket(s);
+  };
 
-    // Unsubscribe from events to prevent memory leaks
+  // On first render:
+  useEffect(() => {
+
+    // Set user if stored in session storage
+    const sessionUser = JSON.parse(sessionStorage.getItem('user'));
+    sessionUser && setUser(sessionUser);
+
     return () => {
-      s.removeAllListeners();
+      // Unsubscribe from socket events to prevent memory leaks
+      socket && socket.removeAllListeners();
     };
   }, []);
 
-  // When user state changes, inform server
-  useEffect(() => {
-    if (!socket) return;
-    if (user) {
-      socket.emit('CLIENT_LOGIN', user);
-    } else {
-      socket.emit('CLIENT_LOGOUT');
-    }
-  }, [user]);
 
   return (
     <div className="App">

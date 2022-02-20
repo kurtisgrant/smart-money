@@ -34,11 +34,7 @@ function Login() {
 			/>
 			<Button
 				green
-				onClick={
-					login
-					// () =>
-					// setUser({ id: 3, name: 'Mrs. Krabappel', type: 'teacher' })
-				}
+				onClick={login}
 			>
 				Login
 			</Button>
