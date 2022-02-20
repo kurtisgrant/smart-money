@@ -1,6 +1,9 @@
 const router = require('express').Router();
+const dbHelpers = require('../db/dbHelpers');
 
 module.exports = (db) => {
+	const { toggleIsPlaying } = dbHelpers(db);
+
 	// show list of all simulations
 	router.get('/', (req, res) => {
 		const query = 'SELECT * FROM simulations';
@@ -136,6 +139,17 @@ module.exports = (db) => {
 		db.query(query, [simulationKey])
 			.then((data) => res.json(data.rows))
 			.catch((e) => console.log(e.message));
+	});
+
+	router.put('/toggle/:simulationKey', (req, res) => {
+		const { simulationKey } = req.params;
+
+		toggleIsPlaying(simulationKey)
+			.then((data) => {
+				res.json(data);
+			})
+			.catch(e => console.log(e.message));
+
 	});
 
 	return router;

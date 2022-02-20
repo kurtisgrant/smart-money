@@ -11,8 +11,8 @@ const dbHelpers = (db) => {
     },
 
     // Toggle play/pause state of simulation by simulation id
-    toggleIsPlaying: (simulationId) => {
-      return db.query('UPDATE simulations SET is_playing = NOT is_playing WHERE id = $1 RETURNING id, name, simulation_key, is_playing, teacher_id', [simulationId]).then(data => data.rows);
+    toggleIsPlaying: (simulationKey) => {
+      return db.query('UPDATE simulations SET is_playing = NOT is_playing WHERE simulation_key = $1 RETURNING id, name, simulation_key, is_playing, teacher_id', [simulationKey]).then(data => data.rows);
     },
 
     getStudentsAndAccounts: (simulationId) => {
