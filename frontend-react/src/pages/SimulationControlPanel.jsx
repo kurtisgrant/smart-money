@@ -20,18 +20,18 @@ function SimulationControlPanel() {
 
 	useEffect(() => {
 		// GET REQUEST HAPPENS HERE
-			axios
-				.get(`/api/students/list/${simulationKey}`)
-				.then((res) => {
-					setStudentsBalance(res.data);
-				})
-				.catch((err) => console.log(err.message));
+		axios
+			.get(`/api/students/list/${simulationKey}`)
+			.then((res) => {
+				setStudentsBalance(res.data);
+			})
+			.catch((err) => console.log(err.message));
 
-			axios
-				.get(`/api/simulations/marketdata/${simulationKey}`)
-				.then((res) => {
-					setMarketData(JSON.parse(res.data[0].mock_market_data));
-				})
+		axios
+			.get(`/api/simulations/marketdata/${simulationKey}`)
+			.then((res) => {
+				setMarketData(JSON.parse(res.data[0].mock_market_data));
+			});
 	}, []);
 
 	const studentsBalanceList = studentsBalance.map(student => {
@@ -48,7 +48,11 @@ function SimulationControlPanel() {
 	});
 
 	const playPauseHandler = () => {
-		socket.emit('TOGGLE_ISPLAYING', simulationKey);
+		axios.put(`/api/simulations/toggle/${simulationKey}`)
+			.then(res => {
+				console.log('Clicked play/pause', res);
+				setIsPlaying(res.data[0].is_playing);
+			});
 		console.log('Sent request to toggle play/pause state');
 	};
 

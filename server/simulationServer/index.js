@@ -1,4 +1,4 @@
-const INTERVAL_SECONDS = 0.1;
+const INTERVAL_SECONDS = 1;
 
 
 module.exports = (io, db) => {
