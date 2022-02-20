@@ -9,7 +9,6 @@ function AccessCodeLogin() {
 	const { setUser } = useContext(UserContext);
 	const [accessCode, setAccessCode] = useState('');
 
-
 	const login = () => {
 		const userInfo = { accessCode };
 
@@ -20,8 +19,13 @@ function AccessCodeLogin() {
 
 				setUser(user);
 			});
-
 	};
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		login();
+	}
+
 	return (
 		<div className="login-container-student">
 			<h2>Enter Access Code</h2>
@@ -32,6 +36,7 @@ function AccessCodeLogin() {
 					placeholder="Enter access code"
 					inputValue={accessCode}
 					setValue={setAccessCode}
+					handleSubmit={handleSubmit}
 				/>
 			</div>
 			<Button green onClick={login}>
