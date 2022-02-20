@@ -19,7 +19,9 @@ module.exports = (db) => {
       RETURNING *
       `;
 
-		db.query(query, [inputOne, inputTwo, id]);
+		db.query(query, [inputOne, inputTwo, id])
+			.then(() => res.send(`Student id: ${id} created`))
+			.catch((err) => res.status(500));
 	});
 
 	// delete student
@@ -30,7 +32,9 @@ module.exports = (db) => {
       DELETE FROM students
       WHERE id = $1`;
 
-		db.query(query, [id]);
+		db.query(query, [id])
+			.then(() => res.send(`Student id: ${id} deleted`))
+			.catch((err) => res.status(500));
 	});
 
 	// return JSON with student object OR null if not found
@@ -61,6 +65,7 @@ module.exports = (db) => {
 		db.query(query, [simulationKey])
 			.then(data => {
 				let stuData = {};
+
 				for (const row of data.rows) {
 					const { student_id: stuId, account_type: acntType, balance: bal, name } = row;
 					if (!stuData[stuId]) {
@@ -70,6 +75,7 @@ module.exports = (db) => {
 						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
 					}
 				}
+
 				stuData = Object.values(stuData);
 				console.log('Sending data for request to "/list/:simulationKey": ', stuData);
 				return stuData;

@@ -12,7 +12,6 @@ module.exports = (db) => {
 
 	// create new simulation
 	router.post('/', (req, res) => {
-		console.log(req.body);
 		let {
 			simulationName,
 			simulationKey,
@@ -34,44 +33,52 @@ module.exports = (db) => {
     RETURNING *
     `;
 
-		db.query(querySimulations, [
-			simulationName,
-			simulationKey,
-			JSON.stringify(randomMarketData),
-			studentIncome,
-			studentExpense,
-			teacherId,
-		])
-			.then((res) => {
-				console.log('students:', students);
-				console.log('res2:', res.rows[0]);
-				const simulationId = res.rows[0].id;
+		// function for inserting students and accounts data
+		const studentsBalanceData = (simulationId) =>
+			students.map((student) => {
+				const queryStudents = `
+					INSERT INTO students(name, access_code, simulation_id)
+					VALUES ($1, $2, $3)
+					RETURNING *
+				`;
 
-				for (const student of students) {
-					const queryStudents = `
-            INSERT INTO students(name, access_code, simulation_id, income, expense)
-            VALUES ($1, $2, $3, $4, $5)
-						RETURNING *
-          `;
-
-					const insertAccounts = `
-						INSERT INTO accounts(account_type, balance, student_id)
-						VALUES ('Savings', $1, $2), ('Investments', $3, $2), ('Chequings', $4, $2)
-					`;
-
-					db.query(queryStudents, [
+				return db
+					.query(queryStudents, [
 						student.name,
 						student.accessCode,
 						simulationId,
-						studentIncome,
-						studentExpense,
-					]).then((res) => {
+					])
+					.then((res) => {
 						const student = res.rows[0];
 						const chequingsValue = studentIncome - studentExpense;
 
-						db.query(insertAccounts, [0, student.id, 0, chequingsValue]);
+						const insertAccounts = `
+							INSERT INTO accounts(account_type, balance, student_id)
+							VALUES ('Savings', $1, $2), ('Investments', $3, $2), ('Chequings', $4, $2)
+							RETURNING *
+						`;
+
+						return db
+							.query(insertAccounts, [0, student.id, 0, chequingsValue])
+							.then((res) => {
+								return res.rows[0];
+							});
 					});
-				}
+			});
+
+		return db
+			.query(querySimulations, [
+				simulationName,
+				simulationKey,
+				JSON.stringify(randomMarketData),
+				studentIncome,
+				studentExpense,
+				teacherId,
+			])
+			.then((response) => {
+				const simulationId = response.rows[0].id;
+
+				res.send(studentsBalanceData(simulationId));
 			})
 			.catch((err) => console.log(err.message));
 	});
@@ -84,7 +91,9 @@ module.exports = (db) => {
     DELETE FROM simulations
     WHERE id = $1`;
 
-		db.query(query, [id]);
+		db.query(query, [id])
+			.then(() => res.send(`Simulation id: ${id} deleted`))
+			.catch((err) => res.status(500));
 	});
 
 	// show list of simulations for specific teacher
@@ -109,6 +118,20 @@ module.exports = (db) => {
 			SELECT income, expense FROM simulations
 			WHERE simulation_key = $1
 			`;
+
+		db.query(query, [simulationKey])
+			.then((data) => res.json(data.rows))
+			.catch((e) => console.log(e.message));
+	});
+
+	// return market data created from new simulation
+	router.get('/marketdata/:simulationKey', (req, res) => {
+		const { simulationKey } = req.params;
+
+		const query = `
+			SELECT mock_market_data FROM simulations
+			WHERE simulation_key = $1
+		`;
 
 		db.query(query, [simulationKey])
 			.then((data) => res.json(data.rows))
