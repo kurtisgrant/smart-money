@@ -9,8 +9,8 @@ const serveSimulations = require('./simulationServer');
 // Database connection
 const db = require('./configs/db.config');
 
-const { getRunningSimulations } = require('./db/dbHelpers')(db);
-getRunningSimulations().then(console.log);
+const { toggleIsPlaying } = require('./db/dbHelpers')(db);
+toggleIsPlaying(1).then(console.log);
 
 const app = express();
 

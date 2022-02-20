@@ -46,7 +46,6 @@ CREATE TABLE accounts (
 
 CREATE TABLE market_transactions (
   id SERIAL PRIMARY KEY NOT NULL,
-  month INT,
   price BIGINT,
   quantity INTEGER,
   account_id INTEGER REFERENCES accounts(id) ON DELETE CASCADE
