@@ -92,7 +92,7 @@ function SimulationControlPanel() {
 
 	return (
 		<div className="simulation-control-panel-container">
-			<CopyClipboard accessLink="http://localhost:3000/sim/h8jO2N" />
+			<CopyClipboard accessLink={window.location.href} />
 			<div className="simulation-control-panel">
 				<LineChart marketData={marketData} currentMonth={currentMonth} />
 				<div className="simulation-run-buttons">

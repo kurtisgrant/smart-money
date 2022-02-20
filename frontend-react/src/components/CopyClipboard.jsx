@@ -4,14 +4,32 @@ import Button from '../components/Button';
 function CopyClipboard({ accessLink }) {
 	const [isCopied, setIsCopied] = useState(false);
 
-	// TODO: Implement copy to clipboard functionality
+  const copyToClipboard = () => {
+    const copy = async (text) => {
+      return await navigator.clipboard.writeText(text)
+    }
+
+    copy(accessLink)
+      .then(() => {
+        setIsCopied(true);
+        setTimeout(() => {
+          setIsCopied(false)
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err.messag);
+      });
+  };
+
+  const buttonColor = isCopied ? 'green' : 'white';
 
 	return (
 		<div className="simulation-control-panel-container">
 			<div className="access-link-container">
-				<input className="access-link" type="text" value={accessLink} />
-				<Button className="access-link-copy" white>
-					Copy
+				<input className="access-link" type="text" value={accessLink} readOnly />
+				{/* <Button className="access-link-copy" {...(isCopied ? "green" : "white")} onClick={copyToClipboard}> */}
+				<Button className="access-link-copy" green={isCopied} white={!isCopied} onClick={copyToClipboard}>
+					{ isCopied ? "Copied!" : "Copy" }
 				</Button>
 			</div>
 		</div>
