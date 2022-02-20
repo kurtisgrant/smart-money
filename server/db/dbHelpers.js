@@ -5,6 +5,16 @@
 const dbHelpers = (db) => {
   return {
 
+    // Get simulation & teacher by id
+    getSimulationById: (simId) => {
+      return db.query(`SELECT simulations.*, teachers.name AS teacher_name, teachers.id AS teacher_id FROM simulations JOIN teachers ON simulations.teacher_id = teachers.id WHERE simulations.id = ${simId}`).then(data => data.rows[0]);
+    },
+
+    // Get simulation key by simulation id
+    getSimulationKey: (simId) => {
+      return db.query(`SELECT simulation_key FROM simulations WHERE simulations.id = ${simId}`).then(data => data.rows[0]?.simulation_key);
+    },
+
     // Get all running simulations (teacher joined)
     getRunningSimulations: () => {
       return db.query('SELECT * FROM simulations JOIN teachers ON simulations.teacher_id = teachers.id WHERE is_playing = TRUE').then(data => data.rows);
