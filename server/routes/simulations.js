@@ -37,17 +37,19 @@ module.exports = (db) => {
     `;
 
 		// function for inserting students and accounts data
-		const studentsBalanceData = (simulationId) =>
+		const studentsBalanceData = (simulationId, income, expense) =>
 			students.map((student) => {
 				const queryStudents = `
-					INSERT INTO students(name, access_code, simulation_id)
-					VALUES ($1, $2, $3)
+					INSERT INTO students(name, income, expense, access_code, simulation_id)
+					VALUES ($1, $2, $3, $4, $5)
 					RETURNING *
 				`;
 
 				return db
 					.query(queryStudents, [
 						student.name,
+						income,
+						expense,
 						student.accessCode,
 						simulationId,
 					])
@@ -78,10 +80,12 @@ module.exports = (db) => {
 				studentExpense,
 				teacherId,
 			])
-			.then((response) => {
-				const simulationId = response.rows[0].id;
+			.then((data) => {
+				const simulationId = data.rows[0].id;
+				const income = data.rows[0].income;
+				const expense = data.rows[0].expense;
 
-				res.send(studentsBalanceData(simulationId));
+				res.send(studentsBalanceData(simulationId, income, expense));
 			})
 			.catch((err) => console.log(err.message));
 	});
