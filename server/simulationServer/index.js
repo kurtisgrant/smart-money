@@ -4,9 +4,9 @@ const Simulation = require('./Simulation');
 
 
 module.exports = (io, db) => {
-  const { getSimulationId, getTeacherForSimulation, toggleIsPlaying, getRunningSimulations } = dbHelpers(db);
+  const { getSimulationId, getSimulationById, getTeacherForSimulation, toggleIsPlaying, getRunningSimulations } = dbHelpers(db);
   let serveClientsInterval;
-  const loadedSimulations = [];
+  const loadedSimulations = {};
 
   io.on('connection', (socket) => {
     console.log('\n🟢 client connected. socket id: ', socket.id);
@@ -24,14 +24,22 @@ module.exports = (io, db) => {
     });
 
     socket.on('PLAY_PAUSE_SIMULATION', async (simulationKey) => {
+      // Validate request
       const simId = await getSimulationId(simulationKey);
       const teacher = await getTeacherForSimulation(simId);
       if (teacher.id !== socket.user.id || socket.isStudent) return;
+
+      // Toggle isPlaying & send new isPlaying state
       const dbUpdatedRow = await toggleIsPlaying(simId);
       const newIsPlaying = dbUpdatedRow.is_playing;
       console.log(`\n⏯  ${socket.user.name} ${newIsPlaying ? 'started' : 'paused'} simulation ${simId} (${simulationKey})`);
       socket.emit('PLAY_PAUSE_UPDATE', newIsPlaying);
-      newIsPlaying && updateLoadedSimulations()
+
+      // If simulation has been started, ensure it is in loadedSimulations
+      if (newIsPlaying && !Object.keys(loadedSimulations).includes(simId)) {
+        const dbSimulation = await getSimulationById(simId);
+        loadedSimulations[simId] = new Simulation(db, io, dbSimulation);
+      }
 
     });
 
@@ -74,7 +82,8 @@ module.exports = (io, db) => {
   }
 
   async function updateLoadedSimulations() {
-    const runningSims = await getRunningSimulations()
+    const runningSims = await getRunningSimulations();
+    const loadedSims = Object.keys(loadedSimulations);
   }
 
   async function updateSocketsCount() {
