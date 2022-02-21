@@ -8,6 +8,7 @@ import './AccessCodeLogin.scss';
 function AccessCodeLogin() {
 	const { setUser } = useContext(UserContext);
 	const [accessCode, setAccessCode] = useState('');
+	const [error, setError] = useState('');
 
 	const login = () => {
 		const userInfo = { accessCode };
@@ -23,12 +24,13 @@ function AccessCodeLogin() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		login();
+
+		login() || setError('Incorrect access code');
 	}
 
 	return (
 		<div className="login-container-student">
-			<h2>Enter Access Code</h2>
+			<h1>Enter Access Code</h1>
 			<div className="login-student-form">
 				<SingleFieldForm
 					label="Access Code"
@@ -39,7 +41,8 @@ function AccessCodeLogin() {
 					handleSubmit={handleSubmit}
 				/>
 			</div>
-			<Button green onClick={login}>
+			<section className="login-error">{error}</section>
+			<Button green onClick={handleSubmit}>
 				Enter
 			</Button>
 		</div>

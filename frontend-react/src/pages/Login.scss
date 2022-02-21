@@ -7,14 +7,15 @@
 	margin-right: auto;
 	margin-left: auto;
 
-	h2 {
+	h1 {
 		margin: 50px 0;
-		width: 100%;
-		font-size: 30px;
-    font-weight: bold;
 	}
 
-	.button {
-		align-self: flex-start;
+	.login-error {
+		color: #ee5253;
+		font-size:small;
+		font-style: italic;
+		padding-left: 10px;
+		margin-bottom: 2%;
 	}
 }
