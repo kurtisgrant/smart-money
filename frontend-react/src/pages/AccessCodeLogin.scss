@@ -7,7 +7,7 @@
 	margin-right: auto;
 	margin-left: auto;
 
-	h2 {
+	h1 {
 		margin: 50px 0;
 	}
 
@@ -15,7 +15,11 @@
     width: 40%;
   }
 
-	// .button {
-	// 	align-self: flex-start;
-	// }
+	.login-error {
+		color: #ee5253;
+		font-size:small;
+		font-style: italic;
+		padding-left: 10px;
+		margin-bottom: 2%;
+	}
 }
