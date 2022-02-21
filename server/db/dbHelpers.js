@@ -42,20 +42,31 @@ const dbHelpers = (db) => {
 
     getStudentsAndAccounts: (simulationId) => {
       const query = `
-			SELECT simulations.id AS sim_id, students.name, accounts.*
+			SELECT simulations.id AS sim_id, students.name, students.access_code, students.income, students.expense, students.savings_allocation, students.investment_allocation, accounts.*
 			FROM accounts
 			JOIN students ON students.id = accounts.student_id
 			JOIN simulations ON simulations.id = students.simulation_id
 			WHERE simulations.id = $1`;
 
-      db.query(query, [simulationId])
+      return db.query(query, [simulationId])
         .then(data => {
           let stuData = {};
 
           for (const row of data.rows) {
-            const { student_id: stuId, account_type: acntType, balance: bal, name } = row;
+            const {
+              student_id: stuId,
+              name,
+              access_code: accessCode,
+              income,
+              expense,
+              savings_allocation: savAllocation,
+              investment_allocation: invAllocation,
+              account_type: acntType,
+              balance: bal
+            } = row;
+
             if (!stuData[stuId]) {
-              stuData[stuId] = { stuId, name };
+              stuData[stuId] = { stuId, name, accessCode, income, expense, savAllocation, invAllocation };
               stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
             } else {
               stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
@@ -63,10 +74,8 @@ const dbHelpers = (db) => {
           }
 
           stuData = Object.values(stuData);
-          console.log('Sending data for request to "/list/:simulationKey": ', stuData);
           return stuData;
         })
-        .then((data) => res.json(data))
         .catch((e) => console.log(e.message));
 
       // Returns array with following structure:
@@ -131,7 +140,7 @@ const dbHelpers = (db) => {
           const { id: accountId, current_month: currentMonth, mock_market_data: jsonMarketData } = data.rows[0];
           const marketData = JSON.parse(jsonMarketData);
           const marketDataPoint = marketData.find(row => row.x === currentMonth);
-          const price = Math.round(marketDataPoint.y * 100);
+          const price = Math.round(marketDataPoint?.y * 100);
 
           return db.query(querySubmitTrans, [price, quantity, accountId])
             .then((data) => data.rows);
