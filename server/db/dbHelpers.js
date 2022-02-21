@@ -42,7 +42,11 @@ const dbHelpers = (db) => {
 
     // Toggle play/pause state of simulation by simulation id
     toggleIsPlaying: (simId) => {
-      return db.query('UPDATE simulations SET is_playing = NOT is_playing WHERE id = $1::INTEGER RETURNING id, name, simulation_key, is_playing, teacher_id', [simId]).then(data => data.rows[0]);
+      return db.query('UPDATE simulations SET is_playing = NOT is_playing WHERE id = $1::INTEGER RETURNING id, name, simulation_key, current_month, is_playing, teacher_id', [simId]).then(data => data.rows[0]);
+    },
+
+    setCurrentMonth: (simId, month) => {
+      return db.query(`UPDATE simulations SET current_month = ${month} WHERE id = ${simId} RETURNING id, name, simulation_key, current_month, is_playing, teacher_id`).then(data => data.rows[0]);
     },
 
     getStudentsAndAccounts: (simulationId) => {
