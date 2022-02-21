@@ -42,7 +42,10 @@ class Simulation {
         currentMonth: this.currentMonth,
         studentData: null
       };
-      teacherSocket.emit('CTRL_PANEL_UPDATE', teacherUpdate);
+      if (teacherSocket) {
+        fancyLog('↳', `${teacherSocket.user.name} has a connected socket. Emiting update for month ${this.currentMonth}.`, 2);
+        teacherSocket.emit('CTRL_PANEL_UPDATE', teacherUpdate);
+      }
     });
     Object.values(this.students).forEach(student => {
       const studentMarketData = this.marketData.filter(dataPoint => dataPoint.x <= this.currentMonth);
@@ -57,7 +60,7 @@ class Simulation {
         marketTransactions: student.marketTransactions
       };
       if (student.socket) {
-        fancyLog('↳', `${student.name} has a connected socket. Emiting update.`, 2);
+        fancyLog('↳', `${student.name} has a connected socket. Emiting update for month ${this.currentMonth}.`, 2);
         student.socket.emit('STUDENT_DASH_UPDATE', studentUpdate);
       }
     });
@@ -124,6 +127,7 @@ class Simulation {
       const stuId = socket.user.id;
       this.students[stuId].socket = socket;
     }
+    fancyLog('↳', `mounted ${studentSocketsForThisSim.length} student sockets`, 3);
   }
 
   // Get connected teacher socket(s)
@@ -138,8 +142,8 @@ class Simulation {
     if (!teacherSocketsForThisSim.length) return;
     for (const socket of teacherSocketsForThisSim) {
       this.teacherSockets.push(socket);
-      fancyLog('↳', `mounted ${teacherSocketsForThisSim.length} teacher sockets`, 3);
     }
+    fancyLog('↳', `mounted ${teacherSocketsForThisSim.length} teacher sockets`, 3);
   }
 
 }
