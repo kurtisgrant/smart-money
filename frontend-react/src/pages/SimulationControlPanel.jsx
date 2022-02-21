@@ -33,6 +33,16 @@ function SimulationControlPanel() {
 			.then((res) => {
 				setMarketData(JSON.parse(res.data[0].mock_market_data));
 			});
+
+		// Socket stuff
+		socket.on('PLAY_PAUSE_UPDATE', updateIsPlayingHandler);
+		socket.on('CTRL_PANEL_UPDATE', updateHandler);
+		socket.emit('JOIN_SIMULATION', simulationKey);
+
+		return () => {
+			socket.emit('LEAVE_SIMULATION', simulationKey)
+			socket.off('CTRL_PANEL_UPDATE', updateHandler);
+		};
 	}, []);
 
 	const studentsBalanceList = studentsBalance.map(student => {
@@ -67,26 +77,6 @@ function SimulationControlPanel() {
 		// setStudentData(studentData);
 	};
 
-	useEffect(() => {
-		if (!socket) return;
-		/*
-		 * TODO: emit event indicating that
-		 * I'm the teacher of X simulation
-		 * and I would like to be notified
-		 * of all related student account
-		 * values and the current point in
-		 * the simulation as it is updated
-		 */
-
-		socket.on('PLAY_PAUSE_UPDATE', updateIsPlayingHandler);
-		socket.on('CTRL_PANEL_UPDATE', updateHandler);
-		socket.emit('REQ_CTRL_PANEL_UPDATE', simulationKey);
-
-		return () => {
-			socket.off('CTRL_PANEL_UPDATE', updateHandler);
-		};
-
-	}, [socket]);
 
 	return (
 		<div className="simulation-control-panel-container">
