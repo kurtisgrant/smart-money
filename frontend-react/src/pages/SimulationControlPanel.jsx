@@ -24,7 +24,6 @@ function SimulationControlPanel() {
 		axios
 			.get(`/api/students/list/${simulationKey}`)
 			.then((res) => {
-				console.log(res.data)
 				setStudentsBalance(res.data);
 			})
 			.catch((err) => console.log(err.message));
@@ -33,6 +32,17 @@ function SimulationControlPanel() {
 			.get(`/api/simulations/marketdata/${simulationKey}`)
 			.then((res) => setMarketData(JSON.parse(res.data[0].mock_market_data)))
 			.catch((err) => console.log(err.message));
+
+		// Socket stuff
+		socket.on('PLAY_PAUSE_UPDATE', updateIsPlayingHandler);
+		socket.on('CTRL_PANEL_UPDATE', updateHandler);
+		socket.emit('JOIN_SIMULATION', simulationKey);
+
+		return () => {
+			socket.emit('LEAVE_SIMULATION', simulationKey);
+			socket.off('PLAY_PAUSE_UPDATE', updateIsPlayingHandler);
+			socket.off('CTRL_PANEL_UPDATE', updateHandler);
+		};
 	}, []);
 
 	const studentsBalanceList = studentsBalance.map(student => {
@@ -49,18 +59,16 @@ function SimulationControlPanel() {
 	});
 
 	const playPauseHandler = () => {
-		axios.put(`/api/simulations/toggle/${simulationKey}`)
-			.then(res => {
-				console.log('Clicked play/pause', res);
-				setIsPlaying(res.data[0].is_playing);
-			});
+		socket.emit('PLAY_PAUSE_SIMULATION', simulationKey);
+
 		console.log('Sent request to toggle play/pause state');
 	};
+	const updateIsPlayingHandler = (newIsPlaying) => setIsPlaying(newIsPlaying);
 
 	const updateHandler = (ctrlPanelUpdate) => {
 		// Ultimately will receive current month & student data
 		// const { current_month: currentMonth, studentData } = ctrlPanelUpdate;
-		const { current_month: currentMonth } = ctrlPanelUpdate;
+		const { currentMonth } = ctrlPanelUpdate;
 
 		console.log('CTRL panel update received: ');
 		console.log('currentMonth: ', currentMonth);
@@ -69,25 +77,6 @@ function SimulationControlPanel() {
 		// setStudentData(studentData);
 	};
 
-	useEffect(() => {
-		if (!socket) return;
-		/*
-		 * TODO: emit event indicating that
-		 * I'm the teacher of X simulation
-		 * and I would like to be notified
-		 * of all related student account
-		 * values and the current point in
-		 * the simulation as it is updated
-		 */
-
-		socket.on('CTRL_PANEL_UPDATE', updateHandler);
-		socket.emit('REQ_CTRL_PANEL_UPDATE', simulationKey);
-
-		return () => {
-			socket.off('CTRL_PANEL_UPDATE', updateHandler);
-		};
-
-	}, [socket]);
 
 	return (
 		<div className="simulation-control-panel-container">
