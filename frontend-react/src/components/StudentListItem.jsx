@@ -4,15 +4,14 @@ import './StudentListItem.scss';
 
 
 const StudentListItem = function ({ name, accessCode, onDelete }) {
-  
   return (
-		<div className="student-item">
-			<div className="col-1">{name}</div>
-			<div className="col-2">{accessCode}</div>
-			<div className="col-3">
+		<tr className="student-item">
+			<td className="col-1">{name}</td>
+			<td className="col-2">{accessCode}</td>
+			<td className="col-3">
 				<FaTrashAlt size={15} onClick={() => onDelete(accessCode)} />
-			</div>
-		</div>
+			</td>
+		</tr>
   );
 };
 

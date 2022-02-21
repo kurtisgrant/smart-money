@@ -49,9 +49,16 @@
 		}
 
 		.dashboard-top-right {
-			border: 1px solid #828282;
-			margin-left: 10px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 			flex: 2;
+			border: 1px solid #828282;
+			margin-left: 1%;
+
+			.chart {
+				width: 100%;
+			}
 		}
 	}
 
