@@ -85,7 +85,7 @@ module.exports = (io, db) => {
   async function serveSimulationClients() {
 
     // Log a dot on each call of this function
-    // process.stdout.write(".");
+    process.stdout.write(".");
 
 
     // Sync all simulations with DB in parallel
@@ -95,7 +95,7 @@ module.exports = (io, db) => {
       syncPromises.push(sim.sync());
     }
     await Promise.all(syncPromises);
-    fancyLog('🔸', 'Done syncing simulations');
+    // fancyLog('🔸', 'Done syncing simulations');
 
 
     // Update all simulation models with
@@ -106,7 +106,7 @@ module.exports = (io, db) => {
       updatePromises.push(sim.update());
     }
     await Promise.all(updatePromises);
-    fancyLog('🔸', 'Done updating simulations');
+    // fancyLog('🔸', 'Done updating simulations');
 
 
     // Persist all updates on simulation
@@ -117,7 +117,7 @@ module.exports = (io, db) => {
       persistPromises.push(sim.persist());
     }
     await Promise.all(persistPromises);
-    fancyLog('🔸', 'Done persisting simulation updates to database');
+    // fancyLog('🔸', 'Done persisting simulation updates to database');
 
 
     // Broadcast changes to sockets connected
@@ -127,7 +127,7 @@ module.exports = (io, db) => {
       castPromises.push(sim.broadcast());
     }
     await Promise.all(castPromises);
-    fancyLog('🔸', 'Done broadcasting updates from simulations to socket connections');
+    // fancyLog('🔸', 'Done broadcasting updates from simulations to socket connections');
 
   }
 
