@@ -57,6 +57,7 @@ const dbHelpers = (db) => {
               student_id: stuId,
               name,
               access_code: accessCode,
+              id: accountId,
               income,
               expense,
               savings_allocation: savAllocation,
@@ -65,11 +66,14 @@ const dbHelpers = (db) => {
               balance: bal
             } = row;
 
+            const acntTypeAbv = acntType.slice(0, 3).toLowerCase();
             if (!stuData[stuId]) {
               stuData[stuId] = { stuId, name, accessCode, income, expense, savAllocation, invAllocation };
-              stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
+              stuData[stuId][acntTypeAbv] = (bal / 100).toFixed(2);
+              stuData[stuId][acntTypeAbv + 'Id'] = accountId;
             } else {
-              stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
+              stuData[stuId][acntTypeAbv] = (bal / 100).toFixed(2);
+              stuData[stuId][acntTypeAbv + 'Id'] = accountId;
             }
           }
 
