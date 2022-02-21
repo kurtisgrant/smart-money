@@ -1,7 +1,9 @@
 const router = require('express').Router();
-
+const dbHelpers = require('../db/dbHelpers');
 
 module.exports = (db) => {
+	const { updateMonthlyAllocations } = dbHelpers(db);
+
 	router.get('/', (req, res) => {
 		const query = 'SELECT * FROM students';
 
@@ -84,6 +86,19 @@ module.exports = (db) => {
 			.then((data) => res.json(data))
 			.catch((e) => console.log(e.message));
 	});
+
+	// update monthly saving and investment allocations
+	router.put('/allocations/:studentId', (req, res) => {
+		const { studentId } = req.params;
+		const { savings, investments } = req.body
+
+		updateMonthlyAllocations(studentId, savings, investments)
+			.then(() => {
+				res.json((`Monthly allocation updated for student id: ${studentId}`));
+			})
+			.catch(e => console.log(e.message));
+	});
+
 
 	return router;
 };

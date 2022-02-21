@@ -18,7 +18,7 @@ function StudentDashboard() {
 
   useEffect(() => {
     axios
-    .get(`http://localhost:8080/api/simulations/cashflow/${simulationKey}`)
+    .get(`/api/simulations/cashflow/${simulationKey}`)
     .then((res) => {
       const incomeData = Number(res.data[0].income) / 100;
       const expenseData = Number(res.data[0].expense) / 100;
@@ -36,6 +36,13 @@ function StudentDashboard() {
   useEffect(() => {
     setChequings(surplus - savings - investments);
 
+		const studentId = user.id;
+
+		const monthlyAllocations = { savings, investments }
+		
+		axios.put(`/api/students/allocations/${studentId}`, monthlyAllocations)
+			.then()
+			.catch()
   }, [savings, investments, surplus])
 
 	const decreaseSavingsAmount = () => {
