@@ -32,26 +32,32 @@
 		}
 	}
 
-	.simulation-student-list {
-		display: flex;
-		flex-direction: column;
+	.simulation-students {
+    display: flex;
+    flex-direction: column;
 
-		.simulations-form-heading {
+		.simulation-student-list {
 			display: flex;
-			justify-content: space-between;
+			flex-direction: column;
+	
+			.simulations-form-heading {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 20px;
+			}
+		}
+	
+		.add-student {
+			display: flex;
 			align-items: center;
 			margin-bottom: 20px;
+	
+			input {
+				flex: 3;
+				margin: 0;
+				margin-right: 10px;
+			}
 		}
-	}
-
-	.add-student {
-		display: flex;
-    align-items: center;
-
-    input {
-      flex: 3;
-      margin: 0;
-			margin-right: 10px;
-    }
 	}
 }
