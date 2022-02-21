@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from 'react';
 import { UserContext } from '../UserContext';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
-import AddForm from '../components/AddForm';
 import axios from 'axios';
 import './Simulations.scss';
 import SimulationListItem from '../components/SimulationListItem';
@@ -10,8 +9,6 @@ import SimulationListItem from '../components/SimulationListItem';
 function Simulations() {
 	const { user } = useContext(UserContext);
 	const [simulations, setSimulations] = useState([]);
-	const [className, setClassName] = useState('');
-	const [date, setDate] = useState('');
 	const teacherId = user.id;
 
 	useEffect(() => {
@@ -41,13 +38,23 @@ function Simulations() {
 			</div>
 
 			<section className="simulations">
-				<ul className="simulation-list">
-					{simulations.map(simulation => <SimulationListItem
-						key={simulation.id}
-						simulation={simulation}
-						onDelete={deleteSimulation}
-					/>)}
-				</ul>
+				<table className="simulation-list">
+					<tbody>
+						<tr>
+							<th className="head-col-1">Simulation Name</th>
+							<th className="head-col-2">Created Date</th>
+							<th className="head-col-3">Delete</th>
+						</tr>
+						{simulations.map(simulation => 
+							<SimulationListItem
+								key={simulation.id}
+								simulation={simulation}
+								onDelete={deleteSimulation}
+							/>
+						)}
+				</tbody>
+
+				</table>
 			</section>
 		</div>
 	);

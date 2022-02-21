@@ -4,7 +4,6 @@ import './StudentListItem.scss';
 
 
 const StudentListItem = function ({ name, accessCode, onDelete }) {
-  
   return (
 		<tr className="student-item">
 			<td className="col-1">{name}</td>

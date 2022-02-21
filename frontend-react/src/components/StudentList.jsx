@@ -12,8 +12,6 @@ const StudentList = function ({ studentsList, onDelete }) {
 		/>
 	));
 
-	console.log(studentsListItems);
-
 	return (
 		<table className="students-container">
 			<tbody>
