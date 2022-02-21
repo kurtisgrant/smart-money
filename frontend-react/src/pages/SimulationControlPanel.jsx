@@ -40,7 +40,8 @@ function SimulationControlPanel() {
 		socket.emit('JOIN_SIMULATION', simulationKey);
 
 		return () => {
-			socket.emit('LEAVE_SIMULATION', simulationKey)
+			socket.emit('LEAVE_SIMULATION', simulationKey);
+			socket.off('PLAY_PAUSE_UPDATE', updateIsPlayingHandler);
 			socket.off('CTRL_PANEL_UPDATE', updateHandler);
 		};
 	}, []);
