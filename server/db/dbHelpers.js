@@ -10,6 +10,11 @@ const dbHelpers = (db) => {
       return db.query(`SELECT * FROM simulations WHERE id = ${simId}`).then(data => data.rows[0]);
     },
 
+    // Get specified column values from simulation
+    getTheseFromSimulationById: (simId, colsStr) => {
+      return db.query(`SELECT ${colsStr} FROM simulations WHERE id = ${simId}`).then(data => data.rows[0]);
+    },
+
     // Get simulation & teacher by key
     getSimulationByKey: (simKey) => {
       return db.query(`SELECT * FROM simulations WHERE simulation_key = '${simKey}'`).then(data => data.rows[0]);
