@@ -31,9 +31,8 @@ function SimulationControlPanel() {
 
 		axios
 			.get(`/api/simulations/marketdata/${simulationKey}`)
-			.then((res) => {
-				setMarketData(JSON.parse(res.data[0].mock_market_data));
-			});
+			.then((res) => setMarketData(JSON.parse(res.data[0].mock_market_data)))
+			.catch((err) => console.log(err.message));
 	}, []);
 
 	const studentsBalanceList = studentsBalance.map(student => {

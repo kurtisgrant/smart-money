@@ -13,9 +13,23 @@
     margin-bottom: 20px;
   }
 
-  .simulation-list {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  .simulations {
+    .simulation-list {
+      width: 100%;
+      border-spacing: 0 1em;
+
+      .head-col-1 {
+        width: 10%;
+      }
+    
+      .head-col-2 {
+        width: 30%;
+      }
+    
+      .head-col-3 {
+        width: 5%;
+      }
+    }
+
   }
 }

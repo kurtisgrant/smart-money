@@ -43,7 +43,7 @@ function NewSimulation() {
 
 	const handleAddStudent = (e) => {
 		e.key === 'Enter' && addStudent();
-	}
+	};
 
 	const deleteStudent = (accessCode) => {
 		setStudents(students.filter((stu) => stu.accessCode !== accessCode));
@@ -136,26 +136,28 @@ function NewSimulation() {
 				</div>
 			</div>
 
-			<div className="simulation-student-list">
-				<div className="simulations-form-heading">
-					<h2>Students</h2>
-					<Button green onClick={saveSimulation}>
-						Save Simulation
+			<div className="simulation-students">
+				<div className="simulation-student-list">
+					<div className="simulations-form-heading">
+						<h2>Students</h2>
+						<Button green onClick={saveSimulation}>
+							Save Simulation
+						</Button>
+					</div>
+				</div>
+				<div className="add-student">
+					<input
+						value={newStudentName}
+						onChange={(e) => setNewStudentName(e.target.value)}
+						placeholder="Student name"
+						onKeyPress={handleAddStudent}
+					/>
+					<Button green onClick={addStudent}>
+						Add Student
 					</Button>
 				</div>
+				<StudentList studentsList={students} onDelete={deleteStudent} />
 			</div>
-			<div className="add-student">
-				<input
-					value={newStudentName}
-					onChange={(e) => setNewStudentName(e.target.value)}
-					placeholder="Student name"
-					onKeyPress={handleAddStudent}
-				/>
-				<Button green onClick={addStudent}>
-					Add Student
-				</Button>
-			</div>
-			<StudentList studentsList={students} onDelete={deleteStudent} />
 		</div>
 	);
 }
