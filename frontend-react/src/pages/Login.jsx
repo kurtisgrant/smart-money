@@ -8,7 +8,7 @@ import './Login.scss';
 function Login() {
 	const { user, setUser } = useContext(UserContext);
 	const [email, setEmail] = useState('');
-	const [error, setError] = useState("");
+	const [error, setError] = useState('');
 
 	const login = () => {
 		const userInfo = { email };
