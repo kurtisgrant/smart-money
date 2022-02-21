@@ -69,7 +69,7 @@ function SimulationControlPanel() {
 	const updateHandler = (ctrlPanelUpdate) => {
 		// Ultimately will receive current month & student data
 		// const { current_month: currentMonth, studentData } = ctrlPanelUpdate;
-		const { current_month: currentMonth } = ctrlPanelUpdate;
+		const { currentMonth } = ctrlPanelUpdate;
 
 		console.log('CTRL panel update received: ');
 		console.log('currentMonth: ', currentMonth);

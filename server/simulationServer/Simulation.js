@@ -43,7 +43,6 @@ class Simulation {
         studentData: null
       };
       teacherSocket.emit('CTRL_PANEL_UPDATE', teacherUpdate);
-      log({ teacherUpdate });
     });
     Object.values(this.students).forEach(student => {
       const studentMarketData = this.marketData.filter(dataPoint => dataPoint.x <= this.currentMonth);
@@ -57,7 +56,6 @@ class Simulation {
         inv: student.inv,
         marketTransactions: student.marketTransactions
       };
-      log({ studentUpdate });
       if (student.socket) {
         fancyLog('↳', `${student.name} has a connected socket. Emiting update.`, 2);
         student.socket.emit('STUDENT_DASH_UPDATE', studentUpdate);
