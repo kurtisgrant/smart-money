@@ -68,7 +68,7 @@ module.exports = (db) => {
 
 				for (const row of data.rows) {
 					const { student_id: stuId, access_code: stuAccCode, account_type: acntType, balance: bal, name } = row;
-					
+
 					if (!stuData[stuId]) {
 						stuData[stuId] = { stuId, name, stuAccCode };
 						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
@@ -78,7 +78,6 @@ module.exports = (db) => {
 				}
 
 				stuData = Object.values(stuData);
-				console.log('Sending data for request to "/list/:simulationKey": ', stuData);
 				return stuData;
 			})
 			.then((data) => res.json(data))
