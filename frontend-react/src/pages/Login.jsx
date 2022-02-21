@@ -6,8 +6,9 @@ import axios from 'axios';
 import './Login.scss';
 
 function Login() {
-	const { setUser } = useContext(UserContext);
+	const { user, setUser } = useContext(UserContext);
 	const [email, setEmail] = useState('');
+	const [error, setError] = useState("");
 
 	const login = () => {
 		const userInfo = { email };
@@ -24,12 +25,13 @@ function Login() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		login();
-	}
+
+		login() || setError('Incorrect email');
+	};
 
 	return (
 		<div className="login-container">
-			<h2>Login</h2>
+			<h1>Login</h1>
 			<SingleFieldForm
 				label="Email"
 				id="email"
@@ -38,7 +40,8 @@ function Login() {
 				setValue={setEmail}
 				handleSubmit={handleSubmit}
 			/>
-			<Button green onClick={login}>
+			<section className="login-error">{error}</section>
+			<Button green onClick={handleSubmit}>
 				Login
 			</Button>
 		</div>
