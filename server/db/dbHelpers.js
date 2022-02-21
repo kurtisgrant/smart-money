@@ -112,8 +112,19 @@ const dbHelpers = (db) => {
             .then((data) => data.rows);
         })
         .catch((e) => console.log(e.message));
+    },
 
-
+    updateMonthlyAllocations: (studentId, savings, investments) => {
+      const query = `
+			UPDATE students
+			SET savings_allocation = $1,
+					investment_allocation = $2
+			WHERE id = $3
+		`
+		
+      return db.query(query, [savings, investments, studentId])
+        .then((data) => data.rows)
+        .catch((e) => console.log(e.message));
     }
   };
 };
