@@ -8,9 +8,10 @@ const fancyLog = (emoji, message, indentation = 0, prefixNewLine) => {
   }
   console.log(prefix + indentStr + emoji + '  ' + msg);
 };
-const log = (variable) => {
-  const name = Object.keys({ variable })[0];
-  console.log('\n\n🟣', name, variable, '\n');
+const log = (variableWrappedInCurlyBraces) => {
+  const name = Object.keys(variableWrappedInCurlyBraces)[0];
+  const value = variableWrappedInCurlyBraces[name];
+  console.log('\n\n🟣', name, value, '\n');
 };
 
 
