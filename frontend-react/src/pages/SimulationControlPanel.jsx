@@ -52,9 +52,9 @@ function SimulationControlPanel() {
 		return (
 			<tr key={id} className="student">
 				<td>{name} <span className="student-access-code">({studentAccessCode})</span></td>
-				<td>${Number(sav / 100).toLocaleString()}</td>
-				<td>${Number(inv / 100).toLocaleString()}</td>
-				<td>${Number(che / 100).toLocaleString()}</td>
+				<td>${Number(sav / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+				<td>${Number(inv / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+				<td>${Number(che / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
 			</tr>
 		);
 	});
