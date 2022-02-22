@@ -19,6 +19,23 @@ function StudentDashboard() {
 	const [investments, setInvestments] = useState(0);
 	const [chequings, setChequings] = useState(0);
 	const [accountBalance, setAccountBalance] = useState({});
+	
+	const updateHandler = (studentData) => {
+		// Structure of studentData object from web socket:
+		//
+		// const studentUpdate = {
+		// 	isPlaying: this.isPlaying,
+		// 	marketData: studentMarketData,
+		// 	income: student.income,
+		// 	expense: student.expense,
+		// 	che: student.che,
+		// 	sav: student.sav,
+		// 	inv: student.inv,
+		// 	marketTransactions: student.marketTransactions
+		// };
+		//
+		console.log(studentData);
+	};
 
 	useEffect(() => {
 		const studentId = user.id;
@@ -37,15 +54,13 @@ function StudentDashboard() {
 			})
 			.catch((err) => console.log(err.message));
 
-		axios
-			.get(`/api/simulations/marketdata/${simulationKey}`)
-			.then((res) => setMarketData(JSON.parse(res.data[0].mock_market_data)))
-			.catch((err) => console.log(err.message));
+		socket.on('STUDENT_DASH_UPDATE', updateHandler);
+		socket.emit('REQ_STUDENT_DASH_UPDATE', user);
 
-		axios
-			.get(`/api/students/accountbalance/${studentId}`)
-			.then((res) => setAccountBalance(res.data))
-			.catch((err) => console.log(err.message));
+		return () => {
+			socket.off('STUDENT_DASH_UPDATE', updateHandler);
+		};
+
 	}, []);
 
 	useEffect(() => {
@@ -57,13 +72,8 @@ function StudentDashboard() {
 
 		axios
 			.put(`/api/students/allocations/${studentId}`, monthlyAllocations)
-			.then()
 			.catch((err) => console.log(err.message));
 
-		axios
-			.get(`/api/students/accountbalance/${studentId}`)
-			.then((res) => setAccountBalance(res.data))
-			.catch((err) => console.log(err.message));
 	}, [savings, investments, surplus]);
 
 	const decreaseSavingsAmount = () => {
