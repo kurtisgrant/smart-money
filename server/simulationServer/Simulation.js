@@ -1,6 +1,11 @@
 const dbHelpersConstructor = require('../db/dbHelpers');
 const { fancyLog, log } = require('../helpers/fancyLogger');
 
+const INFLATION = 0.02 / 12
+const SAV_INTEREST = 0.015 / 12
+const MONTHLY_SAV_FACTOR = SAV_INTEREST - INFLATION;
+const MONTHLY_CHE_FACTOR = - INFLATION;
+
 // Model for single simulation entity
 class Simulation {
   constructor(db, io, dbSim) {
@@ -40,7 +45,7 @@ class Simulation {
       const teacherUpdate = {
         isPlaying: this.isPlaying,
         currentMonth: this.currentMonth,
-        studentData: null
+        studentData: parseStuDataForTeacher(this.students)
       };
       if (teacherSocket) {
         fancyLog('↳', `${teacherSocket.user.name} has a connected socket. Emiting update for month ${this.currentMonth}.`, 2);
@@ -66,15 +71,42 @@ class Simulation {
     });
   }
 
-  update() {
+  // Update with new month and student 
+  // balances/transactions then
+  // persist them to the database
+  async update() {
     fancyLog('🔷', ['update', this.simId], 2);
-    this.currentMonth++;
-  }
+    const dbH = this.dbHelpers
 
-  async persist() {
-    fancyLog('🔷', ['persist', this.simId], 2);
-    const dbH = this.dbHelpers;
+    this.currentMonth++;
     await dbH.setCurrentMonth(this.simId, this.currentMonth);
+
+    const curStockPrice = this.marketData.find(dataPoint => dataPoint.x = this.currentMonth);
+
+    const stuIds = Object.keys(this.students);
+
+    const stuDbPromises = []
+    for (const stuId of stuIds) {
+      const stu = this.students[stuId];
+      
+      const stocksToBuy = Math.floor(toDollars(stu.invAllocation) / curStockPrice);
+      const newTotalStocks = sumStocks(stu.marketTransactions) + stocksToBuy;
+      stuDbPromises.push(dbH.submitMarketTransaction(stuId, stocksToBuy));
+      const valOfTotalStocks = newTotalStocks * curStockPrice;
+      
+      stu.inv = valOfTotalStocks;
+      
+      stu.che *= MONTHLY_CHE_FACTOR;
+      stu.sav *= MONTHLY_SAV_FACTOR;
+
+      const leftoverInvAllocationDollars = toDollars(stu.invAllocation) - stocksToBuy * curStockPrice;
+      stu.sav += toCents(leftoverInvAllocationDollars);
+      stu.sav += stu.savAllocation;
+      stu.che += stu.cheAllocation;
+
+      stuDbPromises.push(dbH.setAccountBalances(stu.stuId, stu.che, stu.sav, stu.inv))
+    }
+    await Promise.all(stuDbPromises)
   }
 
 
@@ -146,6 +178,27 @@ class Simulation {
     fancyLog('↳', `mounted ${teacherSocketsForThisSim.length} teacher sockets`, 3);
   }
 
+}
+
+function parseStuDataForTeacher(students) {
+  const dataForTeacher = Object.values(students).map(stu => {
+    const { name, stuId, che, sav, inv } = stu;
+    return { name, stuId, che, sav, inv };
+  });
+  return dataForTeacher
+}
+function sumStocks(transactions) {
+  let sum = 0;
+  for (const t of transactions) {
+    sum += t.quantity;
+  }
+  return sum;
+}
+function toCents(dollars) {
+  return Math.round(dollars * 100);
+}
+function toDollars(cents) {
+  return Number((cents / 100).toFixed(2));
 }
 
 module.exports = Simulation;
