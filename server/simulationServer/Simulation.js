@@ -6,6 +6,9 @@ const SAV_INTEREST = 0.015 / 12;
 const MONTHLY_SAV_FACTOR = 1 + SAV_INTEREST - INFLATION;
 const MONTHLY_CHE_FACTOR = 1 - INFLATION;
 
+const DEBUG_METHOD_LOGS = false;
+const TEMP_DEBUG_LOGS = true;
+
 // Model for single simulation entity
 class Simulation {
   constructor(db, io, dbSim) {
@@ -25,7 +28,7 @@ class Simulation {
   // Get most recent values for this
   // simulation from the database
   async sync() {
-    fancyLog('🔷', ['init', this.simId], 2);
+    DEBUG_METHOD_LOGS && fancyLog('🔷', ['init', this.simId], 2);
     const dbH = this.dbHelpers;
     const dbSimRow = await dbH.getTheseFromSimulationById(this.simId, 'is_playing, current_month');
     this.isPlaying = dbSimRow.is_playing;
@@ -41,7 +44,7 @@ class Simulation {
   // is in this model when method is called)
   async broadcast() {
     if (!this.isPlaying) return;
-    fancyLog('🔈', ['broadcasting for simulation', this.simId], 0, true);
+    DEBUG_METHOD_LOGS && fancyLog('🔈', ['broadcasting for simulation', this.simId], 0, true);
     this.teacherSockets.forEach(teacherSocket => {
       const teacherUpdate = {
         isPlaying: this.isPlaying,
@@ -49,7 +52,7 @@ class Simulation {
         studentData: parseStuDataForTeacher(this.students)
       };
       if (teacherSocket) {
-        fancyLog('↳', `${teacherSocket.user.name} has a connected socket. Emiting update for month ${this.currentMonth}.`, 2);
+        DEBUG_METHOD_LOGS && fancyLog('↳', `${teacherSocket.user.name} has a connected socket. Emiting update for month ${this.currentMonth}.`, 2);
         teacherSocket.emit('CTRL_PANEL_UPDATE', teacherUpdate);
       }
     });
@@ -66,7 +69,7 @@ class Simulation {
         marketTransactions: student.marketTransactions
       };
       if (student.socket) {
-        fancyLog('↳', `${student.name} has a connected socket. Emiting update for month ${this.currentMonth}.`, 2);
+        DEBUG_METHOD_LOGS && fancyLog('↳', `${student.name} has a connected socket. Emiting update for month ${this.currentMonth}.`, 2);
         student.socket.emit('STUDENT_DASH_UPDATE', studentUpdate);
       }
     });
@@ -77,7 +80,7 @@ class Simulation {
   // persist them to the database
   async update() {
     if (!this.isPlaying) return;
-    fancyLog('🔷', ['update', this.simId], 2);
+    DEBUG_METHOD_LOGS && fancyLog('🔷', ['update', this.simId], 2);
     const dbH = this.dbHelpers;
 
     this.currentMonth++;
@@ -87,23 +90,20 @@ class Simulation {
 
     const stuIds = Object.keys(this.students);
 
-    // const stuDbPromises = [];
-    fancyLog('🔺', 'before students loop', 1);
+    const stuDbPromises = [];
     for (const stuId of stuIds) {
       const stu = this.students[stuId];
-      fancyLog('🔺', `start of loop for ${stu.name}`, 1);
 
       const stocksToBuy = Math.floor(toDollars(stu.invAllocation) / curStockPrice);
       const newTotalStocks = sumStocks(stu.marketTransactions) + stocksToBuy;
 
-      fancyLog('🔺', `before submit marketTransaction ${stu.name}`, 1);
-      // stuDbPromises.push(dbH.submitMarketTransaction(stuId, stocksToBuy));
-      if (stocksToBuy) await dbH.submitMarketTransaction(stuId, stocksToBuy);
-      const valOfTotalStocks = newTotalStocks * curStockPrice;
+      if (stocksToBuy) {
+        stuDbPromises.push(dbH.submitMarketTransaction(stuId, stocksToBuy));
+      }
+      const dollarValOfTotalStocks = newTotalStocks * curStockPrice;
 
-      stu.inv = valOfTotalStocks;
+      stu.inv = toCents(dollarValOfTotalStocks);
 
-      log({ stu });
       stu.che = Math.round(stu.che * MONTHLY_CHE_FACTOR);
       stu.sav = Math.round(stu.sav * MONTHLY_SAV_FACTOR);
 
@@ -113,13 +113,11 @@ class Simulation {
       const cheAllocation = stu.income - stu.expense - stu.invAllocation - stu.savAllocation;
       stu.che += cheAllocation;
 
-      // stuDbPromises.push(dbH.setAccountBalances(stu.stuId, stu.che, stu.sav, stu.inv));
-      fancyLog('🔺', `before setAccountBalances ${stu.name}`, 1);
-      console.log(stu.stuId, stu.che, stu.sav, stu.inv);
-      const setBals = await dbH.setAccountBalances(stu.stuId, stu.che, stu.sav, stu.inv);
-      log({ setBals });
+      stuDbPromises.push(dbH.setAccountBalances(stu.stuId, stu.che, stu.sav, stu.inv));
+      TEMP_DEBUG_LOGS && fancyLog('🔺', `Setting account balances for: ${stu.name}`, 1);
+      TEMP_DEBUG_LOGS && fancyLog('↳', `Che: ${toDollars(stu.che)}, Sav: ${toDollars(stu.sav)}, Inv: ${toDollars(stu.inv)}`, 2);
     }
-    // await Promise.all(stuDbPromises);
+    await Promise.all(stuDbPromises);
   }
 
 
@@ -127,7 +125,7 @@ class Simulation {
   // teacher & student 'rooms' for this
   // simulation
   async getConnectedCount() {
-    fancyLog('🔷', ['getConnectedCount', this.simId], 2);
+    DEBUG_METHOD_LOGS && fancyLog('🔷', ['getConnectedCount', this.simId], 2);
     const studentSimRoom = 's-' + this.simKey;
     const studentSockets = await io.in(studentSimRoom).fetchSockets();
     const teacherSimRoom = 't-' + this.simKey;
@@ -135,7 +133,7 @@ class Simulation {
     const stuCount = studentSockets.length || 0;
     const teaCount = teacherSockets.length || 0;
     const count = stuCount + teaCount;
-    fancyLog('↳', `${count} connected sockets for simulation ${this.simId}`);
+    DEBUG_METHOD_LOGS && fancyLog('↳', `${count} connected sockets for simulation ${this.simId}`);
   }
 
   // Get all students, their accounts 
@@ -143,7 +141,7 @@ class Simulation {
   // the database and store them 
   // in this.students
   async setAllStudentData() {
-    fancyLog('🔷', ['setAllStudentData', this.simId], 2);
+    DEBUG_METHOD_LOGS && fancyLog('🔷', ['setAllStudentData', this.simId], 2);
     const dbH = this.dbHelpers;
     const dbStudentsAndAccounts = await dbH.getStudentsAndAccounts(this.simId);
     const newStudentsObj = {};
@@ -167,7 +165,7 @@ class Simulation {
   // respective 'student' object in the
   // Simulation model (this.students[id].socket)
   async mountStudentSockets() {
-    fancyLog('🔷', ['mountStudentSockets', this.simId], 2);
+    DEBUG_METHOD_LOGS && fancyLog('🔷', ['mountStudentSockets', this.simId], 2);
     const io = this.io;
     const studentSimRoom = 's-' + this.simKey;
     const studentSocketsForThisSim = await io.in(studentSimRoom).fetchSockets();
@@ -176,14 +174,14 @@ class Simulation {
       const stuId = socket.user.id;
       this.students[stuId].socket = socket;
     }
-    fancyLog('↳', `mounted ${studentSocketsForThisSim.length} student sockets`, 3);
+    DEBUG_METHOD_LOGS && fancyLog('↳', `mounted ${studentSocketsForThisSim.length} student sockets`, 3);
   }
 
   // Get connected teacher socket(s)
   // for this simulation and put them
   // in this.teacherSockets array
   async mountTeacherSockets() {
-    fancyLog('🔷', ['mountTeacherSockets', this.simId], 2);
+    DEBUG_METHOD_LOGS && fancyLog('🔷', ['mountTeacherSockets', this.simId], 2);
     const io = this.io;
     const teacherSimRoom = 't-' + this.simKey;
     const teacherSocketsForThisSim = await io.in(teacherSimRoom).fetchSockets();
@@ -192,7 +190,7 @@ class Simulation {
     for (const socket of teacherSocketsForThisSim) {
       this.teacherSockets.push(socket);
     }
-    fancyLog('↳', `mounted ${teacherSocketsForThisSim.length} teacher sockets`, 3);
+    DEBUG_METHOD_LOGS && fancyLog('↳', `mounted ${teacherSocketsForThisSim.length} teacher sockets`, 3);
   }
 
 }
