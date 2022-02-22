@@ -174,19 +174,19 @@ function StudentDashboard() {
 						<h3>My Account Balance</h3>
 						<div className="account-balance">
 							<span className="col-1">Saving</span>
-							<span className="col-2">${Number(accountBalance.savings).toLocaleString()}</span>
+							<span className="col-2">${Number(accountBalance.savings).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
 						</div>
 						<div className="account-balance">
 							<span className="col-1">Investment</span>
-							<span className="col-2">${Number(accountBalance.investment).toLocaleString()}</span>
+							<span className="col-2">${Number(accountBalance.investment).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
 						</div>
 						<div className="account-balance">
 							<span className="col-1">Chequing</span>
-							<span className="col-2">${Number(accountBalance.chequing).toLocaleString()}</span>
+							<span className="col-2">${Number(accountBalance.chequing).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
 						</div>
 						<div className="account-balance">
 							<span className="col-1-green">Total</span>
-							<span className="col-2">${Number(accountBalance.total).toLocaleString()}</span>
+							<span className="col-2">${Number(accountBalance.total).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
 						</div>
 					</div>
 				</div>

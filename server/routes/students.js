@@ -69,7 +69,12 @@ module.exports = (db) => {
 				let stuData = {};
 
 				for (const row of data.rows) {
-					const { student_id: stuId, access_code: stuAccCode, account_type: acntType, balance: bal, name } = row;
+					const { 
+						student_id: stuId,
+						access_code: stuAccCode,
+						account_type: acntType,
+						balance: bal, name,
+					} = row;
 
 					if (!stuData[stuId]) {
 						stuData[stuId] = { stuId, name, stuAccCode };
@@ -78,8 +83,9 @@ module.exports = (db) => {
 						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
 					}
 				}
-
+				 
 				stuData = Object.values(stuData);
+
 				return stuData;
 			})
 			.then((data) => res.json(data))
