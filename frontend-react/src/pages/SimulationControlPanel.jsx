@@ -101,9 +101,9 @@ function SimulationControlPanel() {
 					<tbody>
 						<tr>
 							<th>Name (Access Code)</th>
-							<th>Savings</th>
-							<th>Investments</th>
-							<th>Chequings</th>
+							<th>Saving</th>
+							<th>Investment</th>
+							<th>Chequing</th>
 						</tr>
 						{studentsBalanceList}
 					</tbody>
