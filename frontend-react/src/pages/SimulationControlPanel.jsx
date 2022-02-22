@@ -20,13 +20,6 @@ function SimulationControlPanel() {
 	const [studentsBalance, setStudentsBalance] = useState([]);
 
 	useEffect(() => {
-		// GET REQUEST HAPPENS HERE
-		// axios
-		// 	.get(`/api/students/list/${simulationKey}`)
-		// 	.then((res) => {
-		// 		setStudentsBalance(res.data);
-		// 	})
-		// 	.catch((err) => console.log(err.message));
 
 		axios
 			.get(`/api/simulations/marketdata/${simulationKey}`)
@@ -36,7 +29,7 @@ function SimulationControlPanel() {
 		// Socket stuff
 		socket.on('PLAY_PAUSE_UPDATE', updateIsPlayingHandler);
 		socket.on('CTRL_PANEL_UPDATE', updateHandler);
-		socket.emit('JOIN_SIMULATION', simulationKey);
+		socket.emit('JOIN_SIMULATION', simulationKey, user);
 
 		return () => {
 			socket.emit('LEAVE_SIMULATION', simulationKey);
