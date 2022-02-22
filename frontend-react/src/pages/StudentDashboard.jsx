@@ -45,7 +45,7 @@ function StudentDashboard() {
 		axios
 			.get(`/api/students/accountbalance/${studentId}`)
 			.then((res) => setAccountBalance(res.data))
-			.catch();
+			.catch((err) => console.log(err.message));
 	}, []);
 
 	useEffect(() => {
@@ -58,14 +58,14 @@ function StudentDashboard() {
 		axios
 			.put(`/api/students/allocations/${studentId}`, monthlyAllocations)
 			.then()
-			.catch();
+			.catch((err) => console.log(err.message));
 
 		axios
 			.get(`/api/students/accountbalance/${studentId}`)
 			.then((res) => setAccountBalance(res.data))
-			.catch();
+			.catch((err) => console.log(err.message));
 	}, [savings, investments, surplus]);
-	console.log(accountBalance)
+
 	const decreaseSavingsAmount = () => {
 		if (savings > 0) {
 			setSavings(savings - 50);
