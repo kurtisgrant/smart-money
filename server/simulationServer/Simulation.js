@@ -6,7 +6,7 @@ const SAV_INTEREST = 0.015 / 12;
 const MONTHLY_SAV_FACTOR = 1 + SAV_INTEREST - INFLATION;
 const MONTHLY_CHE_FACTOR = 1 - INFLATION;
 
-const DEBUG_METHOD_LOGS = false;
+const DEBUG_METHOD_LOGS = true;
 const TEMP_DEBUG_LOGS = true;
 
 // Model for single simulation entity
@@ -28,7 +28,7 @@ class Simulation {
   // Get most recent values for this
   // simulation from the database
   async sync() {
-    DEBUG_METHOD_LOGS && fancyLog('🔷', ['init', this.simId], 2);
+    DEBUG_METHOD_LOGS && fancyLog('🔷', ['sync', this.simId], 2);
     const dbH = this.dbHelpers;
     const dbSimRow = await dbH.getTheseFromSimulationById(this.simId, 'is_playing, current_month');
     this.isPlaying = dbSimRow.is_playing;
@@ -36,6 +36,7 @@ class Simulation {
     await this.setAllStudentData();
     await this.mountStudentSockets();
     await this.mountTeacherSockets();
+    return this
   }
 
   // Emit updates to all connected sockets
@@ -43,7 +44,6 @@ class Simulation {
   // is required by each. (Sends data as it
   // is in this model when method is called)
   async broadcast() {
-    if (!this.isPlaying) return;
     DEBUG_METHOD_LOGS && fancyLog('🔈', ['broadcasting for simulation', this.simId], 0, true);
     this.teacherSockets.forEach(teacherSocket => {
       const teacherUpdate = {
@@ -51,10 +51,8 @@ class Simulation {
         currentMonth: this.currentMonth,
         studentData: parseStuDataForTeacher(this.students)
       };
-      if (teacherSocket) {
         DEBUG_METHOD_LOGS && fancyLog('↳', `${teacherSocket.user.name} has a connected socket. Emiting update for month ${this.currentMonth}.`, 2);
         teacherSocket.emit('CTRL_PANEL_UPDATE', teacherUpdate);
-      }
     });
     Object.values(this.students).forEach(student => {
       const studentMarketData = this.marketData.filter(dataPoint => dataPoint.x <= this.currentMonth);
@@ -79,7 +77,6 @@ class Simulation {
   // balances/transactions then
   // persist them to the database
   async update() {
-    if (!this.isPlaying) return;
     DEBUG_METHOD_LOGS && fancyLog('🔷', ['update', this.simId], 2);
     const dbH = this.dbHelpers;
 

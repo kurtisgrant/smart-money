@@ -10,6 +10,7 @@ module.exports = (io, db) => {
   const {
     getSimulationId,
     getSimulationById,
+    getTheseFromSimulationById,
     getTeacherForSimulation,
     toggleIsPlaying,
     getRunningSimulations,
@@ -30,7 +31,7 @@ module.exports = (io, db) => {
       startServingClients();
     }
 
-    socket.on('SET_USER', async (user) => {
+    const setUser = async (user) => {
       socket.user = user;
       socket.isTeacher = user.type === 'teacher';
       socket.isStudent = user.type === 'student';
@@ -43,19 +44,30 @@ module.exports = (io, db) => {
         const simKey = await getSimulationKey(socket.user.simulation_id);
         const studentSimRoom = 's-' + simKey;
         socket.join(studentSimRoom);
+        const simModel = await loadSimulation(socket.user.simulation_id);
+        simModel.broadcast();
       }
-    });
+    };
 
-    socket.on('JOIN_SIMULATION', simKey => {
+    socket.on('SET_USER', setUser);
+
+    socket.on('JOIN_SIMULATION', async (simKey, user) => {
+      if (!socket.user && user) {
+        await setUser(user);
+      }
       const teacherSimRoom = 't-' + simKey;
       socket.join(teacherSimRoom);
-      fancyLog('🚪=>', `${socket.user?.name} joined simulation with key: ${simKey}`, 0, true);
+      const simId = await getSimulationId(simKey);
+      fancyLog('🚪=>', `${socket.user?.name} joined simulation ${simId} (${simKey})`, 0, true);
+      const simModel = await loadSimulation(simId);
+      await simModel.broadcast();
     });
 
-    socket.on('LEAVE_SIMULATION', simKey => {
+    socket.on('LEAVE_SIMULATION', async simKey => {
       const teacherSimRoom = 't-' + simKey;
       socket.leave(teacherSimRoom);
-      fancyLog('🚪<=', `${socket.user?.name} left simulation with key: ${simKey}`, 0, true);
+      const simId = await getSimulationId(simKey);
+      fancyLog('🚪<=', `${socket.user?.name} left simulation ${simId} (${simKey})`, 0, true);
     });
 
     socket.on('PLAY_PAUSE_SIMULATION', async (simulationKey) => {
@@ -70,8 +82,6 @@ module.exports = (io, db) => {
       socket.emit('PLAY_PAUSE_UPDATE', simWasStarted);
       fancyLog('⏯', `${socket.user.name} ${simWasStarted ? 'started' : 'paused'} simulation ${simId} (${simulationKey})`, 0, true);
 
-      // If simulation has been started, run simulationStartHandler
-      simWasStarted && simulationStartHandler(simId);
     });
 
     socket.on('disconnect', (reason) => {
@@ -106,7 +116,9 @@ module.exports = (io, db) => {
     let updatePromises = [];
     for (const simId in loadedSimulations) {
       const sim = loadedSimulations[simId];
-      updatePromises.push(sim.update());
+      if (sim.isPlaying) {
+        updatePromises.push(sim.update());
+      }
     }
     await Promise.all(updatePromises);
     DEBUG_LOGS && fancyLog('🔸', 'Done updating simulations');
@@ -116,7 +128,9 @@ module.exports = (io, db) => {
     let castPromises = [];
     for (const simId in loadedSimulations) {
       const sim = loadedSimulations[simId];
-      castPromises.push(sim.broadcast());
+      if (sim.isPlaying) {
+        castPromises.push(sim.broadcast());
+      }
     }
     await Promise.all(castPromises);
     DEBUG_LOGS && fancyLog('🔸', 'Done broadcasting updates from simulations to socket connections');
@@ -124,11 +138,15 @@ module.exports = (io, db) => {
   }
 
 
-  // Called every time a simulation starts playing
-  async function simulationStartHandler(simId) {
+  // Called every time a simulation is joined by a user
+  async function loadSimulation(simId) {
 
-    // If simulation wasn't in loadedSimulations, add it
+    // If simulation wasn't in loadedSimulations, 
+    // add it and return the new synced instance. 
+    // Otherwise, return the existing (synced) instance.
+
     if (!Object.keys(loadedSimulations).includes(String(simId))) {
+
       console.log(`💾  Adding simulation  ${simId}  to loadedSimulations object.`);
       const dbSimulation = await getSimulationById(simId);
 
@@ -140,8 +158,13 @@ module.exports = (io, db) => {
       await newSimModel.sync();
 
       loadedSimulations[simId] = newSimModel;
+      return newSimModel;
+
+    } else {
+      const simModel = loadedSimulations[simId];
+      await simModel.sync();
+      return simModel;
     }
-    return;
   }
 
   // Counts sockets & stops interval if no one is connected
