@@ -21,12 +21,12 @@ function SimulationControlPanel() {
 
 	useEffect(() => {
 		// GET REQUEST HAPPENS HERE
-		axios
-			.get(`/api/students/list/${simulationKey}`)
-			.then((res) => {
-				setStudentsBalance(res.data);
-			})
-			.catch((err) => console.log(err.message));
+		// axios
+		// 	.get(`/api/students/list/${simulationKey}`)
+		// 	.then((res) => {
+		// 		setStudentsBalance(res.data);
+		// 	})
+		// 	.catch((err) => console.log(err.message));
 
 		axios
 			.get(`/api/simulations/marketdata/${simulationKey}`)
@@ -51,9 +51,9 @@ function SimulationControlPanel() {
 		return (
 			<tr key={id} className="student">
 				<td>{name} <span className="student-access-code">({studentAccessCode})</span></td>
-				<td>${Number(sav).toLocaleString()}</td>
-				<td>${Number(inv).toLocaleString()}</td>
-				<td>${Number(che).toLocaleString()}</td>
+				<td>${Number(sav / 100).toLocaleString()}</td>
+				<td>${Number(inv / 100).toLocaleString()}</td>
+				<td>${Number(che / 100).toLocaleString()}</td>
 			</tr>
 		);
 	});
@@ -68,13 +68,15 @@ function SimulationControlPanel() {
 	const updateHandler = (ctrlPanelUpdate) => {
 		// Ultimately will receive current month & student data
 		// const { current_month: currentMonth, studentData } = ctrlPanelUpdate;
-		const { currentMonth } = ctrlPanelUpdate;
+		const { currentMonth, isPlaying, studentData } = ctrlPanelUpdate;
 
 		console.log('CTRL panel update received: ');
 		console.log('currentMonth: ', currentMonth);
-		// console.log('studentData: ', studentData);
+		console.log('studentData: ', studentData);
+		console.log('isPlaying: ', isPlaying);
+		setStudentsBalance(studentData);
 		setCurrentMonth(currentMonth);
-		// setStudentData(studentData);
+		setIsPlaying(isPlaying);
 	};
 
 

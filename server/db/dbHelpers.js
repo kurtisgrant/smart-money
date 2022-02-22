@@ -1,3 +1,4 @@
+const { log, fancyLog } = require('../helpers/fancyLogger');
 
 // These helper functions operate under the assumption that they
 // won't be used unless the request is valid & authenticated.
@@ -78,10 +79,10 @@ const dbHelpers = (db) => {
             const acntTypeAbv = acntType.slice(0, 3).toLowerCase();
             if (!stuData[stuId]) {
               stuData[stuId] = { stuId, name, accessCode, income, expense, savAllocation, invAllocation };
-              stuData[stuId][acntTypeAbv] = (bal / 100).toFixed(2);
+              stuData[stuId][acntTypeAbv] = bal;
               stuData[stuId][acntTypeAbv + 'Id'] = accountId;
             } else {
-              stuData[stuId][acntTypeAbv] = (bal / 100).toFixed(2);
+              stuData[stuId][acntTypeAbv] = bal;
               stuData[stuId][acntTypeAbv + 'Id'] = accountId;
             }
           }
@@ -115,8 +116,7 @@ const dbHelpers = (db) => {
 
     // Performs multiple database queries to set balances for each account
     setAccountBalances: (studentId, cheBal, savBal, invBal) => {
-      console.log(typeof studentId, typeof cheBal, typeof savBal, typeof invBal);
-      //
+
       const query = `
       UPDATE accounts SET balance = CASE
         WHEN account_type = 'Chequing' then $2::BIGINT
@@ -167,8 +167,8 @@ const dbHelpers = (db) => {
 			SET savings_allocation = $1,
 					investment_allocation = $2
 			WHERE id = $3
-		`
-		
+		`;
+
       return db.query(query, [savings, investments, studentId])
         .then((data) => data.rows)
         .catch((e) => console.log(e.message));
