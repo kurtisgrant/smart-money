@@ -99,7 +99,8 @@ module.exports = (io, db) => {
 
 
     // Update all simulation models with
-    // new month and balances
+    // new month and balances then persist
+    // to the database
     let updatePromises = [];
     for (const simId in loadedSimulations) {
       const sim = loadedSimulations[simId];
@@ -107,17 +108,6 @@ module.exports = (io, db) => {
     }
     await Promise.all(updatePromises);
     // fancyLog('🔸', 'Done updating simulations');
-
-
-    // Persist all updates on simulation
-    // to the database
-    let persistPromises = [];
-    for (const simId in loadedSimulations) {
-      const sim = loadedSimulations[simId];
-      persistPromises.push(sim.persist());
-    }
-    await Promise.all(persistPromises);
-    // fancyLog('🔸', 'Done persisting simulation updates to database');
 
 
     // Broadcast changes to sockets connected
