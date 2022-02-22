@@ -32,7 +32,7 @@ ChartJS.register({
     } = chart;
     ctx.save();
 
-    const xVal = x.getPixelForValue(options.lineIndex);
+    let xVal = options.lineIndex < 0 ? x.getPixelForValue(120) : x.getPixelForValue(options.lineIndex);
     ctx.strokeStyle = '#3DAE70';
     ctx.strokeRect(xVal, top, 0, height);
     ctx.restore();

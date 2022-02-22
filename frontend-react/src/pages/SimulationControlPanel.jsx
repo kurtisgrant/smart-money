@@ -20,17 +20,6 @@ function SimulationControlPanel() {
 	const [studentsBalance, setStudentsBalance] = useState([]);
 
 	useEffect(() => {
-		// GET REQUEST HAPPENS HERE
-		axios
-			.get(`/api/students/list/${simulationKey}`)
-			.then((res) => {
-				console.log(res.data[0])
-				setStudentsBalance(res.data.slice(2));
-				setCurrentMonth(res.data[0]);
-				setIsPlaying(res.data[1]);
-			})
-			.catch((err) => console.log(err.message));
-
 		axios
 			.get(`/api/simulations/marketdata/${simulationKey}`)
 			.then((res) => setMarketData(JSON.parse(res.data[0].mock_market_data)))
@@ -39,14 +28,14 @@ function SimulationControlPanel() {
 		// Socket stuff
 		socket.on('PLAY_PAUSE_UPDATE', updateIsPlayingHandler);
 		socket.on('CTRL_PANEL_UPDATE', updateHandler);
-		socket.emit('JOIN_SIMULATION', simulationKey);
+		socket.emit('JOIN_SIMULATION', simulationKey, user);
 
 		return () => {
 			socket.emit('LEAVE_SIMULATION', simulationKey);
 			socket.off('PLAY_PAUSE_UPDATE', updateIsPlayingHandler);
 			socket.off('CTRL_PANEL_UPDATE', updateHandler);
 		};
-	}, [currentMonth]);
+	}, []);
 
 	const studentsBalanceList = studentsBalance.map(student => {
 		const { stuId: id, stuAccCode: studentAccessCode, name, che, sav, inv } = student;

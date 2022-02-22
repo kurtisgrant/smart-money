@@ -67,9 +67,6 @@ module.exports = (db) => {
 		db.query(query, [simulationKey])
 			.then(data => {
 				let stuData = {};
-				console.log('data==========', data.rows)
-				const currentMonthStatus = data.rows[0].current_month;
-				const isPlayingStatus = data.rows[0].is_playing;
 
 				for (const row of data.rows) {
 					const { 
@@ -77,22 +74,18 @@ module.exports = (db) => {
 						access_code: stuAccCode,
 						account_type: acntType,
 						balance: bal, name,
-						is_playing: isPlaying,
-						current_month: currentMonth
 					} = row;
 
 					if (!stuData[stuId]) {
 						stuData[stuId] = { stuId, name, stuAccCode, isPlaying, currentMonth };
-						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = bal;
+						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
 					} else {
-						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = bal;
+						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
 					}
 				}
-				 console.log('studata======', stuData);
 				 
-				 stuData = Object.values(stuData);
-				 stuData.unshift(currentMonthStatus, isPlayingStatus);
-				 console.log('studata======', stuData);
+				stuData = Object.values(stuData);
+
 				return stuData;
 			})
 			.then((data) => res.json(data))
