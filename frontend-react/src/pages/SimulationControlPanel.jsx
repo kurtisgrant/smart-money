@@ -24,7 +24,7 @@ function SimulationControlPanel() {
 		axios
 			.get(`/api/students/list/${simulationKey}`)
 			.then((res) => {
-				console.log('==========', res.data)
+				console.log(res.data[0])
 				setStudentsBalance(res.data.slice(2));
 				setCurrentMonth(res.data[0]);
 				setIsPlaying(res.data[1]);
@@ -46,7 +46,7 @@ function SimulationControlPanel() {
 			socket.off('PLAY_PAUSE_UPDATE', updateIsPlayingHandler);
 			socket.off('CTRL_PANEL_UPDATE', updateHandler);
 		};
-	}, []);
+	}, [currentMonth]);
 
 	const studentsBalanceList = studentsBalance.map(student => {
 		const { stuId: id, stuAccCode: studentAccessCode, name, che, sav, inv } = student;
