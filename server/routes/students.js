@@ -68,6 +68,8 @@ module.exports = (db) => {
 			.then(data => {
 				let stuData = {};
 				console.log('data==========', data.rows)
+				const currentMonthStatus = data.rows[0].current_month;
+				const isPlayingStatus = data.rows[0].is_playing;
 
 				for (const row of data.rows) {
 					const { 
@@ -87,8 +89,10 @@ module.exports = (db) => {
 					}
 				}
 				 console.log('studata======', stuData);
-
-				stuData = Object.values(stuData);
+				 
+				 stuData = Object.values(stuData);
+				 stuData.unshift(currentMonthStatus, isPlayingStatus);
+				 console.log('studata======', stuData);
 				return stuData;
 			})
 			.then((data) => res.json(data))

@@ -25,12 +25,9 @@ function SimulationControlPanel() {
 			.get(`/api/students/list/${simulationKey}`)
 			.then((res) => {
 				console.log('==========', res.data)
-				const studentsList = res.data;
-				setStudentsBalance(studentsList);
-
-
-				setCurrentMonth();
-				setIsPlaying(isPlaying);
+				setStudentsBalance(res.data.slice(2));
+				setCurrentMonth(res.data[0]);
+				setIsPlaying(res.data[1]);
 			})
 			.catch((err) => console.log(err.message));
 
@@ -84,7 +81,6 @@ function SimulationControlPanel() {
 		setCurrentMonth(currentMonth);
 		setIsPlaying(isPlaying);
 	};
-
 
 	return (
 		<div className="simulation-control-panel-container">
