@@ -1,7 +1,9 @@
-const INTERVAL_SECONDS = 5;
+const INTERVAL_SECONDS = 1.5;
 const dbHelpers = require('../db/dbHelpers');
 const { fancyLog, log } = require('../helpers/fancyLogger');
 const Simulation = require('./Simulation');
+
+const DEBUG_LOGS = false;
 
 
 module.exports = (io, db) => {
@@ -95,29 +97,19 @@ module.exports = (io, db) => {
       syncPromises.push(sim.sync());
     }
     await Promise.all(syncPromises);
-    // fancyLog('🔸', 'Done syncing simulations');
+    DEBUG_LOGS && fancyLog('🔸', 'Done syncing simulations');
 
 
     // Update all simulation models with
-    // new month and balances
+    // new month and balances then persist
+    // to the database
     let updatePromises = [];
     for (const simId in loadedSimulations) {
       const sim = loadedSimulations[simId];
       updatePromises.push(sim.update());
     }
     await Promise.all(updatePromises);
-    // fancyLog('🔸', 'Done updating simulations');
-
-
-    // Persist all updates on simulation
-    // to the database
-    let persistPromises = [];
-    for (const simId in loadedSimulations) {
-      const sim = loadedSimulations[simId];
-      persistPromises.push(sim.persist());
-    }
-    await Promise.all(persistPromises);
-    // fancyLog('🔸', 'Done persisting simulation updates to database');
+    DEBUG_LOGS && fancyLog('🔸', 'Done updating simulations');
 
 
     // Broadcast changes to sockets connected
@@ -127,7 +119,7 @@ module.exports = (io, db) => {
       castPromises.push(sim.broadcast());
     }
     await Promise.all(castPromises);
-    // fancyLog('🔸', 'Done broadcasting updates from simulations to socket connections');
+    DEBUG_LOGS && fancyLog('🔸', 'Done broadcasting updates from simulations to socket connections');
 
   }
 

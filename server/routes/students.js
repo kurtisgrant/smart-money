@@ -89,9 +89,9 @@ module.exports = (db) => {
 	// update monthly saving and investment allocations
 	router.put('/allocations/:studentId', (req, res) => {
 		const { studentId } = req.params;
-		const { savings, investments } = req.body
+		const { savings, investments } = req.body;
 
-		updateMonthlyAllocations(studentId, savings, investments)
+		updateMonthlyAllocations(studentId, toCents(savings), toCents(investments))
 			.then(() => {
 				res.json((`Monthly allocation updated for student id: ${studentId}`));
 			})
@@ -123,3 +123,10 @@ module.exports = (db) => {
 
 	return router;
 };
+
+function toCents(dollars) {
+	return Math.round(dollars * 100);
+}
+function toDollars(cents) {
+	return Number((cents / 100).toFixed(2));
+}
