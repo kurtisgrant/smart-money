@@ -8,6 +8,7 @@ import './Login.scss';
 function Login() {
 	const { user, setUser } = useContext(UserContext);
 	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
 
 	const login = () => {
@@ -26,7 +27,7 @@ function Login() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		login() || setError('Incorrect email');
+		login() || setError('Incorrect email or password');
 	};
 
 	return (
@@ -38,6 +39,14 @@ function Login() {
 				placeholder="Enter email"
 				inputValue={email}
 				setValue={setEmail}
+				handleSubmit={handleSubmit}
+			/>
+			<SingleFieldForm
+				label="Password"
+				id="password"
+				placeholder="Enter Password"
+				inputValue={password}
+				setValue={setPassword}
 				handleSubmit={handleSubmit}
 			/>
 			<section className="login-error">{error}</section>
