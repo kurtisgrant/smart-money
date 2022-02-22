@@ -16,17 +16,21 @@ function Simulations() {
 			.get(`/api/simulations/list/${teacherId}`)
 			.then((res) => {
 				setSimulations(res.data);
-			});
+			})
+			.catch((err) => console.log(err.message));
 	}, []);
 
 	const deleteSimulation = (e, id) => {
-		e.preventDefault();
+		e.stopPropagation();
 
-		axios.delete(`/api/simulations/${id}`);
-
-		setSimulations(
-			simulations.filter((simulationItem) => simulationItem.id !== id)
-		);
+		axios
+			.delete(`/api/simulations/${id}`)
+			.then(() => {
+				setSimulations(
+					simulations.filter((simulationItem) => simulationItem.id !== id)
+				);
+			})
+			.catch((err) => console.log(err.message));
 	};
 
 	return (
@@ -34,7 +38,9 @@ function Simulations() {
 			<h1>Welcome back {user.name}!</h1>
 			<div className="simulations-form-heading">
 				<h2>My Simulations</h2>
-				<Link to="/new"><Button green>Add Simulation</Button></Link>
+				<Link to="/new">
+					<Button green>Add Simulation</Button>
+				</Link>
 			</div>
 
 			<section className="simulations">
@@ -45,15 +51,14 @@ function Simulations() {
 							<th className="head-col-2">Created Date</th>
 							<th className="head-col-3">Delete</th>
 						</tr>
-						{simulations.map(simulation => 
+						{simulations.map((simulation) => (
 							<SimulationListItem
 								key={simulation.id}
 								simulation={simulation}
 								onDelete={deleteSimulation}
 							/>
-						)}
-				</tbody>
-
+						))}
+					</tbody>
 				</table>
 			</section>
 		</div>
