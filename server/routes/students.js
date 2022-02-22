@@ -58,7 +58,7 @@ module.exports = (db) => {
 	router.get('/list/:simulationKey', (req, res) => {
 		const { simulationKey } = req.params;
 		const query = `
-			SELECT simulations.id AS sim_id, students.name, students.access_code, accounts.*
+			SELECT simulations.id AS sim_id, simulations.current_month, simulations.is_playing, students.name, students.access_code, accounts.*
 			FROM accounts
 			JOIN students ON students.id = accounts.student_id
 			JOIN simulations ON simulations.id = students.simulation_id
@@ -67,17 +67,26 @@ module.exports = (db) => {
 		db.query(query, [simulationKey])
 			.then(data => {
 				let stuData = {};
+				console.log('data==========', data.rows)
 
 				for (const row of data.rows) {
-					const { student_id: stuId, access_code: stuAccCode, account_type: acntType, balance: bal, name } = row;
+					const { 
+						student_id: stuId,
+						access_code: stuAccCode,
+						account_type: acntType,
+						balance: bal, name,
+						is_playing: isPlaying,
+						current_month: currentMonth
+					} = row;
 
 					if (!stuData[stuId]) {
-						stuData[stuId] = { stuId, name, stuAccCode };
+						stuData[stuId] = { stuId, name, stuAccCode, isPlaying, currentMonth };
 						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = bal;
 					} else {
 						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = bal;
 					}
 				}
+				 console.log('studata======', stuData);
 
 				stuData = Object.values(stuData);
 				return stuData;
