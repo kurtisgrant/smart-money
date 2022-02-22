@@ -73,9 +73,9 @@ module.exports = (db) => {
 
 					if (!stuData[stuId]) {
 						stuData[stuId] = { stuId, name, stuAccCode };
-						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
+						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = bal;
 					} else {
-						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
+						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = bal;
 					}
 				}
 
