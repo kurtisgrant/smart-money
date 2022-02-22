@@ -58,7 +58,7 @@ module.exports = (db) => {
 	router.get('/list/:simulationKey', (req, res) => {
 		const { simulationKey } = req.params;
 		const query = `
-			SELECT simulations.id AS sim_id, students.name, students.access_code, accounts.*
+			SELECT simulations.id AS sim_id, simulations.current_month, simulations.is_playing, students.name, students.access_code, accounts.*
 			FROM accounts
 			JOIN students ON students.id = accounts.student_id
 			JOIN simulations ON simulations.id = students.simulation_id
@@ -69,17 +69,23 @@ module.exports = (db) => {
 				let stuData = {};
 
 				for (const row of data.rows) {
-					const { student_id: stuId, access_code: stuAccCode, account_type: acntType, balance: bal, name } = row;
+					const { 
+						student_id: stuId,
+						access_code: stuAccCode,
+						account_type: acntType,
+						balance: bal, name,
+					} = row;
 
 					if (!stuData[stuId]) {
-						stuData[stuId] = { stuId, name, stuAccCode };
+						stuData[stuId] = { stuId, name, stuAccCode, isPlaying, currentMonth };
 						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
 					} else {
 						stuData[stuId][acntType.slice(0, 3).toLowerCase()] = (bal / 100).toFixed(2);
 					}
 				}
-
+				 
 				stuData = Object.values(stuData);
+
 				return stuData;
 			})
 			.then((data) => res.json(data))

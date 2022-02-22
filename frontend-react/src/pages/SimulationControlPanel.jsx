@@ -20,7 +20,6 @@ function SimulationControlPanel() {
 	const [studentsBalance, setStudentsBalance] = useState([]);
 
 	useEffect(() => {
-
 		axios
 			.get(`/api/simulations/marketdata/${simulationKey}`)
 			.then((res) => setMarketData(JSON.parse(res.data[0].mock_market_data)))
@@ -44,9 +43,9 @@ function SimulationControlPanel() {
 		return (
 			<tr key={id} className="student">
 				<td>{name} <span className="student-access-code">({studentAccessCode})</span></td>
-				<td>${Number(sav / 100).toLocaleString()}</td>
-				<td>${Number(inv / 100).toLocaleString()}</td>
-				<td>${Number(che / 100).toLocaleString()}</td>
+				<td>${Number(sav / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+				<td>${Number(inv / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+				<td>${Number(che / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
 			</tr>
 		);
 	});
@@ -72,7 +71,6 @@ function SimulationControlPanel() {
 		setIsPlaying(isPlaying);
 	};
 
-
 	return (
 		<div className="simulation-control-panel-container">
 			<CopyClipboard accessLink={window.location.href} />
@@ -94,9 +92,9 @@ function SimulationControlPanel() {
 					<tbody>
 						<tr>
 							<th>Name (Access Code)</th>
-							<th>Savings</th>
-							<th>Investments</th>
-							<th>Chequings</th>
+							<th>Saving</th>
+							<th>Investment</th>
+							<th>Chequing</th>
 						</tr>
 						{studentsBalanceList}
 					</tbody>
