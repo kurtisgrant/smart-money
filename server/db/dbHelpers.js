@@ -172,6 +172,18 @@ const dbHelpers = (db) => {
       return db.query(query, [savings, investments, studentId])
         .then((data) => data.rows)
         .catch((e) => console.log(e.message));
+    },
+
+    getStudentAccountBalance: (studentId) => {
+      const query = `
+			SELECT accounts.*
+			FROM accounts
+			JOIN students ON students.id = accounts.student_id
+			WHERE students.id = $1`;
+
+      return db.query(query, [studentId])
+        .then((data) => data.rows)
+        .catch((e) => console.log(e.message));
     }
   };
 };
