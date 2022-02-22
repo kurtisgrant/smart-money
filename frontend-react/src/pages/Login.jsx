@@ -45,6 +45,7 @@ function Login() {
 				label="Password"
 				id="password"
 				placeholder="Enter Password"
+				typePassword="password"
 				inputValue={password}
 				setValue={setPassword}
 				handleSubmit={handleSubmit}
