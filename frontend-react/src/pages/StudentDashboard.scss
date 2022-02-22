@@ -8,7 +8,7 @@
 		margin-bottom: 50px;
 
 		.dashboard-top-left {
-			flex: 1;
+			flex: 1.5;
 			align-self: center;
 
 			.cashflow {
@@ -52,8 +52,7 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			flex: 2;
-			border: 1px solid #828282;
+			flex: 2.5;
 			margin-left: 1%;
 
 			.chart {
@@ -133,9 +132,51 @@
 		}
 
 		.dashboard-bottom-right {
+			display: flex;
 			border: 1px solid #828282;
-			margin-left: 10px;
 			flex: 1;
+			align-items: center;
+			justify-content: center;
+
+			.dashboard-bottom-right-account-balance {
+				width: 60%;
+
+				.account-balance {
+					display: flex;
+					align-items: center;
+					margin: 15px 0;
+	
+					.col-1 {
+						color: #ffffff;
+						background-color: #828282;
+						border-top-left-radius: 1.5rem;
+						border-bottom-left-radius: 1.5rem;
+						padding: 10px;
+						flex: 1;
+						text-align: center;
+					}
+	
+					.col-1-green {
+						color: #ffffff;
+						background-color: #3dae70;
+						border-top-left-radius: 1.5rem;
+						border-bottom-left-radius: 1.5rem;
+						padding: 10px;
+						flex: 1;
+						text-align: center;
+					}
+	
+					.col-2 {
+						color: #828282;
+						background-color: #f2f2f2;
+						border-top-right-radius: 1.5rem;
+						border-bottom-right-radius: 1.5rem;
+						padding: 10px;
+						flex: 2;
+						text-align: center;
+					}
+				}
+			}
 		}
 	}
 }

@@ -18,8 +18,11 @@ function StudentDashboard() {
 	const [savings, setSavings] = useState(0);
 	const [investments, setInvestments] = useState(0);
 	const [chequings, setChequings] = useState(0);
+	const [accountBalance, setAccountBalance] = useState({});
 
 	useEffect(() => {
+		const studentId = user.id;
+
 		axios
 			.get(`/api/simulations/cashflow/${simulationKey}`)
 			.then((res) => {
@@ -38,6 +41,11 @@ function StudentDashboard() {
 			.get(`/api/simulations/marketdata/${simulationKey}`)
 			.then((res) => setMarketData(JSON.parse(res.data[0].mock_market_data)))
 			.catch((err) => console.log(err.message));
+
+		axios
+			.get(`/api/students/accountbalance/${studentId}`)
+			.then((res) => setAccountBalance(res.data))
+			.catch((err) => console.log(err.message));
 	}, []);
 
 	useEffect(() => {
@@ -50,7 +58,12 @@ function StudentDashboard() {
 		axios
 			.put(`/api/students/allocations/${studentId}`, monthlyAllocations)
 			.then()
-			.catch();
+			.catch((err) => console.log(err.message));
+
+		axios
+			.get(`/api/students/accountbalance/${studentId}`)
+			.then((res) => setAccountBalance(res.data))
+			.catch((err) => console.log(err.message));
 	}, [savings, investments, surplus]);
 
 	const decreaseSavingsAmount = () => {
@@ -104,7 +117,7 @@ function StudentDashboard() {
 						<span className="col-2">${income.toLocaleString()} / m</span>
 					</div>
 					<div className="cashflow">
-						<span className="col-1">Expenses</span>
+						<span className="col-1">Expense</span>
 						<span className="col-2">${expense.toLocaleString()} / m</span>
 					</div>
 					<div className="cashflow">
@@ -120,7 +133,7 @@ function StudentDashboard() {
 				<div className="dashboard-bottom-left">
 					<h3>Monthly Allocations</h3>
 					<div className="allocation">
-						<span className="col-1">Savings</span>
+						<span className="col-1">Saving</span>
 						<span className="col-2" onClick={decreaseSavingsAmount}>
 							-
 						</span>
@@ -130,7 +143,7 @@ function StudentDashboard() {
 						</span>
 					</div>
 					<div className="allocation">
-						<span className="col-1">Investments</span>
+						<span className="col-1">Investment</span>
 						<span className="col-2" onClick={decreaseInvestmentsAmount}>
 							-
 						</span>
@@ -140,13 +153,33 @@ function StudentDashboard() {
 						</span>
 					</div>
 					<div className="allocation chequings">
-						<span className="col-1">Chequings</span>
+						<span className="col-1">Chequing</span>
 						<span className="col-2"></span>
 						<span className="col-3">${chequings.toLocaleString()}</span>
 						<span className="col-4"></span>
 					</div>
 				</div>
-				<div className="dashboard-bottom-right"></div>
+				<div className="dashboard-bottom-right">
+					<div className="dashboard-bottom-right-account-balance">
+						<h3>My Account Balance</h3>
+						<div className="account-balance">
+							<span className="col-1">Saving</span>
+							<span className="col-2">${Number(accountBalance.savings).toLocaleString()}</span>
+						</div>
+						<div className="account-balance">
+							<span className="col-1">Investment</span>
+							<span className="col-2">${Number(accountBalance.investment).toLocaleString()}</span>
+						</div>
+						<div className="account-balance">
+							<span className="col-1">Chequing</span>
+							<span className="col-2">${Number(accountBalance.chequing).toLocaleString()}</span>
+						</div>
+						<div className="account-balance">
+							<span className="col-1-green">Total</span>
+							<span className="col-2">${Number(accountBalance.total).toLocaleString()}</span>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

@@ -2,7 +2,7 @@ const router = require('express').Router();
 const dbHelpers = require('../db/dbHelpers');
 
 module.exports = (db) => {
-	const { updateMonthlyAllocations } = dbHelpers(db);
+	const { updateMonthlyAllocations, getStudentAccountBalance } = dbHelpers(db);
 
 	router.get('/', (req, res) => {
 		const query = 'SELECT * FROM students';
@@ -97,6 +97,28 @@ module.exports = (db) => {
 			})
 			.catch(e => console.log(e.message));
 	});
+
+	// get current student account balance
+	router.get(`/accountbalance/:studentId`, (req, res) => {
+		const { studentId } = req.params;
+
+		getStudentAccountBalance(studentId)
+			.then((data) => {
+				const accountBalance = {};
+				let totalBalance = 0;
+
+				for (const row of data) {
+					accountBalance[row.account_type.toLowerCase()] = (row.balance / 100).toFixed(2);
+
+					totalBalance += Number((row.balance / 100).toFixed(2));
+				}
+
+				accountBalance.total = totalBalance.toString();
+
+				res.json(accountBalance)
+			})
+			.catch(e => console.log(e.message));
+	})
 
 
 	return router;
