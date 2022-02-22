@@ -1,7 +1,9 @@
-const INTERVAL_SECONDS = 2;
+const INTERVAL_SECONDS = 1.5;
 const dbHelpers = require('../db/dbHelpers');
 const { fancyLog, log } = require('../helpers/fancyLogger');
 const Simulation = require('./Simulation');
+
+const DEBUG_LOGS = false;
 
 
 module.exports = (io, db) => {
@@ -95,7 +97,7 @@ module.exports = (io, db) => {
       syncPromises.push(sim.sync());
     }
     await Promise.all(syncPromises);
-    // fancyLog('🔸', 'Done syncing simulations');
+    DEBUG_LOGS && fancyLog('🔸', 'Done syncing simulations');
 
 
     // Update all simulation models with
@@ -107,7 +109,7 @@ module.exports = (io, db) => {
       updatePromises.push(sim.update());
     }
     await Promise.all(updatePromises);
-    // fancyLog('🔸', 'Done updating simulations');
+    DEBUG_LOGS && fancyLog('🔸', 'Done updating simulations');
 
 
     // Broadcast changes to sockets connected
@@ -117,7 +119,7 @@ module.exports = (io, db) => {
       castPromises.push(sim.broadcast());
     }
     await Promise.all(castPromises);
-    // fancyLog('🔸', 'Done broadcasting updates from simulations to socket connections');
+    DEBUG_LOGS && fancyLog('🔸', 'Done broadcasting updates from simulations to socket connections');
 
   }
 
