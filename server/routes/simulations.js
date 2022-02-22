@@ -59,7 +59,7 @@ module.exports = (db) => {
 
 						const insertAccounts = `
 							INSERT INTO accounts(account_type, balance, student_id)
-							VALUES ('Savings', $1, $2), ('Investments', $3, $2), ('Chequings', $4, $2)
+							VALUES ('Savings', $1, $2), ('Investment', $3, $2), ('Chequing', $4, $2)
 							RETURNING *
 						`;
 

@@ -1,4 +1,4 @@
-const INTERVAL_SECONDS = 5;
+const INTERVAL_SECONDS = 2;
 const dbHelpers = require('../db/dbHelpers');
 const { fancyLog, log } = require('../helpers/fancyLogger');
 const Simulation = require('./Simulation');

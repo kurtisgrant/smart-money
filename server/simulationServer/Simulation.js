@@ -1,10 +1,10 @@
 const dbHelpersConstructor = require('../db/dbHelpers');
 const { fancyLog, log } = require('../helpers/fancyLogger');
 
-const INFLATION = 0.02 / 12
-const SAV_INTEREST = 0.015 / 12
-const MONTHLY_SAV_FACTOR = SAV_INTEREST - INFLATION;
-const MONTHLY_CHE_FACTOR = - INFLATION;
+const INFLATION = 0.02 / 12;
+const SAV_INTEREST = 0.015 / 12;
+const MONTHLY_SAV_FACTOR = 1 + SAV_INTEREST - INFLATION;
+const MONTHLY_CHE_FACTOR = 1 - INFLATION;
 
 // Model for single simulation entity
 class Simulation {
@@ -40,6 +40,7 @@ class Simulation {
   // is required by each. (Sends data as it
   // is in this model when method is called)
   async broadcast() {
+    if (!this.isPlaying) return;
     fancyLog('🔈', ['broadcasting for simulation', this.simId], 0, true);
     this.teacherSockets.forEach(teacherSocket => {
       const teacherUpdate = {
@@ -75,38 +76,50 @@ class Simulation {
   // balances/transactions then
   // persist them to the database
   async update() {
+    if (!this.isPlaying) return;
     fancyLog('🔷', ['update', this.simId], 2);
-    const dbH = this.dbHelpers
+    const dbH = this.dbHelpers;
 
     this.currentMonth++;
     await dbH.setCurrentMonth(this.simId, this.currentMonth);
 
-    const curStockPrice = this.marketData.find(dataPoint => dataPoint.x = this.currentMonth);
+    const curStockPrice = this.marketData.find(dataPoint => dataPoint.x === this.currentMonth).y;
 
     const stuIds = Object.keys(this.students);
 
-    const stuDbPromises = []
+    // const stuDbPromises = [];
+    fancyLog('🔺', 'before students loop', 1);
     for (const stuId of stuIds) {
       const stu = this.students[stuId];
-      
+      fancyLog('🔺', `start of loop for ${stu.name}`, 1);
+
       const stocksToBuy = Math.floor(toDollars(stu.invAllocation) / curStockPrice);
       const newTotalStocks = sumStocks(stu.marketTransactions) + stocksToBuy;
-      stuDbPromises.push(dbH.submitMarketTransaction(stuId, stocksToBuy));
+
+      fancyLog('🔺', `before submit marketTransaction ${stu.name}`, 1);
+      // stuDbPromises.push(dbH.submitMarketTransaction(stuId, stocksToBuy));
+      if (stocksToBuy) await dbH.submitMarketTransaction(stuId, stocksToBuy);
       const valOfTotalStocks = newTotalStocks * curStockPrice;
-      
+
       stu.inv = valOfTotalStocks;
-      
-      stu.che *= MONTHLY_CHE_FACTOR;
-      stu.sav *= MONTHLY_SAV_FACTOR;
+
+      log({ stu });
+      stu.che = Math.round(stu.che * MONTHLY_CHE_FACTOR);
+      stu.sav = Math.round(stu.sav * MONTHLY_SAV_FACTOR);
 
       const leftoverInvAllocationDollars = toDollars(stu.invAllocation) - stocksToBuy * curStockPrice;
       stu.sav += toCents(leftoverInvAllocationDollars);
       stu.sav += stu.savAllocation;
-      stu.che += stu.cheAllocation;
+      const cheAllocation = stu.income - stu.expense - stu.invAllocation - stu.savAllocation;
+      stu.che += cheAllocation;
 
-      stuDbPromises.push(dbH.setAccountBalances(stu.stuId, stu.che, stu.sav, stu.inv))
+      // stuDbPromises.push(dbH.setAccountBalances(stu.stuId, stu.che, stu.sav, stu.inv));
+      fancyLog('🔺', `before setAccountBalances ${stu.name}`, 1);
+      console.log(stu.stuId, stu.che, stu.sav, stu.inv);
+      const setBals = await dbH.setAccountBalances(stu.stuId, stu.che, stu.sav, stu.inv);
+      log({ setBals });
     }
-    await Promise.all(stuDbPromises)
+    // await Promise.all(stuDbPromises);
   }
 
 
@@ -138,7 +151,11 @@ class Simulation {
     // Loop through students, adding their individual market transactions to each
     for (let i = 0; i < dbStudentsAndAccounts.length; i++) {
       const student = dbStudentsAndAccounts[i];
+      student.che = Number(student.che);
+      student.sav = Number(student.sav);
+      student.inv = Number(student.inv);
       const studentMarketTransactions = await dbH.getMarketTransactionsForStudent(student.stuId);
+
       student.marketTransactions = studentMarketTransactions;
       newStudentsObj[student.stuId] = student;
     }
@@ -182,10 +199,10 @@ class Simulation {
 
 function parseStuDataForTeacher(students) {
   const dataForTeacher = Object.values(students).map(stu => {
-    const { name, stuId, che, sav, inv } = stu;
-    return { name, stuId, che, sav, inv };
+    const { name, stuId, che, sav, inv, accessCode: stuAccCode } = stu;
+    return { name, stuId, che, sav, inv, stuAccCode };
   });
-  return dataForTeacher
+  return dataForTeacher;
 }
 function sumStocks(transactions) {
   let sum = 0;
