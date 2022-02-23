@@ -2,6 +2,12 @@
 	display: flex;
 	flex-direction: column;
 
+	.dashboard-greeting {
+		text-align: center;
+		font-style: italic;
+		margin-bottom: 2%;
+	}
+
 	.dashboard-top {
 		display: flex;
 		height: 40vh;
@@ -52,12 +58,12 @@
 
 		.dashboard-top-right {
 			display: flex;
-			justify-content: center;
+			justify-content: flex-end;
 			align-items: center;
 			flex: 3;
 
 			.chart {
-				width: 90%;
+				width: 85%;
 			}
 		}
 	}
@@ -69,9 +75,7 @@
 		.dashboard-bottom-left {
 			display: flex;
 			flex: 1;
-			// align-self: center;
-			// justify-content: center;
-			margin-top: 5%;
+			margin-top: 4%;
 
 			.dashboard-bottom-left-allocations {
 				width: 75%;
@@ -142,7 +146,7 @@
 		.dashboard-bottom-right {
 			display: flex;
 			flex: 1;
-			margin-top: 5%;
+			margin-top: 4%;
 			// align-items: center;
 			justify-content: center;
 
