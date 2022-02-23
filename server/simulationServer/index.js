@@ -1,7 +1,5 @@
-<<<<<<< HEAD
-const INTERVAL_SECONDS = 0.5
-=======
->>>>>>> main
+const INTERVAL_SECONDS = 0.6;
+
 const dbHelpers = require('../db/dbHelpers');
 const { fancyLog, log } = require('../helpers/fancyLogger');
 const Simulation = require('./Simulation');
