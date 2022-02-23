@@ -67,28 +67,6 @@ function Simulations() {
 						No saved simulations
 					</div>
 				)}
-				{/* <table className="simulation-list">
-					<tbody>
-						<tr>
-							<th className="head-col-1">Simulation Name</th>
-							<th className="head-col-2">Created Date</th>
-							<th className="head-col-3">Delete</th>
-						</tr>
-						{simulations.length > 0 ? (
-							simulations.map((simulation) => (
-								<SimulationListItem
-									key={simulation.id}
-									simulation={simulation}
-									onDelete={deleteSimulation}
-								/>
-							))
-						) : (
-							<tr className="simulation-empty">
-								<td colSpan="3">No simulation saved</td>
-							</tr>
-						)}
-					</tbody>
-				</table> */}
 			</section>
 		</div>
 	);
