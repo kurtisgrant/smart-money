@@ -36,7 +36,7 @@ function SimulationControlPanel() {
 			socket.off('CTRL_PANEL_UPDATE', updateHandler);
 		};
 	}, []);
-
+	console.log(studentsBalance)
 	const studentsBalanceList = studentsBalance.map(student => {
 		const { stuId: id, stuAccCode: studentAccessCode, name, che, sav, inv } = student;
 
@@ -46,6 +46,7 @@ function SimulationControlPanel() {
 				<td>${Number(sav / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
 				<td>${Number(inv / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
 				<td>${Number(che / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+				<td>${Number((sav + inv + che) / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
 			</tr>
 		);
 	});
@@ -95,6 +96,7 @@ function SimulationControlPanel() {
 							<th>Saving</th>
 							<th>Investment</th>
 							<th>Chequing</th>
+							<th>Total</th>
 						</tr>
 						{studentsBalanceList}
 					</tbody>

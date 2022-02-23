@@ -120,11 +120,6 @@ function NewSimulation() {
 					/>
 				</div>
 				<div className="simulation-view-right">
-					{/* <GraphWithPlayhead
-						marketData={randomMarketData}
-						currentMonth={0}
-						zeroIndex={10 * 12}
-					/> */}
 					{randomMarketData.length && (
 						<LineChart marketData={randomMarketData} currentMonth={0} />
 					)}
@@ -156,7 +151,11 @@ function NewSimulation() {
 						Add Student
 					</Button>
 				</div>
-				<StudentList studentsList={students} onDelete={deleteStudent} />
+				{students.length > 0 ? (
+					<StudentList studentsList={students} onDelete={deleteStudent} />
+				) : (
+					<div className="student-empty">Add students to create a new simulation</div>
+				)}
 			</div>
 		</div>
 	);
