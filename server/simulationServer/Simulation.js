@@ -36,7 +36,7 @@ class Simulation {
     await this.setAllStudentData();
     await this.mountStudentSockets();
     await this.mountTeacherSockets();
-    return this
+    return this;
   }
 
   // Emit updates to all connected sockets
@@ -51,8 +51,8 @@ class Simulation {
         currentMonth: this.currentMonth,
         studentData: parseStuDataForTeacher(this.students)
       };
-        DEBUG_METHOD_LOGS && fancyLog('↳', `${teacherSocket.user.name} has a connected socket. Emiting update for month ${this.currentMonth}.`, 2);
-        teacherSocket.emit('CTRL_PANEL_UPDATE', teacherUpdate);
+      DEBUG_METHOD_LOGS && fancyLog('↳', `${teacherSocket.user.name} has a connected socket. Emiting update for month ${this.currentMonth}.`, 2);
+      teacherSocket.emit('CTRL_PANEL_UPDATE', teacherUpdate);
     });
     Object.values(this.students).forEach(student => {
       const studentMarketData = this.marketData.filter(dataPoint => dataPoint.x <= this.currentMonth);
@@ -80,7 +80,17 @@ class Simulation {
     DEBUG_METHOD_LOGS && fancyLog('🔷', ['update', this.simId], 2);
     const dbH = this.dbHelpers;
 
+
     this.currentMonth++;
+
+    // If next month has no marketData, don't update.
+    if (!this.marketData.find(d => d.x === this.currentMonth)) {
+      await dbH.toggleIsPlaying(this.simId);
+
+      fancyLog('🟥', `SIMULATION ${this.simId} COMPLETE`);
+      return;
+    }
+
     await dbH.setCurrentMonth(this.simId, this.currentMonth);
 
     const curStockPrice = this.marketData.find(dataPoint => dataPoint.x === this.currentMonth).y;
