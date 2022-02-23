@@ -122,7 +122,9 @@ module.exports = (db) => {
 		const { simulationKey } = req.params;
 
 		const query = `
-			SELECT income, expense FROM simulations
+			SELECT simulations.income, simulations.expense, simulations.name, teachers.name AS teacherName
+			FROM simulations
+			JOIN teachers ON teachers.id = simulations.teacher_id
 			WHERE simulation_key = $1
 			`;
 
