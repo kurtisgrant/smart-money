@@ -64,7 +64,7 @@ function Simulations() {
 					</table>
 				) : (
 					<div className="simulation-empty">
-						No simulations saved
+						No saved simulations
 					</div>
 				)}
 				{/* <table className="simulation-list">
