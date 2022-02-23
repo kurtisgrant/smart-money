@@ -151,32 +151,34 @@ function StudentDashboard() {
 			</div>
 			<div className="dashboard-bottom">
 				<div className="dashboard-bottom-left">
-					<h3>Monthly Allocations</h3>
-					<div className="allocation">
-						<span className="col-1">Saving</span>
-						<span className="col-2" onClick={decreaseSavingsAmount}>
-							-
-						</span>
-						<span className="col-3">${savings.toLocaleString()}</span>
-						<span className="col-4" onClick={increaseSavingsAmount}>
-							+
-						</span>
-					</div>
-					<div className="allocation">
-						<span className="col-1">Investment</span>
-						<span className="col-2" onClick={decreaseInvestmentsAmount}>
-							-
-						</span>
-						<span className="col-3">${investments.toLocaleString()}</span>
-						<span className="col-4" onClick={increaseInvestmentsAmount}>
-							+
-						</span>
-					</div>
-					<div className="allocation chequings">
-						<span className="col-1">Chequing</span>
-						<span className="col-2"></span>
-						<span className="col-3">${chequings.toLocaleString()}</span>
-						<span className="col-4"></span>
+					<div className="dashboard-bottom-left-allocations">
+						<h3>Monthly Allocations</h3>
+						<div className="allocation">
+							<span className="col-1">Saving</span>
+							<span className="col-2" onClick={decreaseSavingsAmount}>
+								-
+							</span>
+							<span className="col-3">${savings.toLocaleString()}</span>
+							<span className="col-4" onClick={increaseSavingsAmount}>
+								+
+							</span>
+						</div>
+						<div className="allocation">
+							<span className="col-1">Investment</span>
+							<span className="col-2" onClick={decreaseInvestmentsAmount}>
+								-
+							</span>
+							<span className="col-3">${investments.toLocaleString()}</span>
+							<span className="col-4" onClick={increaseInvestmentsAmount}>
+								+
+							</span>
+						</div>
+						<div className="allocation chequings">
+							<span className="col-1">Chequing</span>
+							<span className="col-2"></span>
+							<span className="col-3">${chequings.toLocaleString()}</span>
+							<span className="col-4"></span>
+						</div>
 					</div>
 				</div>
 				<div className="dashboard-bottom-right">
