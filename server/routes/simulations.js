@@ -138,7 +138,7 @@ module.exports = (db) => {
 		const { simulationKey } = req.params;
 
 		const query = `
-			SELECT mock_market_data FROM simulations
+			SELECT mock_market_data, name FROM simulations
 			WHERE simulation_key = $1
 		`;
 
