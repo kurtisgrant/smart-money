@@ -53,6 +53,9 @@ const LineChart = ({ marketData, currentMonth }) => {
   });
   const [options, setOptions] = useState({
     responsive: true,
+    animation: {
+      duration: 0
+    },
     elements: {
       point: {
         radius: 0
@@ -100,6 +103,9 @@ const LineChart = ({ marketData, currentMonth }) => {
   useEffect(() => {
     setOptions({
       responsive: true,
+      animation: {
+        duration: 0
+      },
       elements: {
         point: {
           radius: 0
