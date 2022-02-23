@@ -35,7 +35,7 @@ function StudentDashboard() {
 		// };
 		//
 		console.log(studentData);
-		const { sav, inv, che } = studentData;
+		const { sav, inv, che, marketData } = studentData;
 		
 		setAccountBalance({
 			sav: sav / 100,
@@ -43,6 +43,8 @@ function StudentDashboard() {
 			che: che / 100,
 			total: (sav + inv + che) / 100
 		});
+
+		setMarketData(marketData);
 	};
 
 	useEffect(() => {
