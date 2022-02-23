@@ -19,9 +19,36 @@ function StudentDashboard() {
 	const [investments, setInvestments] = useState(0);
 	const [chequings, setChequings] = useState(0);
 	const [accountBalance, setAccountBalance] = useState({});
+	
+	const updateHandler = (studentData) => {
+		// Structure of studentData object from web socket:
+		//
+		// const studentUpdate = {
+		// 	isPlaying: this.isPlaying,
+		// 	marketData: studentMarketData,
+		// 	income: student.income,
+		// 	expense: student.expense,
+		// 	che: student.che,
+		// 	sav: student.sav,
+		// 	inv: student.inv,
+		// 	marketTransactions: student.marketTransactions
+		// };
+		//
+		console.log(studentData);
+		const { sav, inv, che, marketData } = studentData;
+		
+		setAccountBalance({
+			sav: sav / 100,
+			inv: inv / 100,
+			che: che / 100,
+			total: (sav + inv + che) / 100
+		});
+
+		setMarketData(marketData);
+	};
 
 	useEffect(() => {
-		const studentId = user.id;
+		if(!socket) return;
 
 		axios
 			.get(`/api/simulations/cashflow/${simulationKey}`)
@@ -37,16 +64,14 @@ function StudentDashboard() {
 			})
 			.catch((err) => console.log(err.message));
 
-		axios
-			.get(`/api/simulations/marketdata/${simulationKey}`)
-			.then((res) => setMarketData(JSON.parse(res.data[0].mock_market_data)))
-			.catch((err) => console.log(err.message));
+		socket.on('STUDENT_DASH_UPDATE', updateHandler);
+		socket.emit('REQ_STUDENT_DASH_UPDATE', user);
 
-		axios
-			.get(`/api/students/accountbalance/${studentId}`)
-			.then((res) => setAccountBalance(res.data))
-			.catch((err) => console.log(err.message));
-	}, []);
+		return () => {
+			socket.off('STUDENT_DASH_UPDATE', updateHandler);
+		};
+
+	}, [socket]);
 
 	useEffect(() => {
 		setChequings(surplus - savings - investments);
@@ -57,13 +82,8 @@ function StudentDashboard() {
 
 		axios
 			.put(`/api/students/allocations/${studentId}`, monthlyAllocations)
-			.then()
 			.catch((err) => console.log(err.message));
 
-		axios
-			.get(`/api/students/accountbalance/${studentId}`)
-			.then((res) => setAccountBalance(res.data))
-			.catch((err) => console.log(err.message));
 	}, [savings, investments, surplus]);
 
 	const decreaseSavingsAmount = () => {
@@ -164,15 +184,15 @@ function StudentDashboard() {
 						<h3>My Account Balance</h3>
 						<div className="account-balance">
 							<span className="col-1">Saving</span>
-							<span className="col-2">${Number(accountBalance.savings).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+							<span className="col-2">${Number(accountBalance.sav).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
 						</div>
 						<div className="account-balance">
 							<span className="col-1">Investment</span>
-							<span className="col-2">${Number(accountBalance.investment).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+							<span className="col-2">${Number(accountBalance.inv).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
 						</div>
 						<div className="account-balance">
 							<span className="col-1">Chequing</span>
-							<span className="col-2">${Number(accountBalance.chequing).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+							<span className="col-2">${Number(accountBalance.che).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
 						</div>
 						<div className="account-balance">
 							<span className="col-1-green">Total</span>

@@ -70,6 +70,14 @@ module.exports = (io, db) => {
       fancyLog('🚪<=', `${socket.user?.name} left simulation ${simId} (${simKey})`, 0, true);
     });
 
+    socket.on('REQ_STUDENT_DASH_UPDATE', async (user) => {
+      if (!socket.user) {
+        await setUser(user);
+      }
+      const simModel = await loadSimulation(socket.user.simulation_id);
+      simModel.broadcast();
+    });
+
     socket.on('PLAY_PAUSE_SIMULATION', async (simulationKey) => {
       // Validate request
       const simId = await getSimulationId(simulationKey);
