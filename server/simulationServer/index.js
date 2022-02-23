@@ -137,9 +137,7 @@ module.exports = (io, db) => {
     let castPromises = [];
     for (const simId in loadedSimulations) {
       const sim = loadedSimulations[simId];
-      if (sim.isPlaying) {
-        castPromises.push(sim.broadcast());
-      }
+      castPromises.push(sim.broadcast());
     }
     await Promise.all(castPromises);
     DEBUG_LOGS && fancyLog('🔸', 'Done broadcasting updates from simulations to socket connections');
