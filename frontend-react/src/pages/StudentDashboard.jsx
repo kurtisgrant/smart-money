@@ -48,6 +48,8 @@ function StudentDashboard() {
 	};
 
 	useEffect(() => {
+		if(!socket) return;
+
 		axios
 			.get(`/api/simulations/cashflow/${simulationKey}`)
 			.then((res) => {
@@ -69,7 +71,7 @@ function StudentDashboard() {
 			socket.off('STUDENT_DASH_UPDATE', updateHandler);
 		};
 
-	}, []);
+	}, [socket]);
 
 	useEffect(() => {
 		setChequings(surplus - savings - investments);
