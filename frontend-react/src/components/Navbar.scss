@@ -8,9 +8,21 @@
   align-items: center;
   background-color: #3DAE70;
 
-  .logo-image {
-    width: 60px;
-    height: 60px;
+  .logo {
+    display: flex;
+    color: #FFFFFF;
+
+    .logo-image {
+      width: 60px;
+      height: 60px;
+    }
+  
+    .app-name {
+      align-self: center;
+      font-weight: 700;
+      font-size: larger;
+      margin-left: 10px;
+    }
   }
 
   .simulation-name {
