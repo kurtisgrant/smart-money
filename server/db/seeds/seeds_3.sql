@@ -91,8 +91,8 @@ INSERT INTO students (name, access_code, income, expense, savings_allocation, in
 VALUES 
 ('Sally Savings', 'Z5ZqP', 300000, 270000, 20000, 5000, 2), 
 ('Chad Chequings', 'qKKSL', 300000, 270000, 5000, 5000, 2), 
-('Ivan Investor', 'R3VMi', 300000, 270000, 5000, 20000, 2), 
-('Diversified Dan', 'zrC1k', 300000, 270000, 10000, 10000, 2), 
+('Diversified Dan', 'zrC1k', 300000, 270000, 10000, 10000, 2),
+('Ivan Investor', 'R3VMi', 300000, 270000, 5000, 20000, 2);
 
 INSERT INTO accounts (account_type, balance, student_id)
 VALUES 
@@ -113,5 +113,5 @@ VALUES
  VALUES
  (10, 437, 20),
  (10, 437, 23),
- (10, 2489, 26),
- (10, 1132, 29);
+ (10, 1132, 29),
+ (10, 2489, 26);
