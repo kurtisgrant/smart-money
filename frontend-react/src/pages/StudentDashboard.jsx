@@ -21,6 +21,7 @@ function StudentDashboard() {
 	const [accountBalance, setAccountBalance] = useState({});
 	const [simulationName, setSimulationName] = useState('');
 	const [teacherName, setTeacherName] = useState('');
+	const currentMonth = marketData[marketData.length - 1]?.x;
 	
 	const updateHandler = (studentData) => {
 
