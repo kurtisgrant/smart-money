@@ -4,7 +4,7 @@ const dbHelpers = require('../db/dbHelpers');
 const { fancyLog, log } = require('../helpers/fancyLogger');
 const Simulation = require('./Simulation');
 
-const DEBUG_LOGS = false;
+const DEBUG_LOGS = true;
 
 
 module.exports = (io, db) => {

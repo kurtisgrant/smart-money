@@ -104,15 +104,16 @@ function NewSimulation() {
 						inputValue={simulationName}
 						setValue={setSimulationName}
 					/>
+					<h4>Monthly Cashflow</h4>
 					<SingleFieldForm
-						label="Student Income ($)"
+						label="Income ($)"
 						id="student-income"
 						placeholder="Set student income"
 						inputValue={studentIncome}
 						setValue={setStudentIncome}
 					/>
 					<SingleFieldForm
-						label="Student Expense ($)"
+						label="Expense ($)"
 						id="student-expense"
 						placeholder="Set student expense"
 						inputValue={studentExpense}
