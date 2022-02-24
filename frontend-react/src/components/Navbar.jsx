@@ -25,6 +25,7 @@ function Navbar({ appState, logout }) {
 				<Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
 					<img src={Logo} alt="logo" className="logo-image" />
 				</Link>
+					<div className="app-name">SmartMoney</div>
 			</div>
 			{user && authUserDiv}
 		</div>
