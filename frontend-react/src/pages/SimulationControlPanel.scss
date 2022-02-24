@@ -17,21 +17,31 @@
       width: 100%;
     }
 
-    .simulation-run-buttons {
-      align-self: flex-end;
+    .below-chart-container {
+      display: grid;
+      grid-template-columns: 1fr 3fr 1fr;
+      grid-column-gap: 5px;
+      justify-items: center;
+      align-items: center;
+      width: 100%;
 
+      .month-price-container {
+        font-weight: bold;
+        grid-column-start: 2;
+      }
       .button {
-        margin: 5px 0 5px 5px;
+        margin: 5px 0 5px auto;
       }
     }
   }
 
   .simulation-control-panel-student-list {
+    margin-top: 30px;
     display: flex;
     flex-direction: column;
 
     .list-heading {
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
     .student-list-balance {
