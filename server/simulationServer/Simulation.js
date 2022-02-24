@@ -6,8 +6,8 @@ const SAV_INTEREST = 0.015 / 12;
 const MONTHLY_SAV_FACTOR = 1 + SAV_INTEREST - INFLATION;
 const MONTHLY_CHE_FACTOR = 1 - INFLATION;
 
-const DEBUG_METHOD_LOGS = true;
-const TEMP_DEBUG_LOGS = true;
+const DEBUG_METHOD_LOGS = false;
+const TEMP_DEBUG_LOGS = false;
 
 // Model for single simulation entity
 class Simulation {

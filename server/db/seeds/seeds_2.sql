@@ -1,5 +1,5 @@
-INSERT INTO teachers (name, email, password)
-VALUES ('Mrs. Krabappel', 'krabappel@lhl.com', '123456789');
+-- INSERT INTO teachers (name, email, password)
+-- VALUES ('Mrs. Krabappel', 'krabappel@lhl.com', '123456789');
 
 -- INSERT INTO simulations(name,
 --                         simulation_key,
