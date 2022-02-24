@@ -8,6 +8,7 @@ import CopyClipboard from '../components/CopyClipboard';
 import Button from '../components/Button';
 import axios from 'axios';
 import './SimulationControlPanel.scss';
+import MonthPriceIndicator from '../components/MonthPriceIndicator';
 
 function SimulationControlPanel() {
 	const { simulationKey } = useParams();
@@ -42,11 +43,11 @@ function SimulationControlPanel() {
 
 		return (
 			<tr key={id} className="student">
-				<td>{name} <span className="student-access-code">({studentAccessCode})</span></td>
-				<td>${Number(sav / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-				<td>${Number(inv / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-				<td>${Number(che / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-				<td>${Number((sav + inv + che) / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+				<td><b>{name}</b> <span className="student-access-code">({studentAccessCode})</span></td>
+				<td>${Number(sav / 100).toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
+				<td>${Number(inv / 100).toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
+				<td>${Number(che / 100).toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
+				<td><b>${Number((sav + inv + che) / 100).toLocaleString(undefined, {maximumFractionDigits: 0})}</b></td>
 			</tr>
 		);
 	});
@@ -77,7 +78,8 @@ function SimulationControlPanel() {
 			<CopyClipboard accessLink={window.location.href} />
 			<div className="simulation-control-panel">
 				<LineChart marketData={marketData} currentMonth={currentMonth} />
-				<div className="simulation-run-buttons">
+				<div className="below-chart-container">
+					<MonthPriceIndicator marketData={marketData} currentMonth={currentMonth} />
 					{
 						isPlaying ?
 							<Button white onClick={playPauseHandler}>Pause</Button> :
@@ -92,7 +94,7 @@ function SimulationControlPanel() {
 				<table className="student-list-balance">
 					<tbody>
 						<tr>
-							<th>Name (Access Code)</th>
+							<th>Name</th>
 							<th>Saving</th>
 							<th>Investment</th>
 							<th>Chequing</th>
