@@ -41,7 +41,7 @@ function AccessCodeLogin() {
 					handleSubmit={handleSubmit}
 				/>
 			</div>
-			<section className="login-error">{error}</section>
+			{/* <section className="login-error">{error}</section> */}
 			<Button green onClick={handleSubmit}>
 				Enter
 			</Button>
