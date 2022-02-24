@@ -16,14 +16,19 @@ function SimulationControlPanel() {
 	const { socket } = useContext(SocketContext);
 	const [marketData, setMarketData] = useState([]);
 	const [currentMonth, setCurrentMonth] = useState(0);
-	const [studentData, setStudentData] = useState([]);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [studentsBalance, setStudentsBalance] = useState([]);
+	const [simulationName, setSimulationName] = useState('');
+
 
 	useEffect(() => {
 		axios
 			.get(`/api/simulations/marketdata/${simulationKey}`)
-			.then((res) => setMarketData(JSON.parse(res.data[0].mock_market_data)))
+			.then((res) => {
+				console.log('=====================', res.data)
+				setMarketData(JSON.parse(res.data[0].mock_market_data))
+				setSimulationName(res.data[0].name);
+			})
 			.catch((err) => console.log(err.message));
 
 		// Socket stuff
@@ -37,7 +42,7 @@ function SimulationControlPanel() {
 			socket.off('CTRL_PANEL_UPDATE', updateHandler);
 		};
 	}, []);
-	console.log(studentsBalance)
+
 	const studentsBalanceList = studentsBalance.map(student => {
 		const { stuId: id, stuAccCode: studentAccessCode, name, che, sav, inv } = student;
 
@@ -75,6 +80,9 @@ function SimulationControlPanel() {
 
 	return (
 		<div className="simulation-control-panel-container">
+			<div className="simulation-control-panel-name">
+				<h2>{simulationName}</h2>
+			</div>
 			<CopyClipboard accessLink={window.location.href} />
 			<div className="simulation-control-panel">
 				<LineChart marketData={marketData} currentMonth={currentMonth} />

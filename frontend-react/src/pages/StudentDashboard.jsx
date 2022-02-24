@@ -12,7 +12,6 @@ function StudentDashboard() {
 	const { user } = useContext(UserContext);
 	const { socket } = useContext(SocketContext);
 	const [marketData, setMarketData] = useState([]);
-	const [currentMonth, setCurrentMonth] = useState(0);
 	const [income, setIncome] = useState(0);
 	const [expense, setExpense] = useState(0);
 	const [surplus, setSurplus] = useState(0);
@@ -20,6 +19,8 @@ function StudentDashboard() {
 	const [investments, setInvestments] = useState(0);
 	const [chequings, setChequings] = useState(0);
 	const [accountBalance, setAccountBalance] = useState({});
+	const [simulationName, setSimulationName] = useState('');
+	const [teacherName, setTeacherName] = useState('');
 	
 	const updateHandler = (studentData) => {
 
@@ -45,11 +46,14 @@ function StudentDashboard() {
 				const incomeData = Number(res.data[0].income) / 100;
 				const expenseData = Number(res.data[0].expense) / 100;
 				const surplusData = incomeData - expenseData;
+				console.log(res)
 
 				setIncome(incomeData);
 				setExpense(expenseData);
 				setSurplus(surplusData);
 				setChequings(surplusData);
+				setSimulationName(res.data[0].name);
+				setTeacherName(res.data[0].teachername);
 			})
 			.catch((err) => console.log(err.message));
 
@@ -118,6 +122,9 @@ function StudentDashboard() {
 
 	return (
 		<div className="dashboard-container">
+			<div className="dashboard-greeting">
+				<h2>{`Welcome to ${teacherName}'s ${simulationName}`}</h2>
+			</div>
 			<div className="dashboard-top">
 				<div className="dashboard-top-left">
 					<h3>Monthly Cashflow</h3>

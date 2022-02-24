@@ -1,6 +1,12 @@
 .simulation-control-panel-container {
 	display: flex;
 	flex-direction: column;
+
+  .simulation-control-panel-name {
+    text-align: center;
+		font-style: italic;
+		margin-bottom: 2%;
+  }
   
 	.simulation-control-panel {
     display: flex;

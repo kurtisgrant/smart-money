@@ -1,5 +1,11 @@
 .dashboard-container {
 
+	.dashboard-greeting {
+		text-align: center;
+		font-style: italic;
+		margin-bottom: 2%;
+	}
+
 	.dashboard-top {
 		display: flex;
 		margin: 50px 0 30px 0;
