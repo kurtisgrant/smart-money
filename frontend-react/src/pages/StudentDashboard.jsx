@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { UserContext } from '../UserContext';
 import { SocketContext } from '../SocketContext';
 import LineChartStudent from '../components/LineChartStudent';
+import MonthPriceIndicator from '../components/MonthPriceIndicator';
 import './StudentDashboard.scss';
 import axios from 'axios';
 
@@ -20,21 +21,10 @@ function StudentDashboard() {
 	const [accountBalance, setAccountBalance] = useState({});
 	const [simulationName, setSimulationName] = useState('');
 	const [teacherName, setTeacherName] = useState('');
+	const currentMonth = marketData[marketData.length - 1]?.x;
 	
 	const updateHandler = (studentData) => {
-		// Structure of studentData object from web socket:
-		//
-		// const studentUpdate = {
-		// 	isPlaying: this.isPlaying,
-		// 	marketData: studentMarketData,
-		// 	income: student.income,
-		// 	expense: student.expense,
-		// 	che: student.che,
-		// 	sav: student.sav,
-		// 	inv: student.inv,
-		// 	marketTransactions: student.marketTransactions
-		// };
-		//
+
 		console.log(studentData);
 		const { sav, inv, che, marketData } = studentData;
 		
@@ -154,6 +144,7 @@ function StudentDashboard() {
 				</div>
 				<div className="dashboard-top-right">
 					<LineChartStudent marketData={marketData} />
+					<MonthPriceIndicator marketData={marketData} currentMonth={currentMonth} />
 				</div>
 			</div>
 			<div className="dashboard-bottom">

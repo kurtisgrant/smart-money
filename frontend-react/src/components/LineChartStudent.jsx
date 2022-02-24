@@ -22,23 +22,6 @@ ChartJS.register(
   Legend
 );
 
-// ChartJS.register({
-//   id: 'arbitraryLine',
-//   beforeDraw(chart, args, options) {
-//     const {
-//       ctx,
-//       chartArea: { top, right, bottom, left, width, height },
-//       scales: { x, y }
-//     } = chart;
-//     ctx.save();
-
-//     const xVal = x.getPixelForValue(options.lineIndex);
-//     ctx.strokeStyle = '#3DAE70';
-//     ctx.strokeRect(xVal, top, 0, height);
-//     ctx.restore();
-//   }
-// });
-
 const LineChart = ({ marketData, currentMonth }) => {
 
   const [data, setData] = useState({
@@ -79,11 +62,11 @@ const LineChart = ({ marketData, currentMonth }) => {
         }
       }
     },
-    // plugins: {
-    //   arbitraryLine: {
-    //     lineIndex: marketData.findIndex(d => d.x === 0)
-    //   }
-    // }
+    plugins: {
+      legend: {
+        display: false
+      }
+    }
   });
 
   useEffect(() => {
@@ -129,11 +112,11 @@ const LineChart = ({ marketData, currentMonth }) => {
           }
         }
       },
-      // plugins: {
-      //   arbitraryLine: {
-      //     lineIndex: marketData.findIndex(d => d.x === currentMonth)
-      //   }
-      // }
+      plugins: {
+        legend: {
+          display: false
+        }
+      }
     });
   }, [currentMonth]);
 
