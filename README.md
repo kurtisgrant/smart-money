@@ -28,20 +28,16 @@ Comparison of students' total account balance before and after simulation, which
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-## Getting Started
+## Built With
 
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Express](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![React](	https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Node](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-## Dependencies
-
-* [PostgreSQL](https://www.postgresql.org/)
-* [Express](https://expressjs.com/)
-* [React.js](https://reactjs.org/)
-* [Node](https://nodejs.org/en/)
-* [Socket.IO](https://socket.io/)
-* [GraphQL](https://graphql.org/)
+![Socket.IO](	https://img.shields.io/badge/Socket.io-010101?&style=for-the-badge&logo=Socket.io&logoColor=white)
+![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white)
+![Sass](https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
